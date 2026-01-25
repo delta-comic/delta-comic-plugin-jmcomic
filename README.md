@@ -1,6 +1,7 @@
 # Delta Comic Plugin Jmcomic - _<span style="font-weight: lighter;font-size:16px">何以哀怮</span>_
 
 [![GitHub](https://img.shields.io/github/license/delta-comic/delta-comic-plugin-jmcomic)](https://raw.githubusercontent.com/delta-comic/delta-comic-plugin-jmcomic/main/LICENSE)
+![Download](https://img.shields.io/github/downloads/delta-comic/delta-comic-plugin-jmcomic/total)
 
 - [delta-comic](https://github.com/delta-comic/delta-comic)的插件
 
