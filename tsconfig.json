@@ -25,6 +25,6 @@
     "paths": { "@/*": ["./src/*"] },
     "types": ["./components.d.ts", "./env.d.ts", "./src/global.d.ts", "vue-component-type-helpers"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","src-wasm/pkg/*"],
   "exclude": []
 }

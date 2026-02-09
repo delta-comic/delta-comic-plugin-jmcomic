@@ -2,7 +2,7 @@ import axios from 'axios'
 import { uni, Utils } from 'delta-comic-core'
 import { retry } from 'es-toolkit'
 
-import { decode_image, decode_images_batch } from '@/pkg/jmcomic_helper'
+import { decode_image, decode_images_batch } from '../../src-wasm/pkg/jmcomic_helper'
 
 export namespace _jmImage {
   const api = axios.create()

@@ -150,9 +150,6 @@ importers:
       vite-plugin-monkey:
         specifier: ^7.1.9
         version: 7.1.9(postcss@8.5.6)(vite@8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2))
-      vite-plugin-wasm:
-        specifier: ^3.5.0
-        version: 3.5.0(vite@8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2))
       vue-component-type-helpers:
         specifier: ^3.2.4
         version: 3.2.4
@@ -3657,11 +3654,6 @@ packages:
     peerDependenciesMeta:
       vite:
         optional: true
-
-  vite-plugin-wasm@3.5.0:
-    resolution: {integrity: sha512-X5VWgCnqiQEGb+omhlBVsvTfxikKtoOgAzQ95+BZ8gQ+VfMHIjSHr0wyvXFQCa0eKQ0fKyaL0kWcEnYqBac4lQ==}
-    peerDependencies:
-      vite: ^8.0.0-beta.13
 
   vite@8.0.0-beta.13:
     resolution: {integrity: sha512-7s/rfpYOAo7WUHh9irzaGjhhKb12hGv0BpDegAMV5A391wdyvM45WtX6VMV7hvEtZF2j/QtpDpR6ldXI3GgARQ==}
@@ -7315,10 +7307,6 @@ snapshots:
       vite: 8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - postcss
-
-  vite-plugin-wasm@3.5.0(vite@8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2)):
-    dependencies:
-      vite: 8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2)
 
   vite@8.0.0-beta.13(@types/node@25.2.2)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2):
     dependencies:
