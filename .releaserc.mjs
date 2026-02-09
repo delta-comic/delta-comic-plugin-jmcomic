@@ -7,10 +7,10 @@ export default {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
-    ['@semantic-release/github', { assets: ['dist/plugin.zip'] }],
+    ['@semantic-release/github', { assets: ['dist/*'] }],
     [
       '@semantic-release/exec',
-      { publishCmd: 'node ./script/set-version.mts ${nextRelease.version}' }
+      { generateNotes: 'node ./script/set-version.mts ${nextRelease.version}' }
     ],
     [
       '@semantic-release/git',
