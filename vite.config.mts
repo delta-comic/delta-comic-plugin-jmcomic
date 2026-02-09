@@ -8,12 +8,14 @@ import { fileURLToPath, URL } from 'node:url'
 import { NaiveUiResolver, VantResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, type UserConfigExport } from 'vite'
+import wasm from 'vite-plugin-wasm'
 
 import _package from './package.json'
 export default defineConfig(
   ({ command }) =>
     ({
       plugins: [
+        wasm(),
         vue(),
         vueJsx(),
         Components({ dts: true, resolvers: [NaiveUiResolver(), VantResolver()] }),
@@ -42,11 +44,7 @@ export default defineConfig(
           targets: browserslistToTargets(browserslist('> 1%, last 2 versions, not ie <= 8'))
         }
       },
-      build: {
-        sourcemap: true
-        // minify: true,
-        // cssMinify: true
-      },
+      build: { sourcemap: true, minify: true, cssMinify: true },
       server: { port: 6173 },
       base: '/'
     }) satisfies UserConfigExport
