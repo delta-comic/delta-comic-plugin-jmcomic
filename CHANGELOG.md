@@ -1,3 +1,11 @@
+## [0.1.1](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.0...0.1.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* **ci:** ci version update [pub] ([9b3055c](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/9b3055c63e3c0e5eac2d08f606263a07cedf556f))
+* **ci:** range of commit too large [pub] ([e059108](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/e059108b88705b78f1c1caf3e5e2869b2e3cf60d))
+
 # [0.1.0](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.0.6...0.1.0) (2026-02-09)
 
 
