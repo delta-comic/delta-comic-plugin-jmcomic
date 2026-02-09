@@ -1,8 +1,7 @@
-import { pluginName } from "@/symbol"
-import axios from "axios"
-import { MD5 } from "crypto-js"
-import { uni, Utils } from "delta-comic-core"
-import { padStart } from "es-toolkit/compat"
+import axios from 'axios'
+import { MD5 } from 'crypto-js'
+import { uni, Utils } from 'delta-comic-core'
+import { padStart } from 'es-toolkit/compat'
 
 export namespace _jmImage {
   const api = axios.create()
@@ -20,11 +19,11 @@ export namespace _jmImage {
     if (0 <= key && key <= 9) return key * 2 + 2
     else return 10
   }
-  export const decoder = async (nowPath: string, img: uni.image.Image): Promise<[path: string, exit: false]> => {
-    if (
-      nowPath.indexOf('.gif') > 0 ||
-      (Number(img.$$meta!.id) < 220980)
-    ) {
+  export const decoder = async (
+    nowPath: string,
+    img: uni.image.Image
+  ): Promise<[path: string, exit: false]> => {
+    if (nowPath.indexOf('.gif') > 0 || Number(img.$$meta!.id) < 220980) {
       return [nowPath, false]
     }
 
@@ -34,17 +33,18 @@ export namespace _jmImage {
     cache.set(nowPath, promise.promise)
 
     // 1) 获取 blob（确保图片允许 CORS）
-    const blob = await Utils.request.utilInterceptors.useForceRetry(() => api.get<Blob>(`${uni.image.Image.activeFork.get(`${pluginName}:${img.forkNamespace}`)}/${nowPath}`, {
-      responseType: 'blob'
-    }))
+    const blob = await Utils.request.utilInterceptors.useForceRetry(() =>
+      api.get<Blob>(`${img.getThisFork()}/${nowPath}`, { responseType: 'blob' })
+    )
     const bitmap = await createImageBitmap(blob)
-    const width = bitmap.width, height = bitmap.height
+    const width = bitmap.width,
+      height = bitmap.height
 
     // 3) 创建目标 canvas
-    const canvas = document.createElement("canvas")
+    const canvas = document.createElement('canvas')
     canvas.width = width
     canvas.height = height
-    const ctx = canvas.getContext("2d")!
+    const ctx = canvas.getContext('2d')!
 
     // 4) 计算分段并按你的逻辑重组
     const segCount = getChunkNumber(img.$$meta!.page, img.$$meta!.id)
@@ -67,10 +67,13 @@ export namespace _jmImage {
       dy += segH
     }
     canvas.toBlob(blob => {
-      if (!blob) return promise.reject(new Error('[plugin jmcomic]image decode fail, cannot convert to blob'))
+      if (!blob)
+        return promise.reject(
+          new Error('[plugin jmcomic]image decode fail, cannot convert to blob')
+        )
       const dataurl = URL.createObjectURL(blob)
       promise.resolve(dataurl)
-    })//toDataURL("image/webp", 1)
+    }) //toDataURL("image/webp", 1)
     return [await promise.promise, false]
   }
 }
