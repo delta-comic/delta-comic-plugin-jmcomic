@@ -9,9 +9,13 @@ export default {
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
     ['@semantic-release/github', { assets: ['dist/plugin.zip'] }],
     [
+      '@semantic-release/exec',
+      { publishCmd: 'node ./script/set-version.mts ${nextRelease.version}' }
+    ],
+    [
       '@semantic-release/git',
       {
-        assets: ['package.json', 'CHANGELOG.md'],
+        assets: ['.', '*'],
         message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
       }
     ]
