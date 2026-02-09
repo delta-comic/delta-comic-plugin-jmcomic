@@ -71,8 +71,8 @@ export namespace _jmImage {
         return promise.reject(
           new Error('[plugin jmcomic]image decode fail, cannot convert to blob')
         )
-      const dataurl = URL.createObjectURL(blob)
-      promise.resolve(dataurl)
+      const dataUrl = URL.createObjectURL(blob)
+      promise.resolve(dataUrl)
     }) //toDataURL("image/webp", 1)
     return [await promise.promise, false]
   }
