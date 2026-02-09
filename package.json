@@ -21,7 +21,8 @@
     "lint:fix": "oxlint --fix --type-aware",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "typecheck": "vue-tsc --noEmit -p ./tsconfig.json --composite false"
+    "typecheck": "vue-tsc --noEmit -p ./tsconfig.json --composite false",
+    "build:wasm": "cd ./src-wasm && wasm-pack build --scope wenxig --release && cd .. && cp -r ./src-wasm/pkg ./src"
   },
   "dependencies": {
     "@vicons/antd": "^0.13.0",
@@ -35,6 +36,7 @@
     "dompurify": "^3.3.1",
     "es-toolkit": "^1.44.0",
     "naive-ui": "^2.43.2",
+    "pkg": "link:src-wasm/src-wasm/pkg",
     "vant": "^4.9.22",
     "vue": "^3.5.28",
     "vue-draggable-plus": "^0.6.1",

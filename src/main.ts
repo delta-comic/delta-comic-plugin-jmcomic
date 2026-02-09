@@ -35,6 +35,7 @@ import User from './components/user.vue'
 import WeekPromote from './components/weekPromote.vue'
 import { jmStore } from './store'
 import { pluginName } from './symbol'
+
 const testAxios = axios.create({
   timeout: 10000,
   method: 'GET',
@@ -344,17 +345,6 @@ void definePlugin({
           return []
         }
       }
-      // category: {
-      //   name: '分类',
-      //   getStream(input, sort) {
-      //     return jm.api.search.utils.createCategoryStream(input, <jm.SortType>sort)
-      //   },
-      //   sorts: jm.sortMap,
-      //   defaultSort: '',
-      //   async getAutoComplete(_input, _signal) {
-      //     return []
-      //   },
-      // }
     },
     tabbar: Object.entries(jm.api.blog.blogType).map(v => ({
       comp: TabbarBlog,
