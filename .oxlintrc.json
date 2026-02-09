@@ -6,7 +6,8 @@
     "no-unused-expressions": "allow",
     "no-useless-escape": "allow",
     "no-non-null-asserted-optional-chain": "allow",
-    "no-thenable": "allow"
+    "no-thenable": "allow",
+    "no-unused-vars": "allow"
   },
   "settings": {
     "jsx-a11y": { "polymorphicPropName": null, "components": {}, "attributes": {} },

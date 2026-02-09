@@ -8,7 +8,7 @@ export namespace _jmSearch {
     id: string
     title: string
     slug: string
-    type: string | 'library'
+    type: string
     filter_val: string | number
     content: (_jmComic.RawCommonComic | _jmBook.RawCommonBook)[]
   }

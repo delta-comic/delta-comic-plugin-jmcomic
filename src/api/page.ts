@@ -55,7 +55,6 @@ export class JmComicPage extends uni.content.ContentImagePage {
   public override exportOffline(): never {
     throw new Error('Method not implemented.')
   }
-  // @ts-ignore
   public ViewComp
   constructor(preload: uni.content.PreloadValue, id: string, ep: string) {
     super(preload, id, ep)

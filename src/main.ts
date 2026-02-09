@@ -49,7 +49,7 @@ testAxios.interceptors.response.use(
 
 const { layout } = requireDepend(coreModule)
 
-definePlugin({
+void definePlugin({
   name: pluginName,
   api: {
     api: {
@@ -142,6 +142,7 @@ definePlugin({
         'getRandomProvide'
       )
     }
+    return { jm }
   },
   auth: {
     passSelect: async () => {
