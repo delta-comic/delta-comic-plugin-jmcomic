@@ -9,10 +9,6 @@ export default {
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
     ['@semantic-release/github', { assets: ['dist/*'] }],
     [
-      '@semantic-release/exec',
-      { generateNotes: 'node ./script/set-version.mts ${nextRelease.version}' }
-    ],
-    [
       '@semantic-release/git',
       {
         assets: ['package.json', 'CHANGELOG.md'],
