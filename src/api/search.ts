@@ -1,13 +1,14 @@
-import { _jmComic } from "./comic"
-import { createCommonBookToItem, createCommonToUniItem } from "./api/utils"
-import type { _jmBook } from "./book"
+import type { _jmBook } from './book'
+
+import { createCommonBookToItem, createCommonToUniItem } from './api/utils'
+import { _jmComic } from './comic'
 
 export namespace _jmSearch {
   export interface RawPromote {
     id: string
     title: string
     slug: string
-    type: string | "library"
+    type: string | 'library'
     filter_val: string | number
     content: (_jmComic.RawCommonComic | _jmBook.RawCommonBook)[]
   }
@@ -18,16 +19,16 @@ export namespace _jmSearch {
     }
     public title: string
     public slug: string
-    public type: string 
+    public type: string
     public filter_val: string | number
     public get $filter_val() {
       return Number(this.filter_val)
     }
     public content: (_jmComic.RawCommonComic | _jmBook.RawCommonBook)[]
     public get $content() {
-      return this.type == 'library' ?
-        this.content.map(<any>createCommonBookToItem) :
-        this.content.map(<any>createCommonToUniItem)
+      return this.type == 'library'
+        ? this.content.map(<any>createCommonBookToItem)
+        : this.content.map(<any>createCommonToUniItem)
     }
     constructor(v: RawPromote) {
       this.id = v.id
@@ -40,7 +41,7 @@ export namespace _jmSearch {
   }
 
   export interface PromoteItem {
-    list: _jmComic.RawCommonComic[],
+    list: _jmComic.RawCommonComic[]
     total: number
   }
 
@@ -50,19 +51,12 @@ export namespace _jmSearch {
   }
 
   export interface WeekBestList {
-    categories: {
-      id: string,
-      title: string,
-      time: string
-    }[],
-    type: {
-      id: string,
-      title: string
-    }[]
+    categories: { id: string; title: string; time: string }[]
+    type: { id: string; title: string }[]
   }
 
   export interface WeekBestItem {
-    total: number,
+    total: number
     list: _jmComic.RawCommonComic[]
   }
 
@@ -84,10 +78,7 @@ export namespace _jmSearch {
 
   export interface CategoriesResult {
     categories: CategoryResult[]
-    blocks: {
-      title: string
-      content: string[]
-    }[]
+    blocks: { title: string; content: string[] }[]
   }
   export interface CategoryResult {
     id: number
@@ -95,10 +86,6 @@ export namespace _jmSearch {
     slug: string
     total_albums: string
     type: string
-    sub_categories?: {
-      CID: string
-      name: string
-      slug: string
-    }[]
+    sub_categories?: { CID: string; name: string; slug: string }[]
   }
 }

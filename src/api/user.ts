@@ -1,11 +1,14 @@
-import { uni } from "delta-comic-core"
-import type { _jmComment } from "./comment"
-import { _jmImage } from "./image"
-import { pluginName } from "@/symbol"
-import type { _jmBlog } from "./blog"
+import { uni } from 'delta-comic-core'
+
+import { pluginName } from '@/symbol'
+
+import type { _jmBlog } from './blog'
+import type { _jmComment } from './comment'
+
+import { _jmImage } from './image'
 
 export namespace _jmUser {
-  export type Gender = "Male" | "Female"
+  export type Gender = 'Male' | 'Female'
   export interface RawBadge {
     content: string
     id: string
@@ -96,17 +99,10 @@ export namespace _jmUser {
       super({
         id: v.uid,
         name: v.username,
-        avatar: {
-          $$plugin: pluginName,
-          type: 'default',
-          pathname: `/media/users/${v.uid}.jpg`
-        },
+        avatar: { $$plugin: pluginName, type: 'default', pathname: `/media/users/${v.uid}.jpg` },
         $$plugin: pluginName
       })
-      this.customUser = {
-        user: v,
-        expInfo: new ExpInfo(v)
-      }
+      this.customUser = { user: v, expInfo: new ExpInfo(v) }
     }
   }
 
@@ -119,18 +115,12 @@ export namespace _jmUser {
       super({
         id: c.UID,
         name: c.username,
-        avatar: c.photo.includes('nopic') ? undefined : {
-          $$plugin: pluginName,
-          type: 'default',
-          pathname: `/media/users/${c.photo}`,
-
-        },
+        avatar: c.photo.includes('nopic')
+          ? undefined
+          : { $$plugin: pluginName, type: 'default', pathname: `/media/users/${c.photo}` },
         $$plugin: pluginName
       })
-      this.customUser = {
-        user: c,
-        expInfo: new ExpInfo(c.expinfo)
-      }
+      this.customUser = { user: c, expInfo: new ExpInfo(c.expinfo) }
     }
   }
 
@@ -143,17 +133,12 @@ export namespace _jmUser {
       super({
         id: c.uid,
         name: c.username,
-        avatar: c.photo.includes('nopic') ? undefined : {
-          $$plugin: pluginName,
-          type: 'default',
-          pathname: `/media/users/${c.uid}.jpg`
-        },
+        avatar: c.photo.includes('nopic')
+          ? undefined
+          : { $$plugin: pluginName, type: 'default', pathname: `/media/users/${c.uid}.jpg` },
         $$plugin: pluginName
       })
-      this.customUser = {
-        user: c,
-        expInfo: 'expInfo' in c ? new ExpInfo(c.expInfo) : undefined
-      }
+      this.customUser = { user: c, expInfo: 'expInfo' in c ? new ExpInfo(c.expInfo) : undefined }
     }
   }
 
@@ -186,19 +171,19 @@ export namespace _jmUser {
   }
 
   export interface BadgeItem extends RawBadge {
-    type: 'badge',
+    type: 'badge'
     coin: string
     rule: string
-    begin_time: string  // 2021-05-06 00:00:00
-    end_time: string  //2080-05-06 23:59:59
+    begin_time: string // 2021-05-06 00:00:00
+    end_time: string //2080-05-06 23:59:59
     created_at: string //2021-05-06 13:48:16
-    updated_at: string  // 2021-05-06 13:48:16
+    updated_at: string // 2021-05-06 13:48:16
     done: boolean //是否已经购买
   }
   export interface TitleItem {
     id: string
-    name: string,
-    type: "title"
+    name: string
+    type: 'title'
     content: string
     coin: '0'
     rule: string
@@ -209,6 +194,3 @@ export namespace _jmUser {
     done: boolean
   }
 }
-
-
-

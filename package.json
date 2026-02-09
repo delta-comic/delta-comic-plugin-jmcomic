@@ -31,13 +31,13 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.19",
     "delta-comic-core": "latest",
+    "delta-comic-plugin-layout": "github:delta-comic/delta-comic-plugin-layout",
     "dompurify": "^3.3.1",
     "es-toolkit": "^1.44.0",
     "naive-ui": "^2.43.2",
     "vant": "^4.9.22",
     "vue": "^3.5.28",
     "vue-draggable-plus": "^0.6.1",
-    "delta-comic-plugin-layout": "github:delta-comic/delta-comic-plugin-layout",
     "vue-router": "^5.0.2"
   },
   "devDependencies": {

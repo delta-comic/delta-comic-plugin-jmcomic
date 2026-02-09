@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { jm } from '@/api'
 import { jmStore } from '@/store'
 import { useResizeObserver, until } from '@vueuse/core'
@@ -8,19 +8,22 @@ import { shallowRef, ref, onMounted, computed } from 'vue'
 import { ComponentExposed } from 'vue-component-type-helpers'
 import { useRouter } from 'vue-router'
 
-const $props = defineProps<{
-  isActive: boolean
-  tabbar: PluginConfigSearchTabbar
-}>()
+const $props = defineProps<{ isActive: boolean; tabbar: PluginConfigSearchTabbar }>()
 
 const $router = useRouter()
 
 const list = shallowRef<ComponentExposed<typeof Comp.Waterfall>>()
 const temp = Store.useTemp()
-const orderStoreSaveTemp = temp.$applyRaw(`orderJmStoreSave`, () => new Map<string, Utils.data.RStream<jm.comic.JmItem>>())
+const orderStoreSaveTemp = temp.$applyRaw(
+  `orderJmStoreSave`,
+  () => new Map<string, Utils.data.RStream<jm.comic.JmItem>>()
+)
 const orderScrollSaveTemp = temp.$applyRaw(`orderJmScoreSave`, () => new Map<string, number>())
 const containBound = ref<DOMRectReadOnly>()
-useResizeObserver(() => <HTMLDivElement | null>list.value?.scrollParent?.firstElementChild, ([b]) => containBound.value = b.contentRect)
+useResizeObserver(
+  () => <HTMLDivElement | null>list.value?.scrollParent?.firstElementChild,
+  ([b]) => (containBound.value = b.contentRect)
+)
 onMounted(async () => {
   if (!isEmpty(dataSource.value.data.value)) {
     await until(() => (containBound.value?.height ?? 0) > 8).toBeTruthy()
@@ -33,8 +36,12 @@ const stop = $router.beforeEach(() => {
 })
 const dataSource = computed(() => {
   if (!orderStoreSaveTemp.has($props.tabbar.id))
-    orderStoreSaveTemp.set($props.tabbar.id, jm.api.blog.createBlogsStream(<jm.api.blog.BlogType>$props.tabbar.id)
-      .setupData(jmStore.promotes.value?.find(v => v.id == $props.tabbar.id)?.$content ?? []))
+    orderStoreSaveTemp.set(
+      $props.tabbar.id,
+      jm.api.blog
+        .createBlogsStream(<jm.api.blog.BlogType>$props.tabbar.id)
+        .setupData(jmStore.promotes.value?.find(v => v.id == $props.tabbar.id)?.$content ?? [])
+    )
   return orderStoreSaveTemp.get($props.tabbar.id)!
 })
 </script>

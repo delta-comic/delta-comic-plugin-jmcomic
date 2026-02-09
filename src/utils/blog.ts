@@ -1,5 +1,6 @@
-import { JmComicPage } from "@/api/page"
-import type { uni } from "delta-comic-core"
+import type { uni } from 'delta-comic-core'
+
+import { JmComicPage } from '@/api/page'
 
 export const parseBlog = (blog: Document) => {
   const paragraphs = Array.from(blog.querySelectorAll<HTMLParagraphElement>('div>p'))
@@ -25,15 +26,13 @@ export const parseBlog = (blog: Document) => {
       const id = url.pathname.match(/\d+/g)?.[0] ?? '350234'
       result.push({
         type: 'textSet',
-        text: [{
-          style: link.innerHTML.includes('<strong>') ? 'bold' : 'common',
-          text: link.innerText,
-          link: {
-            content: JmComicPage.contentType,
-            ep: id,
-            id
+        text: [
+          {
+            style: link.innerHTML.includes('<strong>') ? 'bold' : 'common',
+            text: link.innerText,
+            link: { content: JmComicPage.contentType, ep: id, id }
           }
-        }]
+        ]
       })
       continue
     }
@@ -43,10 +42,7 @@ export const parseBlog = (blog: Document) => {
         type: 'textSet',
         text: text.map(el => {
           const text = el.innerText
-          return {
-            style: el.innerHTML.includes('<strong>') ? 'bold' : 'common',
-            text
-          }
+          return { style: el.innerHTML.includes('<strong>') ? 'bold' : 'common', text }
         })
       })
       continue
@@ -56,32 +52,17 @@ export const parseBlog = (blog: Document) => {
       console.log('last', last)
       continue
     }
-    result.push({
-      type: 'empty'
-    })
+    result.push({ type: 'empty' })
   }
   return result
 }
 
-export type Paragraph = {
-  type: 'img'
-  src: string
-  aspect: {
-    width: number
-    height: number
-  }
-} | {
-  type: 'textSet'
-  text: TextAtom[]
-} | {
-  type: 'empty'
-}
+export type Paragraph =
+  | { type: 'img'; src: string; aspect: { width: number; height: number } }
+  | { type: 'textSet'; text: TextAtom[] }
+  | { type: 'empty' }
 export type TextAtom = {
   style: 'bold' | 'common'
   text: string
-  link?: {
-    content: uni.content.ContentType_
-    id: string
-    ep: string
-  }
+  link?: { content: uni.content.ContentType_; id: string; ep: string }
 }

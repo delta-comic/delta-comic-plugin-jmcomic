@@ -1,8 +1,11 @@
-import { uni } from "delta-comic-core"
-import type { _jmUser } from "./user"
-import dayjs from "dayjs"
-import { createRelatedBookToItem, dateTranslate } from "./api/utils"
-import { pluginName } from "@/symbol"
+import dayjs from 'dayjs'
+import { uni } from 'delta-comic-core'
+
+import { pluginName } from '@/symbol'
+
+import type { _jmUser } from './user'
+
+import { createRelatedBookToItem, dateTranslate } from './api/utils'
 
 export namespace _jmBook {
   export interface RawCommonBook {
@@ -33,20 +36,14 @@ export namespace _jmBook {
     work_title: ''
     author_name: string
     work_date: ''
-    author_avatar: string///media/library/artists/6212623/icon/136650067.gif
-    background_image: string///media/library/artists/6212623/banner/136650067.gif
+    author_avatar: string ///media/library/artists/6212623/icon/136650067.gif
+    background_image: string ///media/library/artists/6212623/banner/136650067.gif
     sponsor: {
-      platform_url: string//https://www.patreon.com/user?u=136650067
+      platform_url: string //https://www.patreon.com/user?u=136650067
       platform_name: string
     }[]
     related_works: RawRelatedBook[]
-    filters: {
-      language: string[]
-      source: {
-        service: string
-        name: string
-      }[]
-    }
+    filters: { language: string[]; source: { service: string; name: string }[] }
   }
 
   export class AuthorDetail implements RawAuthorDetail {
@@ -55,21 +52,12 @@ export namespace _jmBook {
     public work_date: ''
     public author_avatar: string
     public background_image: string
-    public sponsor: {
-      platform_url: string
-      platform_name: string
-    }[]
+    public sponsor: { platform_url: string; platform_name: string }[]
     public related_works: RawRelatedBook[]
     public get $related_works() {
       return this.related_works.map(createRelatedBookToItem)
     }
-    public filters: {
-      language: string[]
-      source: {
-        service: string
-        name: string
-      }[]
-    }
+    public filters: { language: string[]; source: { service: string; name: string }[] }
     constructor(item: RawAuthorDetail) {
       this.work_title = item.work_title
       this.author_name = item.author_name
@@ -126,11 +114,13 @@ export namespace _jmBook {
     public total_page: number
     public images: { page: number; image: string }[]
     public get $images() {
-      return this.images.map(img => uni.image.Image.create({
-        $$plugin: pluginName,
-        forkNamespace: 'default',
-        path: new URL(img.image).pathname
-      }))
+      return this.images.map(img =>
+        uni.image.Image.create({
+          $$plugin: pluginName,
+          forkNamespace: 'default',
+          path: new URL(img.image).pathname
+        })
+      )
     }
     public content: string
     public addtime: number
@@ -150,19 +140,16 @@ export namespace _jmBook {
   }
 
   export class JmBook extends uni.item.Item {
-    override $$meta: {
-      raw: RawCommonBook
-      background?: uni.image.RawImage
-    }
+    override $$meta: { raw: RawCommonBook; background?: uni.image.RawImage }
     override like(_signal?: AbortSignal): PromiseLike<boolean> {
-      throw new Error("Method not implemented.")
+      throw new Error('Method not implemented.')
     }
     override report(_signal?: AbortSignal): PromiseLike<any> {
-      throw new Error("Method not implemented.")
+      throw new Error('Method not implemented.')
     }
     override sendComment(_text: string, _signal?: AbortSignal): PromiseLike<any> {
       window.$message.warning('不支持发送评论')
-      throw new Error("Method not implemented.")
+      throw new Error('Method not implemented.')
     }
     constructor(v: uni.item.RawItem) {
       super(v)

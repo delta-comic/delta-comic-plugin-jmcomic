@@ -21,7 +21,7 @@ export namespace _jmImage {
   }
   export const decoder = async (
     nowPath: string,
-    img: uni.image.Image
+    img: uni.resource.Resource
   ): Promise<[path: string, exit: false]> => {
     if (nowPath.indexOf('.gif') > 0 || Number(img.$$meta!.id) < 220980) {
       return [nowPath, false]

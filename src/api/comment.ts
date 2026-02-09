@@ -1,12 +1,14 @@
-import { _jmUser } from "./user"
-import { _jmImage } from "./image"
-import DOMPurify from 'dompurify'
-import { uni, Utils } from "delta-comic-core"
-import { pluginName } from "@/symbol"
-import { isEmpty } from "es-toolkit/compat"
-import { jm } from "."
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { uni, Utils } from 'delta-comic-core'
+import DOMPurify from 'dompurify'
+import { isEmpty } from 'es-toolkit/compat'
+
+import { pluginName } from '@/symbol'
+
+import { jm } from '.'
+import { _jmImage } from './image'
+import { _jmUser } from './user'
 dayjs.extend(customParseFormat)
 
 export namespace _jmComment {
@@ -33,11 +35,15 @@ export namespace _jmComment {
     override $$meta: { raw: RawComment }
     override sender: _jmUser.CommentUser
     override async like(signal?: AbortSignal): Promise<boolean> {
-      await jm.api.comment.likeComment(this.$$meta.raw.name.match(/\d+/g)?.[0] ?? '', this.id, signal)
+      await jm.api.comment.likeComment(
+        this.$$meta.raw.name.match(/\d+/g)?.[0] ?? '',
+        this.id,
+        signal
+      )
       return Promise.resolve(false)
     }
     override report(signal?: AbortSignal): PromiseLike<any> {
-      window.$message.error("Method not implemented.")
+      window.$message.error('Method not implemented.')
       return Promise.resolve(undefined)
     }
     override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {
@@ -53,10 +59,7 @@ export namespace _jmComment {
       super({
         $$plugin: pluginName,
         childrenCount: v.replys?.length ?? 0,
-        content: {
-          text: DOMPurify.sanitize(v.content),
-          type: 'html'
-        },
+        content: { text: DOMPurify.sanitize(v.content), type: 'html' },
         id: v.CID,
         isLiked: false,
         isTop: false,
@@ -75,9 +78,7 @@ export namespace _jmComment {
           return date.toDate().getTime()
         })()
       })
-      this.$$meta = {
-        raw: v
-      }
+      this.$$meta = { raw: v }
       this.sender = sender
       this.children = Utils.data.Stream.create<Comment>(function* () {
         yield v.replys?.map(v => new Comment(v)) ?? []

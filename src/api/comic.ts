@@ -1,7 +1,9 @@
-import { uni } from "delta-comic-core"
-import { _jmImage } from "./image"
-import type { _jmSearch } from "./search"
-import { jm } from "."
+import { uni } from 'delta-comic-core'
+
+import type { _jmSearch } from './search'
+
+import { jm } from '.'
+import { _jmImage } from './image'
 
 export namespace _jmComic {
   export interface RawSeries {
@@ -50,7 +52,6 @@ export namespace _jmComic {
     tags: string
   }
 
-
   export interface RawCommonComic extends RawBaseComic {
     author: string
     description?: string
@@ -60,11 +61,10 @@ export namespace _jmComic {
     update_at?: number
   }
 
-
   export interface RawRecommendComic {
-    id: string,
-    author: string,
-    name: string,
+    id: string
+    author: string
+    name: string
     image: string
   }
 
@@ -93,7 +93,7 @@ export namespace _jmComic {
       return jm.api.comic.likeComic(this.id, signal)
     }
     public override report(signal?: AbortSignal): PromiseLike<any> {
-      throw new Error("Method not implemented.")
+      throw new Error('Method not implemented.')
     }
     public override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {
       return jm.api.comic.sendComment(this.id, text, false, signal)

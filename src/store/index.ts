@@ -1,7 +1,9 @@
-import type { jm } from "@/api"
-import type { Utils } from "delta-comic-core"
+import type { Utils } from 'delta-comic-core'
+
 import { useLocalStorage } from '@vueuse/core'
-import { ref, shallowRef } from "vue"
+import { ref, shallowRef } from 'vue'
+
+import type { jm } from '@/api'
 export namespace jmStore {
   export const api = shallowRef<Utils.request.Requester>()
   export const loginToken = shallowRef<string | undefined>()

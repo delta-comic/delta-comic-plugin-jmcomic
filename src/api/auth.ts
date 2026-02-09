@@ -1,4 +1,4 @@
-import type { _jmUser } from "./user"
+import type { _jmUser } from './user'
 
 export namespace _jmAuth {
   export interface LoginData {

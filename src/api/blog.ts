@@ -1,6 +1,8 @@
-import { uni } from "delta-comic-core"
-import type { _jmUser } from "./user"
-import { jm } from "."
+import { uni } from 'delta-comic-core'
+
+import type { _jmUser } from './user'
+
+import { jm } from '.'
 
 export namespace _jmBlog {
   export interface RawCommonBlog {
@@ -13,10 +15,7 @@ export namespace _jmBlog {
     gid: string
     title: string
     tags: string[]
-    category: {
-      name: string
-      slug: string
-    }
+    category: { name: string; slug: string }
     content: string
     photo: string
     total_views: string
@@ -27,14 +26,12 @@ export namespace _jmBlog {
   }
 
   export class JmBlog extends uni.item.Item {
-    override $$meta: {
-      raw: RawCommonBlog | RawFullBlog
-    }
+    override $$meta: { raw: RawCommonBlog | RawFullBlog }
     override like(signal?: AbortSignal): PromiseLike<boolean> {
       return jm.api.blog.likeBlog(this.id, signal)
     }
     override report(_signal?: AbortSignal): PromiseLike<any> {
-      throw new Error("Method not implemented.")
+      throw new Error('Method not implemented.')
     }
     override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {
       return jm.api.blog.sendComment(this.id, text, signal)
@@ -49,7 +46,7 @@ export namespace _jmBlog {
     id: string
     uid: string
     title: string
-    tags: string[],
+    tags: string[]
     content: string
     photo: string
     total_views: string
@@ -57,13 +54,10 @@ export namespace _jmBlog {
     total_likes: string
     username: string
     nickname: string
-    user_photo: null,
-    category: {
-      name: string
-      slug: string
-    },
+    user_photo: null
+    category: { name: string; slug: string }
     expInfo: _jmUser.RawExpInfo
-    game_url: null,
+    game_url: null
     is_liked: boolean
     /** @example "2025-04-24" */
     date: string
