@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.1...0.1.2) (2026-02-09)
+
+
+### Bug Fixes
+
+* **ci:** build release & hook time ([e288fec](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/e288fec2dce15ca78b1e8e2a849ad7698cc51c48))
+
 ## [0.1.1](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.0...0.1.1) (2026-02-09)
 
 
