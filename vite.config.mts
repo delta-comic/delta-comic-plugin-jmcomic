@@ -26,7 +26,10 @@ export default defineConfig(
             supportCoreVersion: '^1.1',
             author: _package.author.name,
             description: _package.description,
-            require: ['core']
+            require: [
+              'core',
+              { id: 'layout', download: 'gh:delta-comic/delta-comic-plugin-layout' }
+            ]
           },
           command,
           _package
