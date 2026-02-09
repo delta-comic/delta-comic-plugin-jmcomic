@@ -17,6 +17,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --fix --type-aware",
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
     "typecheck": "vue-tsc --noEmit -p ./tsconfig.json --composite false"
   },
   "dependencies": {
@@ -36,9 +40,27 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@commitlint/types": "^20.4.0",
+    "@cspell/dict-npm": "^5.2.32",
+    "@cspell/dict-rust": "^4.1.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.3",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "commitlint-plugin-cspell": "^0.4.0",
+    "conventional-recommended-bump": "^11.2.0",
+    "cspell": "^9.6.4",
+    "husky": "^9.1.7",
     "@tailwindcss/vite": "^4.1.18",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^25.0.3",
+    "lint-staged": "^16.2.7",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
+    "oxlint-tsgolint": "^0.11.4",
+    "semantic-release": "^25.0.3",
+    "semver": "^7.7.3",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vitejs/plugin-vue-jsx": "^5.1.3",
     "browserslist": "^4.28.1",
@@ -46,7 +68,7 @@
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "unplugin-vue-components": "30.0.0",
-    "vite": "^7.3.0",
+    "vite": "^8.0.0-beta.13",
     "vite-plugin-external": "^6.2.2",
     "vite-plugin-monkey": "^7.1.8",
     "vue-component-type-helpers": "^3.2.1",
@@ -54,7 +76,7 @@
   },
   "pnpm": {
     "overrides": {
-      "vite": "^7.3.0"
+      "vite": "^8.0.0-beta.13"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
