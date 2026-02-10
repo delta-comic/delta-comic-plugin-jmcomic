@@ -15,14 +15,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cd ./dist && zip -r plugin.zip ./*",
+    "build": "pnpm build:wasm && vite build && cd ./dist && zip -r plugin.zip ./*",
     "preview": "vite preview",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --fix --type-aware",
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "typecheck": "vue-tsc --noEmit -p ./tsconfig.json --composite false",
-    "build:wasm": "cd ./src-wasm && wasm-pack build --release && cd .."
+    "build:wasm": "cd ./src-wasm && wasm-pack build --release --target web && cd .."
   },
   "dependencies": {
     "@vicons/antd": "^0.13.0",

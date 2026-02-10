@@ -44,7 +44,7 @@ export default defineConfig(
       },
       build: { sourcemap: true, minify: true, cssMinify: true },
       server: { port: 6173 },
-      base: '/'
-      // optimizeDeps: { include: ['jmcomic-helper'] }
+      base: '/',
+      optimizeDeps: { exclude: ['jmcomic-helper'] }
     }) satisfies UserConfigExport
 )
