@@ -1,3 +1,19 @@
+# [0.2.0](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.2...0.2.0) (2026-02-10)
+
+
+### Bug Fixes
+
+* **decode:** [pub] better decoder ([fbebd63](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/fbebd63e33b78d7ad710dd5a7d97d4a555e5f047))
+* **decode:** [pub] ci ([cb80441](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/cb80441c792ff517a19a8afe124ccf129a02d7c9))
+* **decode:** [wip] old plugin remove ([d61fe1f](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/d61fe1f5d0ac1fe1869248e29a999bb5ea4ee910))
+* **decode:** [wip] wasm support of vite ([1f019d1](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/1f019d1aaaa5418917a5aeacb2d943fde672875a))
+* **decode:** better path ([d7379eb](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/d7379ebc53c513b4dc488d5b8abfb0feb893fcda))
+
+
+### Features
+
+* **decode:** [wip] wasm in decode image ([06b5804](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/06b5804632b485302dbff37f272c8c2ce53ccde4))
+
 ## [0.1.2](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.1...0.1.2) (2026-02-09)
 
 

@@ -31,7 +31,7 @@
     "axios": "^1.13.5",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.19",
-    "delta-comic-core": "file:../delta-comic-core/dist/pack.tgz",
+    "delta-comic-core": "latest",
     "delta-comic-plugin-layout": "github:delta-comic/delta-comic-plugin-layout",
     "dompurify": "^3.3.1",
     "es-toolkit": "^1.44.0",
