@@ -68,7 +68,6 @@ pub fn decode_image(image_data: &[u8], page: u32, id: u32) -> Result<String, JsV
       ImageFormat::Png => "image/png",
       ImageFormat::Jpeg => "image/jpeg",
       ImageFormat::WebP => "image/webp",
-      ImageFormat::Gif => "image/gif",
       _ => "image/png",
     };
 
@@ -178,9 +177,9 @@ pub unsafe fn decode_images_batch(images: JsValue) -> Result<JsValue, JsValue> {
     // 提取data, page, id字段
     let obj = JsValue::from(item);
 
-    let data = unsafe { js_sys::Reflect::get(&obj, &JsValue::from_str("data")) }?;
-    let page = unsafe { js_sys::Reflect::get(&obj, &JsValue::from_str("page")) }?;
-    let id = unsafe { js_sys::Reflect::get(&obj, &JsValue::from_str("id")) }?;
+    let data = js_sys::Reflect::get(&obj, &JsValue::from_str("data"))?;
+    let page = js_sys::Reflect::get(&obj, &JsValue::from_str("page"))?;
+    let id = js_sys::Reflect::get(&obj, &JsValue::from_str("id"))?;
 
     // 转换类型
     let data_array = js_sys::Uint8Array::new(&data);

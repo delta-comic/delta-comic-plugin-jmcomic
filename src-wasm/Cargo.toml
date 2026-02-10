@@ -4,7 +4,13 @@ version = "0.0.0-semantically-released"
 edition = "2024"
 rust-version = "1.92.0"
 
-[package.metadata]
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = false
+
+[package.metadata.wasm-pack.profile.profiling]
 wasm-opt = false
 
 [lib]
