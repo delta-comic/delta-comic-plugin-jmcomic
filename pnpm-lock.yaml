@@ -27,8 +27,8 @@ importers:
         specifier: ^0.0.2
         version: 0.0.2(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(axios@1.13.5)(vue@3.5.28(typescript@5.9.3))
       '@delta-comic/ui':
-        specifier: ^0.0.4
-        version: 0.0.4(7c1e1aac8f84f224884a78b3a2352838)
+        specifier: ^0.0.5
+        version: 0.0.5(7c1e1aac8f84f224884a78b3a2352838)
       '@delta-comic/utils':
         specifier: ^0.0.3
         version: 0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
@@ -62,9 +62,6 @@ importers:
       es-toolkit:
         specifier: ^1.44.0
         version: 1.44.0
-      jmcomic-helper:
-        specifier: link:src-wasm/pkg
-        version: link:src-wasm/pkg
       naive-ui:
         specifier: ^2.43.2
         version: 2.43.2(vue@3.5.28(typescript@5.9.3))
@@ -166,7 +163,7 @@ importers:
         specifier: 31.0.0
         version: 31.0.0(vue@3.5.28(typescript@5.9.3))
       vite:
-        specifier: 8.0.0-beta.15
+        specifier: ^8.0.0-beta.15
         version: 8.0.0-beta.15(@types/node@25.3.0)(esbuild@0.27.2)(jiti@2.6.1)(sass@1.89.1)(terser@5.44.0)(yaml@2.8.2)
       vite-plugin-external:
         specifier: ^6.2.2
@@ -697,6 +694,18 @@ packages:
 
   '@delta-comic/ui@0.0.4':
     resolution: {integrity: sha512-WpxB5mxOqsCKzYD5vRDqdZ0nZJOLSe2AP0EM85ri7zRQ6YaRKlEHMjhquRPL9hNTlYws/iTsxGWL2TJKFvnlhg==}
+    peerDependencies:
+      '@delta-comic/core': 0.3.0
+      '@delta-comic/model': 0.0.2
+      '@delta-comic/utils': 0.0.3
+      naive-ui: ^2.43
+      pinia: ^3.0
+      vant: ^4.9
+      vue: ^3.5
+      vue-router: ^5.0
+
+  '@delta-comic/ui@0.0.5':
+    resolution: {integrity: sha512-CnbpswJiRyZ+0XGdCw8sCAzwT/AhuYThDH5CAAr5SB3jmddxbg3WbSYdMTd3yRB1rwYrda5IrC7wsmJ7HLerwg==}
     peerDependencies:
       '@delta-comic/core': 0.3.0
       '@delta-comic/model': 0.0.2
@@ -4711,6 +4720,29 @@ snapshots:
       - tailwindcss
 
   '@delta-comic/ui@0.0.4(7c1e1aac8f84f224884a78b3a2352838)':
+    dependencies:
+      '@delta-comic/core': 0.3.0(@delta-comic/model@0.0.2(@delta-comic/request@0.0.2(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(axios@1.13.5)(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+      '@delta-comic/model': 0.0.2(@delta-comic/request@0.0.2(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(axios@1.13.5)(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+      '@delta-comic/utils': 0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+      '@lhlyu/vue-virtual-waterfall': 1.0.8(vue@3.5.28(typescript@5.9.3))
+      '@vant/use': 1.6.0(vue@3.5.28(typescript@5.9.3))
+      '@vueuse/core': 14.2.1(vue@3.5.28(typescript@5.9.3))
+      dayjs: 1.11.19
+      mitt: 3.0.1
+      motion-v: 1.10.3(@vueuse/core@14.2.1(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+      naive-ui: 2.43.2(vue@3.5.28(typescript@5.9.3))
+      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3))
+      tailwindcss-safe-area-capacitor: 0.5.1(tailwindcss@4.2.0)
+      vant: 4.9.22(vue@3.5.28(typescript@5.9.3))
+      vue: 3.5.28(typescript@5.9.3)
+      vue-router: 5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - react
+      - react-dom
+      - tailwindcss
+
+  '@delta-comic/ui@0.0.5(7c1e1aac8f84f224884a78b3a2352838)':
     dependencies:
       '@delta-comic/core': 0.3.0(@delta-comic/model@0.0.2(@delta-comic/request@0.0.2(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(axios@1.13.5)(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
       '@delta-comic/model': 0.0.2(@delta-comic/request@0.0.2(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(axios@1.13.5)(vue@3.5.28(typescript@5.9.3)))(@delta-comic/utils@0.0.3(axios@1.13.5)(naive-ui@2.43.2(vue@3.5.28(typescript@5.9.3)))(vue-router@5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
