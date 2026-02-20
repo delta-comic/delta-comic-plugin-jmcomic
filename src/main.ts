@@ -258,15 +258,15 @@ void definePlugin({
     }
   },
   otherProgress: [
-    {
-      name: '解码器初始化',
-      async call(setDescription) {
-        setDescription('载入wasm')
-        const init = await import('jmcomic-helper')
-        setDescription('初始化wasm')
-        await init.default()
-      }
-    },
+    // {
+    //   name: '解码器初始化',
+    //   async call(setDescription) {
+    //     setDescription('载入wasm')
+    //     const init = await import('jmcomic-helper')
+    //     setDescription('初始化wasm')
+    //     await init.default()
+    //   }
+    // },
     {
       name: '签到',
       async call(setDescription) {
