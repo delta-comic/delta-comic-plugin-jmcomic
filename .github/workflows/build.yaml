@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-          
+
       # js
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -33,11 +33,8 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Change depends
-        run: sh ./script/install.sh
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       # build
       - name: Change version
