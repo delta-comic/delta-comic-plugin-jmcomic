@@ -1,6 +1,6 @@
+import { Stream, uni } from '@delta-comic/model'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { uni, Utils } from 'delta-comic-core'
 import DOMPurify from 'dompurify'
 import { isEmpty } from 'es-toolkit/compat'
 
@@ -42,7 +42,7 @@ export namespace _jmComment {
       )
       return Promise.resolve(false)
     }
-    override report(signal?: AbortSignal): PromiseLike<any> {
+    override report(_signal?: AbortSignal): PromiseLike<any> {
       window.$message.error('Method not implemented.')
       return Promise.resolve(undefined)
     }
@@ -80,7 +80,7 @@ export namespace _jmComment {
       })
       this.$$meta = { raw: v }
       this.sender = sender
-      this.children = Utils.data.Stream.create<Comment>(function* () {
+      this.children = Stream.create<Comment>(function* () {
         yield v.replys?.map(v => new Comment(v)) ?? []
       })
     }

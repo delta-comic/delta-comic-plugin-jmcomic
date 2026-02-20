@@ -1,4 +1,5 @@
-import { Utils, type PluginConfigSearchHotPageLevelboard } from 'delta-comic-core'
+import { PromiseContent } from '@delta-comic/model'
+import type { Search } from '@delta-comic/plugin'
 import { random } from 'es-toolkit/compat'
 
 import { jmStore } from '@/store'
@@ -7,7 +8,6 @@ import { type jm as JmType } from '..'
 import { _jmSearch } from '../search'
 import { createCommonToUniItem, jmStream } from './utils'
 export namespace _jmApiSearch.utils {
-  const { PromiseContent } = Utils.data
   export const byKeyword = PromiseContent.fromAsyncFunction(
     (searchQuery: string, order: JmType.SortType = '', page = 1, signal?: AbortSignal) =>
       jmStore.api
@@ -40,7 +40,6 @@ export namespace _jmApiSearch.utils {
 }
 
 export namespace _jmApiSearch {
-  const { PromiseContent } = Utils.data
   export const getPromote = PromiseContent.fromAsyncFunction((signal?: AbortSignal) =>
     jmStore.api
       .value!.get<JmType.search.RawPromote[]>(`/promote`, { signal, params: { page: 1 } })
@@ -91,7 +90,7 @@ export namespace _jmApiSearch {
         name: '月排行',
         content: () => _jmApiSearch.utils.byCategory('', 'mv_m').setProcessor(v => v.list)
       }
-    ] satisfies PluginConfigSearchHotPageLevelboard[]
+    ] satisfies Search.HotLevelboard[]
 
   export const getCategories = PromiseContent.fromAsyncFunction((signal?: AbortSignal) =>
     jmStore.api.value!.get<JmType.search.CategoriesResult>('/categories', { signal })

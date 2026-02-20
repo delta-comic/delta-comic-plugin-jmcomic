@@ -1,4 +1,4 @@
-import { Utils } from 'delta-comic-core'
+import { PromiseContent } from '@delta-comic/model'
 
 import { jmStore } from '@/store'
 
@@ -6,7 +6,6 @@ import { _jmBook } from '../book'
 import { jmStream } from './utils'
 
 export namespace _jmApiBook {
-  const { PromiseContent } = Utils.data
   export const getSearchAuthor = PromiseContent.fromAsyncFunction(
     async (page: number, search_query?: string, signal?: AbortSignal) => {
       const res = await jmStore.api.value!.get<{ content: _jmBook.RawListBook[]; total: number }>(

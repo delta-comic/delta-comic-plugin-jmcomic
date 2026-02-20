@@ -1,15 +1,13 @@
-import { uni, Utils } from 'delta-comic-core'
+import { PromiseContent, uni } from '@delta-comic/model'
 
 import { jmStore } from '@/store'
 import { pluginName } from '@/symbol'
 
 import type { jm as JmType } from '..'
 import type { _jmUser } from '../user'
-
 import { createCommonToUniItem, jmStream } from './utils'
 
 export namespace _jmApiUser {
-  const { PromiseContent } = Utils.data
   export const createFavouriteStream = () =>
     jmStream(async (page, signal) => {
       const { list, total } = await jmStore.api.value!.get<{
@@ -56,7 +54,6 @@ export namespace _jmApiUser {
 }
 
 export namespace _jmApiUser.badge {
-  const { PromiseContent } = Utils.data
   export const buy = PromiseContent.fromAsyncFunction(
     (badgeId: number | string, signal?: AbortSignal) => {
       const user = uni.user.User.userBase.get(pluginName)
@@ -95,7 +92,6 @@ export namespace _jmApiUser.badge {
 }
 
 export namespace _jmApiUser.title {
-  const { PromiseContent } = Utils.data
   export const getAll = PromiseContent.fromAsyncFunction(async (signal?: AbortSignal) => {
     const all = await jmStore.api.value!.get<{ list: _jmUser.TitleItem[] }>('/tasks', {
       params: { type: 'title', filter: 'all' },

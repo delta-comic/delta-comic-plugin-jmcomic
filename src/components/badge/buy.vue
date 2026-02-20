@@ -2,14 +2,16 @@
 import { jm } from '@/api'
 import { jmStore } from '@/store'
 import { pluginName } from '@/symbol'
+import { useTemp } from '@delta-comic/core'
+import { uni } from '@delta-comic/model'
+import { createDialog, createLoadingMessage } from '@delta-comic/ui'
 import { CheckCircleOutlineOutlined } from '@vicons/material'
 import { until } from '@vueuse/core'
-import { Comp, Store, uni, Utils } from 'delta-comic-core'
 import { isEmpty } from 'es-toolkit/compat'
 import { computed } from 'vue'
 import { shallowRef } from 'vue'
 await until(jmStore.user).toBeTruthy()
-const temp = Store.useTemp().$apply('jm:badge', () => ({ badges: jm.api.user.badge.getAll() }))
+const temp = useTemp().$apply('jm:badge', () => ({ badges: jm.api.user.badge.getAll() }))
 const inputModel = shallowRef('')
 const inputFilter = shallowRef('')
 
@@ -17,8 +19,7 @@ const latestDate = computed(() => temp.badges.data.value?.at(-1)?.begin_time)
 
 const isBuying = shallowRef(false)
 const buyBadge = (item: jm.user.BadgeItem) =>
-  Utils.message
-    .createLoadingMessage('购买中')
+  createLoadingMessage('购买中')
     .bind(
       Promise.try(async () => {
         if (isBuying.value) throw '购买中'
@@ -26,7 +27,7 @@ const buyBadge = (item: jm.user.BadgeItem) =>
         if (item.done) throw '已被购买'
         if (Number(item.coin) > (jmStore.user.value?.customUser.user.coin ?? 0)) throw 'coin不足'
 
-        await Utils.message.createDialog({
+        await createDialog({
           title: '再次确认',
           content: `你确定花费${item.coin}购买"${item.name}"吗?`,
           positiveText: '确定',
@@ -54,15 +55,15 @@ const buyBadge = (item: jm.user.BadgeItem) =>
 </script>
 
 <template>
-  <NSpin :show="isBuying" class="!size-full *:!size-full">
+  <NSpin :show="isBuying" class="size-full! *:size-full!">
     <div
-      class="mb-[3px] flex h-[calc(10%-3px)] w-full flex-col items-center rounded-b-lg bg-(--van-background-2)"
+      class="mb-0.75 flex h-[calc(10%-3px)] w-full flex-col items-center rounded-b-lg bg-(--van-background-2)"
     >
       <NInput
         placeholder="输入内容以过滤..."
         v-model:value="inputModel"
         @blur="inputFilter = inputModel"
-        class="!w-[calc(100%-8px)]"
+        class="w-[calc(100%-8px)]!"
       />
       <div class="h-fit w-full pl-2">
         <div class="flex flex-nowrap items-center text-nowrap">
@@ -92,14 +93,14 @@ const buyBadge = (item: jm.user.BadgeItem) =>
         </div>
       </div>
     </div>
-    <Comp.Waterfall
+    <DcWaterfall
       :col="1"
       :source="{ data: temp.badges, isEnd: true }"
       :data-processor="
         v => v.toReversed().filter(v => isEmpty(inputFilter) || v.name.includes(inputFilter))
       "
       v-slot="{ item }"
-      class="!h-9/10 !w-full"
+      class="h-9/10! w-full!"
     >
       <button
         class="relative flex h-20 w-full items-center overflow-hidden rounded-lg bg-(--van-background-2)"
@@ -115,25 +116,25 @@ const buyBadge = (item: jm.user.BadgeItem) =>
           color="var(--p-color)"
           size="130px"
           v-if="item.done"
-          class="!absolute right-0 bottom-0 translate-x-1/3 translate-y-1/3 text-lg font-bold text-nowrap text-(--p-color) opacity-30"
+          class="absolute! right-0 bottom-0 translate-x-1/3 translate-y-1/3 text-lg font-bold text-nowrap text-(--p-color) opacity-30"
         >
           <CheckCircleOutlineOutlined />
         </NIcon>
         <div class="h-[calc(100%-10px)] pl-2">
-          <Comp.Image
+          <DcImage
             :src="
               uni.image.Image.create(
                 { $$plugin: pluginName, forkNamespace: 'default', path: item.content },
                 { width: 1, height: 1 }
               )
             "
-            class="aspect-square !size-full"
+            class="aspect-square size-full!"
           />
         </div>
         <div class="relative flex h-full flex-col py-1 pl-1">
           <div
             class="flex flex-nowrap items-center text-[16px] text-nowrap"
-            :class="[item.done && '!text-xl font-semibold text-(--p-color)']"
+            :class="[item.done && 'text-xl! font-semibold text-(--p-color)']"
           >
             <NTag
               v-if="!item.done && latestDate == item.begin_time"
@@ -174,6 +175,6 @@ const buyBadge = (item: jm.user.BadgeItem) =>
           </div>
         </div>
       </button>
-    </Comp.Waterfall>
+    </DcWaterfall>
   </NSpin>
 </template>

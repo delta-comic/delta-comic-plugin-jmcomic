@@ -1,6 +1,6 @@
-import type { _jmBook } from './book'
-
 import { createCommonBookToItem, createCommonToUniItem } from './api/utils'
+import type { _jmBlog } from './blog'
+import type { _jmBook } from './book'
 import { _jmComic } from './comic'
 
 export namespace _jmSearch {
@@ -25,7 +25,7 @@ export namespace _jmSearch {
       return Number(this.filter_val)
     }
     public content: (_jmComic.RawCommonComic | _jmBook.RawCommonBook)[]
-    public get $content() {
+    public get $content(): _jmBlog.JmBlog[] {
       return this.type == 'library'
         ? this.content.map(<any>createCommonBookToItem)
         : this.content.map(<any>createCommonToUniItem)

@@ -1,8 +1,7 @@
-import { uni } from 'delta-comic-core'
-
-import type { _jmUser } from './user'
+import { uni } from '@delta-comic/model'
 
 import { jm } from '.'
+import type { _jmUser } from './user'
 
 export namespace _jmBlog {
   export interface RawCommonBlog {

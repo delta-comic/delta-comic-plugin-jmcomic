@@ -1,5 +1,5 @@
+import { createAxios } from '@delta-comic/request'
 import { MD5, AES, enc, mode, pad, lib } from 'crypto-js'
-import { Utils } from 'delta-comic-core'
 
 export const image = [
   'https://cdn-msp.jmapinodeudzn.net',
@@ -14,7 +14,7 @@ export const apiGetter = [
   'https://rup4a04-c02.tos-cn-hongkong.bytepluses.com'
 ]
 export const getApiFork = async () => {
-  const api = Utils.request.createAxios(() => apiGetter[0])
+  const api = createAxios(() => apiGetter[0])
   return (<{ Server: string[] }>convertData(await api.get<string>('/newsvr-2025.txt'))).Server.map(
     v => `https://${v}`
   )

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { jm } from '@/api'
-import { Comp, Store, uni, Utils } from 'delta-comic-core'
 import { VueDraggable } from 'vue-draggable-plus'
 import { until, createReusableTemplate } from '@vueuse/core'
 import { differenceBy } from 'es-toolkit/compat'
@@ -8,8 +7,12 @@ import { computed, ref, triggerRef, watch } from 'vue'
 import { shallowRef } from 'vue'
 import { jmStore } from '@/store'
 import { pluginName } from '@/symbol'
+import { createLoadingMessage } from '@delta-comic/ui'
+import { uni } from '@delta-comic/model'
+import { useConfig } from '@delta-comic/plugin'
+import { useTemp } from '@delta-comic/core'
 await until(jmStore.user).toBeTruthy()
-const temp = Store.useTemp().$apply('jm:change', () => ({ allMyOwn: jm.api.user.badge.getMy() }))
+const temp = useTemp().$apply('jm:change', () => ({ allMyOwn: jm.api.user.badge.getMy() }))
 const allList = ref<jm.user.RawBadge[]>([])
 watch(
   () => temp.allMyOwn.data.value,
@@ -47,8 +50,7 @@ const previewUser = computed(
 
 const isReordering = shallowRef(false)
 const reorderBadge = (item: jm.user.RawBadge[]) =>
-  Utils.message
-    .createLoadingMessage('排序中')
+  createLoadingMessage('排序中')
     .bind(
       Promise.try(async () => {
         if (isReordering.value) throw '排序中'
@@ -71,7 +73,7 @@ const reorderBadge = (item: jm.user.RawBadge[]) =>
       isReordering.value = false
     })
 
-const config = Store.useConfig()
+const config = useConfig()
 </script>
 
 <template>
@@ -80,7 +82,7 @@ const config = Store.useConfig()
       class="relative flex aspect-7/3 shrink-0 flex-col items-start justify-center overflow-hidden rounded bg-(--van-gray-1)"
       :class="[config.isDark && 'bg-white/10!']"
     >
-      <Comp.Image
+      <DcImage
         :src="
           uni.image.Image.create(
             { $$plugin: pluginName, forkNamespace: 'default', path: item.content },
@@ -96,15 +98,15 @@ const config = Store.useConfig()
         #{{ index }}
       </div>
       <div
-        class="absolute !right-1 bottom-2 rounded-full bg-white px-1 text-nowrap opacity-55 shadow"
-        :class="[config.isDark && '!bg-black']"
+        class="absolute right-1! bottom-2 rounded-full bg-white px-1 text-nowrap opacity-55 shadow"
+        :class="[config.isDark && 'bg-black!']"
       >
         {{ item.name }}
       </div>
     </div>
   </Def>
-  <NSpin :show="isReordering" class="!size-full *:!size-full">
-    <Comp.Content :source="temp.allMyOwn" class="flex h-full flex-col" v-if="jmStore.user">
+  <NSpin :show="isReordering" class="size-full! *:size-full!">
+    <DcContent :source="temp.allMyOwn" class="flex h-full flex-col" v-if="jmStore.user">
       <div class="flex h-[calc(100%-40px)] w-full flex-col">
         <NCard title="预览" size="small">
           <User :user="previewUser" />
@@ -134,11 +136,11 @@ const config = Store.useConfig()
       <VanButton
         @click="reorderBadge(myList)"
         block
-        class="!h-10 !rounded-none"
+        class="h-10! rounded-none!"
         size="large"
         type="primary"
         >确认更新
       </VanButton>
-    </Comp.Content>
+    </DcContent>
   </NSpin>
 </template>

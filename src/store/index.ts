@@ -1,14 +1,14 @@
-import type { Utils } from 'delta-comic-core'
-
-import { useLocalStorage } from '@vueuse/core'
+import { useNativeStore } from '@delta-comic/db'
+import type { Requester } from '@delta-comic/request'
 import { ref, shallowRef } from 'vue'
 
 import type { jm } from '@/api'
+import { pluginName } from '@/symbol'
 export namespace jmStore {
-  export const api = shallowRef<Utils.request.Requester>()
+  export const api = shallowRef<Requester>()
   export const loginToken = shallowRef<string | undefined>()
   export const loginAvs = shallowRef<string | undefined>()
-  export const loginData = useLocalStorage<jm.auth.LoginData>('jm.auth.LoginData', {
+  export const loginData = useNativeStore<jm.auth.LoginData>(pluginName, 'auth', {
     username: '',
     password: ''
   })

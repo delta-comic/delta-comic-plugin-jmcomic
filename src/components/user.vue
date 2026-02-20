@@ -2,7 +2,6 @@
 import userIcon from '@/assets/images/userIcon.webp?url'
 import { jm } from '@/api'
 import { computed } from 'vue'
-import { Comp } from 'delta-comic-core'
 import { isEmpty } from 'es-toolkit/compat'
 
 const $props = defineProps<{ user: jm.user.CommentUser | jm.user.UserMe; isSmall?: boolean }>()
@@ -15,7 +14,7 @@ const customUser = computed(() => $props.user.customUser.user)
     content-class="w-full"
   >
     <template #avatar>
-      <Comp.Image
+      <DcImage
         :fallback="userIcon"
         previewable
         :src="user.avatar"
@@ -84,14 +83,14 @@ const customUser = computed(() => $props.user.customUser.user)
           {{ user.customUser.expInfo.level_name }}
         </VanTag>
         <template v-if="isSmall">
-          <Comp.Image
+          <DcImage
             :src="badge.$content"
             class="size-4"
             v-for="badge of user.customUser.expInfo.$badges"
           />
         </template>
       </div>
-      <div class="flex !w-[60%] items-center">
+      <div class="flex w-[60%]! items-center">
         <span class="no-color-change-transition mr-1 text-xs text-(--van-text-color-2)"
           >{{ user.customUser.expInfo.exp ?? 0 }}/{{
             user.customUser.expInfo.$nextLevelExp ?? 0
@@ -134,7 +133,7 @@ const customUser = computed(() => $props.user.customUser.user)
           class="flex w-1/5 shrink-0 flex-col items-center justify-center text-(--van-text-color-2) odd:*:last:mb-4 even:*:last:mt-4"
           v-for="badge of user.customUser.expInfo.$badges"
         >
-          <Comp.Image :src="badge.$content" previewable class="size-13" hide-error />
+          <DcImage :src="badge.$content" previewable class="size-13" hide-error />
           <span class="">{{ badge.name }}</span>
         </div>
       </div>

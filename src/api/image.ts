@@ -1,12 +1,13 @@
+import type { uni } from '@delta-comic/model'
+import { interceptors } from '@delta-comic/request'
 import axios from 'axios'
-import { uni, Utils } from 'delta-comic-core'
 import { retry } from 'es-toolkit'
 import { decode_image, decode_images_batch } from 'jmcomic-helper'
 
 export namespace _jmImage {
   const api = axios.create()
-  api.interceptors.response.use(undefined, Utils.request.utilInterceptors.checkIsAxiosError)
-  api.interceptors.response.use(undefined, Utils.request.utilInterceptors.createAutoRetry(api))
+  api.interceptors.response.use(undefined, interceptors.checkIsAxiosError)
+  api.interceptors.response.use(undefined, interceptors.createAutoRetry(api))
   const cache = new Map<string, Promise<string>>()
 
   export interface DecodeOptions {

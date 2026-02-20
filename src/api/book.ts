@@ -1,11 +1,10 @@
+import { uni } from '@delta-comic/model'
 import dayjs from 'dayjs'
-import { uni } from 'delta-comic-core'
 
 import { pluginName } from '@/symbol'
 
-import type { _jmUser } from './user'
-
 import { createRelatedBookToItem, dateTranslate } from './api/utils'
+import type { _jmUser } from './user'
 
 export namespace _jmBook {
   export interface RawCommonBook {

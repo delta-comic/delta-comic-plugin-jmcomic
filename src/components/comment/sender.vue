@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { Comp, Store, uni, Utils } from 'delta-comic-core'
+import type { uni } from '@delta-comic/model'
+import { useConfig } from '@delta-comic/plugin'
+import { createLoadingMessage } from '@delta-comic/ui'
 import { FieldInstance } from 'vant'
 import { shallowRef } from 'vue'
 
-const config = Store.useConfig()
+const config = useConfig()
 
 const $props = defineProps<{
   class?: any
@@ -19,7 +21,7 @@ const isSubmitting = shallowRef(false)
 const submit = async () => {
   if (input.value == '') return window.$message.info('评论内容不能为空')
   isSubmitting.value = true
-  const loading = Utils.message.createLoadingMessage('发送中')
+  const loading = createLoadingMessage('发送中')
   try {
     await $props.aim.sendComment(input.value)
     loading.success()
@@ -33,12 +35,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <Comp.Popup
-    v-model:show="show"
-    position="bottom"
-    class="w-full bg-(--van-background-2) pb-1"
-    round
-  >
+  <DcPopup v-model:show="show" position="bottom" class="w-full bg-(--van-background-2) pb-1" round>
     <VanField
       type="textarea"
       class="min-h-[30vh] w-full"
@@ -52,11 +49,11 @@ const submit = async () => {
     <div class="mt-1 flex h-8 w-full items-center justify-end pr-1">
       <NButton round type="primary" :loading="isSubmitting" @click="submit()"> 提交 </NButton>
     </div>
-  </Comp.Popup>
+  </DcPopup>
 
   <div
     :class="[config.isDark ? 'bg-[#333] text-[#666]' : 'bg-gray-100 text-gray-300', $props.class]"
-    class="van-ellipsis flex h-[80%] w-1/2 items-center rounded-full px-2 !text-xs"
+    class="van-ellipsis flex h-4/5 w-1/2 items-center rounded-full px-2 text-xs!"
     @click="
       async () => {
         if (!item.commentSendable) return

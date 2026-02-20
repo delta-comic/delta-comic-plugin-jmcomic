@@ -1,12 +1,10 @@
-import { Utils } from 'delta-comic-core'
+import { PromiseContent } from '@delta-comic/model'
 
 import { jmStore } from '@/store'
 
 import type { jm as JmType } from '..'
-
 import { _jmUser } from '../user'
 export namespace _jmApiAuth {
-  const { PromiseContent } = Utils.data
   export const login = PromiseContent.fromAsyncFunction(
     (data: JmType.auth.LoginData, signal?: AbortSignal) =>
       jmStore.api

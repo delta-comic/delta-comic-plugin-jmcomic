@@ -1,21 +1,28 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { coreModule, requireDepend, uni } from 'delta-comic-core'
 import { jm } from '@/api'
+import { require } from '@delta-comic/plugin'
+import { layoutModule } from '@/symbol'
+import type { uni } from '@delta-comic/model'
 const $props = defineProps<{
   comment: jm.comment.Comment
-  item: any
+  item?: uni.item.Item
   parentComment?: uni.comment.Comment
 }>()
 const raw = computed(() => $props.comment.sender.customUser)
 const $emit = defineEmits<{ click: [c: uni.comment.Comment]; clickUser: [u: uni.user.User] }>()
 defineSlots<{ default(): void }>()
 
-const { comp } = requireDepend(coreModule)
+const {
+  component: {
+    comment: { CommentRow }
+  }
+} = require(layoutModule)
 </script>
 
 <template>
-  <comp.CommentRow
+  <CommentRow
+    :item
     :comment
     :parentComment
     @click="$emit('click', $event)"
@@ -26,5 +33,5 @@ const { comp } = requireDepend(coreModule)
         Lv{{ raw.expInfo.level }}
       </span>
     </template>
-  </comp.CommentRow>
+  </CommentRow>
 </template>

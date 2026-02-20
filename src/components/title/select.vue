@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { jm } from '@/api'
-import { Comp, Store, uni, Utils } from 'delta-comic-core'
 import { until } from '@vueuse/core'
 import { computed, triggerRef } from 'vue'
 import { shallowRef } from 'vue'
 import { jmStore } from '@/store'
 import { pluginName } from '@/symbol'
+import { useTemp } from '@delta-comic/core'
+import { createLoadingMessage } from '@delta-comic/ui'
+import { uni } from '@delta-comic/model'
 await until(jmStore.user).toBeTruthy()
-const temp = Store.useTemp().$apply('jm:change-title', () => ({ all: jm.api.user.title.getAll() }))
+const temp = useTemp().$apply('jm:change-title', () => ({ all: jm.api.user.title.getAll() }))
 const isChanging = shallowRef(false)
 const change = (item: string) =>
-  Utils.message
-    .createLoadingMessage('更换中')
+  createLoadingMessage('更换中')
     .bind(
       Promise.try(async () => {
         if (isChanging.value || !temp.all.data.value) throw '更换中'
@@ -42,8 +43,8 @@ const previewUser = computed(
 </script>
 
 <template>
-  <NSpin :show="isChanging" class="!size-full *:!size-full">
-    <Comp.Content :source="temp.all" class="flex h-full flex-col" v-if="jmStore.user">
+  <NSpin :show="isChanging" class="size-full! *:size-full!">
+    <DcContent :source="temp.all" class="flex h-full flex-col" v-if="jmStore.user">
       <div class="flex h-[calc(100%-40px)] w-full flex-col">
         <NCard title="预览" size="small">
           <User :user="previewUser" isSmall />
@@ -52,13 +53,13 @@ const previewUser = computed(
           <NGrid :cols="3" v-if="temp.all.data.value">
             <NGi
               v-for="item of temp.all.data.value"
-              class="van-hairline--surround relative h-16 w-full !bg-(--van-background-2) pl-2 before:bg-transparent before:transition-all"
+              class="van-hairline--surround relative h-16 w-full bg-(--van-background-2)! pl-2 before:bg-transparent before:transition-all"
               @click="item.done && (selectTitle = item.content)"
               :class="[
                 !item.done &&
-                  'before:absolute before:top-0 before:left-0 before:size-full before:!bg-(--van-background-2)/50',
+                  'before:absolute before:top-0 before:left-0 before:size-full before:bg-(--van-background-2)/50!',
                 selectTitle == item.content &&
-                  'before:absolute before:top-0 before:left-0 before:size-full before:!bg-(--p-color)/20'
+                  'before:absolute before:top-0 before:left-0 before:size-full before:bg-(--p-color)/20!'
               ]"
             >
               <div class="flex size-full flex-col items-start justify-around">
@@ -78,11 +79,11 @@ const previewUser = computed(
       <VanButton
         @click="change(selectTitle)"
         block
-        class="!h-10 !rounded-none"
+        class="h-10! rounded-none!"
         size="large"
         type="primary"
         >确认更新
       </VanButton>
-    </Comp.Content>
+    </DcContent>
   </NSpin>
 </template>

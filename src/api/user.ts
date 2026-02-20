@@ -1,10 +1,9 @@
-import { uni } from 'delta-comic-core'
+import { uni } from '@delta-comic/model'
 
 import { pluginName } from '@/symbol'
 
 import type { _jmBlog } from './blog'
 import type { _jmComment } from './comment'
-
 import { _jmImage } from './image'
 
 export namespace _jmUser {

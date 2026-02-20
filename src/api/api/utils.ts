@@ -1,5 +1,5 @@
+import { Stream } from '@delta-comic/model'
 import dayjs from 'dayjs'
-import { Utils } from 'delta-comic-core'
 import { ceil, isEmpty, isString, uniq } from 'es-toolkit/compat'
 
 import { pluginName } from '@/symbol'
@@ -304,7 +304,7 @@ export const dateTranslate = (date: string) => {
 export const jmStream = <T>(
   api: (page: number, signal: AbortSignal) => PromiseLike<{ list: T[]; total: number }>
 ) =>
-  Utils.data.Stream.create<T>(async function* (signal, that) {
+  Stream.create<T>(async function* (signal, that) {
     while (true) {
       if (that.pages.value <= that.page.value) return
       that.page.value++

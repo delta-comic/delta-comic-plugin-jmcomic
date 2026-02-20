@@ -1,9 +1,8 @@
-import { uni } from 'delta-comic-core'
-
-import type { _jmSearch } from './search'
+import { uni } from '@delta-comic/model'
 
 import { jm } from '.'
 import { _jmImage } from './image'
+import type { _jmSearch } from './search'
 
 export namespace _jmComic {
   export interface RawSeries {
@@ -92,7 +91,8 @@ export namespace _jmComic {
     public override like(signal?: AbortSignal): PromiseLike<boolean> {
       return jm.api.comic.likeComic(this.id, signal)
     }
-    public override report(signal?: AbortSignal): PromiseLike<any> {
+    public override report(_signal?: AbortSignal): PromiseLike<any> {
+      window.$message.warning('Method not implemented.')
       throw new Error('Method not implemented.')
     }
     public override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {

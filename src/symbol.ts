@@ -1,7 +1,6 @@
 export const pluginName = 'jmcomic'
 
-import type { LayoutPlugin } from 'delta-comic-plugin-layout'
+import { declareDepType } from '@delta-comic/plugin'
+import type { LayoutLib } from 'delta-comic-plugin-layout'
 
-import { declareDependType } from 'delta-comic-core'
-
-export const layoutModule = declareDependType<LayoutPlugin>('layout')
+export const layoutModule = declareDepType<LayoutLib>('layout')

@@ -1,4 +1,4 @@
-import type { uni } from 'delta-comic-core'
+import type { uni } from '@delta-comic/model'
 
 import { JmComicPage } from '@/api/page'
 

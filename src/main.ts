@@ -1,4 +1,9 @@
 import '@/index.css'
+import { SharedFunction } from '@delta-comic/core'
+import { uni } from '@delta-comic/model'
+import { definePlugin, Global, require, type Subscribe } from '@delta-comic/plugin'
+import { createAxios, interceptors } from '@delta-comic/request'
+import type {} from '@delta-comic/utils'
 import { UserOutlined } from '@vicons/antd'
 import {
   BadgeOutlined,
@@ -9,14 +14,6 @@ import {
 } from '@vicons/material'
 import axios, { formToJSON } from 'axios'
 import { AES, MD5, enc, mode } from 'crypto-js'
-import {
-  coreModule,
-  definePlugin,
-  requireDepend,
-  uni,
-  Utils,
-  type PluginConfigSubscribe
-} from 'delta-comic-core'
 import { first, inRange, isArray, isEmpty, isString } from 'es-toolkit/compat'
 
 import { jm } from './api'
@@ -34,7 +31,13 @@ import Select from './components/title/select.vue'
 import User from './components/user.vue'
 import WeekPromote from './components/weekPromote.vue'
 import { jmStore } from './store'
-import { pluginName } from './symbol'
+import { layoutModule, pluginName } from './symbol'
+
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    jm_key?: string
+  }
+}
 
 const testAxios = axios.create({
   timeout: 10000,
@@ -43,12 +46,9 @@ const testAxios = axios.create({
     return inRange(status, 199, 499)
   }
 })
-testAxios.interceptors.response.use(
-  undefined,
-  Utils.request.utilInterceptors.createAutoRetry(testAxios, 2)
-)
+testAxios.interceptors.response.use(undefined, interceptors.createAutoRetry(testAxios, 2))
 
-const { layout } = requireDepend(coreModule)
+const { layout } = require(layoutModule)
 
 void definePlugin({
   name: pluginName,
@@ -72,7 +72,7 @@ void definePlugin({
     console.log('setup...', ins, ins.api?.api)
     if (ins.api?.api) {
       const f = ins.api.api
-      const api = Utils.request.createAxios(
+      const api = createAxios(
         () => f,
         {},
         ins => {
@@ -137,7 +137,7 @@ void definePlugin({
         }
       )
       jmStore.api.value = api
-      Utils.eventBus.SharedFunction.define(
+      SharedFunction.define(
         s => jm.api.search.getRandomComics(s).then(v => v.list),
         pluginName,
         'getRandomProvide'
@@ -247,14 +247,11 @@ void definePlugin({
         ]
       }
     ],
-    authorActions: {
+    userActions: {
       search: {
         name: '搜索',
         call(author) {
-          return Utils.eventBus.SharedFunction.call('routeToSearch', author.label, [
-            pluginName,
-            'keyword'
-          ])
+          return SharedFunction.call('routeToSearch', author.label, [pluginName, 'keyword'])
         },
         icon: SearchOutlined
       }
@@ -299,7 +296,7 @@ void definePlugin({
           jmStore.useredit.value = useredit
 
           console.log('cate', cate)
-          uni.content.ContentPage.addCategories(
+          Global.addCategories(
             pluginName,
             ...cate.categories
               .filter(v => !!v.sub_categories)
@@ -321,15 +318,11 @@ void definePlugin({
 
           console.log('wb', wb)
           jmStore.wb.value = wb
-          uni.content.ContentPage.addTabbar(pluginName, {
-            comp: WeekPromote,
-            id: 'weekPromote',
-            title: '每周推荐'
-          })
+          Global.addTabbar(pluginName, { comp: WeekPromote, id: 'weekPromote', title: '每周推荐' })
 
           console.log('promote', promote)
           jmStore.promotes.value = promote
-          uni.content.ContentPage.addTabbar(
+          Global.addTabbar(
             pluginName,
             ...promote.map(v => ({ title: v.title, id: v.id, comp: Tabbar }))
           )
@@ -386,8 +379,8 @@ void definePlugin({
 })
 
 const diff = async (
-  that: PluginConfigSubscribe,
-  olds: Parameters<PluginConfigSubscribe['getUpdateList']>[0],
+  that: Subscribe.Config,
+  olds: Parameters<Subscribe.Config['getUpdateList']>[0],
   signal?: AbortSignal
 ) => {
   const allList = await Promise.all(

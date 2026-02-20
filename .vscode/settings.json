@@ -1,5 +1,5 @@
 {
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[vue]": { "editor.defaultFormatter": "Vue.volar" },
   "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" }
 }

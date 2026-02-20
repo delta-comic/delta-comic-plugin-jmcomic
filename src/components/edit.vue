@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { jm } from '@/api'
 import { jmStore } from '@/store'
-import { Utils } from 'delta-comic-core'
+import { createLoadingMessage } from '@delta-comic/ui'
 import { shallowRef } from 'vue'
 
 const isSubmitting = shallowRef(false)
 const submit = async () => {
   if (isSubmitting.value) return
   isSubmitting.value = true
-  const loading = Utils.message.createLoadingMessage('上传中')
+  const loading = createLoadingMessage('上传中')
   if (!jmStore.useredit.value) return loading.fail('无信息')
   jmStore.useredit.value.password = jmStore.useredit.value.password_confirm =
     jmStore.loginData.value.password
@@ -21,12 +21,12 @@ const submit = async () => {
   <NForm
     :model="jmStore.useredit.value"
     label-placement="top"
-    class="!bg-(--van-background-2) !p-3"
+    class="bg-(--van-background-2)! p-3!"
     v-if="jmStore.useredit.value"
     @submit.stop.prevent
     :disabled="isSubmitting"
   >
-    <NDivider title-placement="left" class="!mt-0"> 个人信息 </NDivider>
+    <NDivider title-placement="left" class="mt-0!"> 个人信息 </NDivider>
     <NFormItem label="昵称" path="nickName">
       <NInput clearable v-model:value="jmStore.useredit.value.nickName" />
     </NFormItem>

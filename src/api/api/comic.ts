@@ -1,14 +1,12 @@
-import { uni, Utils } from 'delta-comic-core'
+import { PromiseContent, uni } from '@delta-comic/model'
 
 import { jmStore } from '@/store'
 import { pluginName } from '@/symbol'
 
 import type { jm as JmType } from '..'
-
 import { _jmComment } from '../comment'
 import { createFullToUniItem, jmStream } from './utils'
 export namespace _jmApiComic {
-  const { PromiseContent } = Utils.data
   export const getComic = PromiseContent.fromAsyncFunction(
     async (id: string, signal?: AbortSignal) =>
       createFullToUniItem(

@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import { jm } from '@/api'
 import { jmStore } from '@/store'
+import type { Search } from '@delta-comic/plugin'
 import { useResizeObserver, until } from '@vueuse/core'
-import { Comp, PluginConfigSearchTabbar, Store, Utils } from 'delta-comic-core'
+
 import { isEmpty } from 'es-toolkit/compat'
 import { computed, onMounted, ref, shallowRef } from 'vue'
 import { ComponentExposed } from 'vue-component-type-helpers'
 import { useRouter } from 'vue-router'
-const $props = defineProps<{ isActive: boolean; tabbar: PluginConfigSearchTabbar }>()
+import { DcWaterfall } from '@delta-comic/ui'
+import { useTemp } from '@delta-comic/core'
+import type { RStream } from '@delta-comic/model'
+
+const $props = defineProps<{ isActive: boolean; tabbar: Search.Tabbar }>()
 const $router = useRouter()
 
-const list = shallowRef<ComponentExposed<typeof Comp.Waterfall>>()
-const temp = Store.useTemp()
+const list = shallowRef<ComponentExposed<typeof DcWaterfall>>()
+const temp = useTemp()
 const orderStoreSaveTemp = temp.$applyRaw(
   `orderJmStoreSave`,
-  () => new Map<string, Utils.data.RStream<jm.comic.JmItem>>()
+  () => new Map<string, RStream<jm.comic.JmItem>>()
 )
 const orderScrollSaveTemp = temp.$applyRaw(`orderJmScoreSave`, () => new Map<string, number>())
 const containBound = ref<DOMRectReadOnly>()
@@ -45,7 +50,7 @@ const dataSource = computed(() => {
 </script>
 
 <template>
-  <Comp.Waterfall :source="dataSource" v-slot="{ item }" ref="list">
+  <DcWaterfall :source="dataSource" v-slot="{ item }" ref="list">
     <Card :item free-height type="small" />
-  </Comp.Waterfall>
+  </DcWaterfall>
 </template>

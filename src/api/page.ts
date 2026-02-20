@@ -1,4 +1,5 @@
-import { requireDepend, uni, Utils } from 'delta-comic-core'
+import { PromiseContent, Stream, uni } from '@delta-comic/model'
+import { require } from '@delta-comic/plugin'
 import { defineComponent, h } from 'vue'
 
 import { layoutModule, pluginName } from '@/symbol'
@@ -10,9 +11,9 @@ import {
   createRecommendToUniItem
 } from './api/utils'
 
-const { view } = requireDepend(layoutModule)
+const { model, view } = require(layoutModule)
 
-export class JmComicPage extends uni.content.ContentImagePage {
+export class JmComicPage extends model.ContentImagePage {
   public static contentType = uni.content.ContentPage.contentPage.toString([pluginName, 'comic'])
   public override plugin = pluginName
   public override contentType = uni.content.ContentPage.contentPage.toJSON(JmComicPage.contentType)
@@ -55,10 +56,10 @@ export class JmComicPage extends uni.content.ContentImagePage {
   public override exportOffline(): never {
     throw new Error('Method not implemented.')
   }
-  public ViewComp
+  // @ts-ignore
+  public ViewComp = view.Image
   constructor(preload: uni.content.PreloadValue, id: string, ep: string) {
     super(preload, id, ep)
-    this.ViewComp = view.Image
   }
 }
 
@@ -66,7 +67,7 @@ export class JmBlogPage extends uni.content.ContentPage {
   public static contentType = uni.content.ContentPage.contentPage.toString([pluginName, 'blog'])
   public override plugin = pluginName
   public override contentType = uni.content.ContentPage.contentPage.toJSON(JmBlogPage.contentType)
-  public content = Utils.data.PromiseContent.withResolvers<string>()
+  public content = PromiseContent.withResolvers<string>()
   public override loadAll() {
     return Promise.resolve(
       this.detail.content.isLoading.value ||
@@ -87,9 +88,9 @@ export class JmBlogPage extends uni.content.ContentPage {
         )
     )
   }
-  public uploader = Utils.data.PromiseContent.withResolvers<uni.user.User>()
-  public recommendComics = Utils.data.PromiseContent.withResolvers<uni.item.Item[]>()
-  public images = Utils.data.PromiseContent.withResolvers<uni.image.Image[]>()
+  public uploader = PromiseContent.withResolvers<uni.user.User>()
+  public recommendComics = PromiseContent.withResolvers<uni.item.Item[]>()
+  public images = PromiseContent.withResolvers<uni.image.Image[]>()
   public override comments = jm.api.blog.createCommentsStream(this.id)
   public override reloadAll(): any {
     throw new Error('Method not implemented.')
@@ -127,7 +128,7 @@ export class JmBookPage extends uni.content.ContentPage {
       // }))
     ])
   }
-  public override comments = Utils.data.Stream.create<uni.comment.Comment>(function* () {})
+  public override comments = Stream.create<uni.comment.Comment>(function* () {})
   public override reloadAll(): any {
     throw new Error('Method not implemented.')
   }

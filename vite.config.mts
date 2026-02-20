@@ -1,10 +1,12 @@
+import { fileURLToPath, URL } from 'node:url'
+
+import { DeltaComicUiResolver } from '@delta-comic/ui/vite'
+import { deltaComicPlus } from '@delta-comic/vite'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import browserslist from 'browserslist'
-import { deltaComic, deltaComicPlus } from 'delta-comic-core/vite'
 import { browserslistToTargets } from 'lightningcss'
-import { fileURLToPath, URL } from 'node:url'
 import { NaiveUiResolver, VantResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, type UserConfigExport } from 'vite'
@@ -18,7 +20,10 @@ export default defineConfig(
         wasm(),
         vue(),
         vueJsx(),
-        Components({ dts: true, resolvers: [NaiveUiResolver(), VantResolver()] }),
+        Components({
+          dts: true,
+          resolvers: [NaiveUiResolver(), VantResolver(), DeltaComicUiResolver()]
+        }),
         tailwindcss(),
         deltaComicPlus(
           {
@@ -43,7 +48,7 @@ export default defineConfig(
         }
       },
       build: { sourcemap: true, minify: true, cssMinify: true },
-      server: { port: 6173 },
+      server: { port: 6173, host: true },
       base: '/',
       optimizeDeps: { exclude: ['jmcomic-helper'] }
     }) satisfies UserConfigExport

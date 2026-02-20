@@ -1,15 +1,12 @@
-import { Utils } from 'delta-comic-core'
+import { PromiseContent } from '@delta-comic/model'
 
 import { jmStore } from '@/store'
 
 import type { jm as JmType } from '..'
-
 import { _jmComment } from '../comment'
 import { createCommonBlogToUniItem, jmStream } from './utils'
 
 export namespace _jmApiBlog {
-  const { PromiseContent } = Utils.data
-
   export type BlogType = 'dinner' | 'raiders' | 'sexytalk'
   export const blogType: Record<BlogType, string> = {
     dinner: '绅夜食堂',

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { jm } from '@/api'
 import { JmBlogPage } from '@/api/page'
-import { pluginName } from '@/symbol'
+import { layoutModule, pluginName } from '@/symbol'
 import { parseBlog } from '@/utils/blog'
+import { SharedFunction } from '@delta-comic/core'
+import { PromiseContent, uni } from '@delta-comic/model'
+import { require } from '@delta-comic/plugin'
 import { LikeFilled } from '@vicons/antd'
 import { ArrowBackIosRound, ChatBubbleOutlineOutlined, PlusRound } from '@vicons/material'
-import { Comp, coreModule, requireDepend, uni, Utils } from 'delta-comic-core'
 import { isEmpty } from 'es-toolkit/compat'
 import { NScrollbar } from 'naive-ui'
 import { computed, shallowRef } from 'vue'
@@ -21,21 +23,23 @@ const user = computed(() => new jm.user.BlogUser(raw.value))
 const createURL = (url: string) => new URL(url)
 
 const isLiked = shallowRef(union.value.isLiked ?? false)
-const handleLike = Utils.data.PromiseContent.fromAsyncFunction(() =>
-  jm.api.blog.likeBlog(union.value.id)
-)
+const handleLike = PromiseContent.fromAsyncFunction(() => jm.api.blog.likeBlog(union.value.id))
 
 const showComment = shallowRef(union.value.isLiked ?? false)
 
 const {
-  comp: { Comment, FavouriteSelect }
-} = requireDepend(coreModule)
+  component: {
+    comment: { Comment },
+    FavouriteSelect
+  },
+  helper: { createDateString }
+} = require(layoutModule)
 </script>
 
 <template>
-  <NScrollbar class="relative !h-[100vh] w-full overflow-x-hidden bg-(--van-background-2) pb-13">
+  <NScrollbar class="relative h-screen! w-full overflow-x-hidden bg-(--van-background-2) pb-13">
     <div class="relative flex h-15 w-full items-center">
-      <NButton text type="tertiary" @click="$router.back()" class="!absolute left-4">
+      <NButton text type="tertiary" @click="$router.back()" class="absolute! left-4">
         <template #icon>
           <NIcon size="30px">
             <ArrowBackIosRound />
@@ -47,14 +51,14 @@ const {
       {{ union.title }}
     </div>
     <div class="relative flex h-15 w-full items-center px-4">
-      <Comp.Image :src="user.avatar" class="!aspect-square !size-12" round />
+      <DcImage :src="user.avatar" class="aspect-square! size-12!" round />
       <div class="ml-1 flex h-full w-full flex-col gap-0.5 py-3">
         <div class="text-sm font-semibold">{{ user.name }}</div>
         <div class="text-xs text-(--van-text-color-2)">
-          {{ Utils.translate.createDateString(union.$updateTime) }}
+          {{ createDateString(union.$updateTime) }}
         </div>
       </div>
-      <NButton size="tiny" ghost type="primary" class="!absolute right-4">
+      <NButton size="tiny" ghost type="primary" class="absolute! right-4">
         <template #icon>
           <NIcon>
             <PlusRound />
@@ -63,20 +67,13 @@ const {
         关注
       </NButton>
     </div>
-    <div v-for="p of content" class="w-full px-4 !text-lg" ref="content">
+    <div v-for="p of content" class="w-full px-4 text-lg!" ref="content">
       <template v-if="p.type == 'textSet'">
         <span v-for="t in p.text" :class="[t.style == 'bold' && 'font-bold']">
           <NButton
             text
             size="large"
-            @click="
-              Utils.eventBus.SharedFunction.call(
-                'routeToContent',
-                t.link.content,
-                t.link.id,
-                t.link.ep
-              )
-            "
+            @click="SharedFunction.call('routeToContent', t.link.content, t.link.id, t.link.ep)"
             v-if="t.link"
             type="primary"
           >
@@ -86,7 +83,7 @@ const {
         </span>
       </template>
       <template v-else-if="p.type == 'img'">
-        <Comp.Image
+        <DcImage
           :src="
             uni.image.Image.create(
               { $$plugin: pluginName, forkNamespace: 'default', path: createURL(p.src).pathname },
@@ -94,24 +91,24 @@ const {
             )
           "
           previewable
-          class="!w-full !bg-(--van-background)"
+          class="w-full! bg-(--van-background)!"
         />
       </template>
       <template v-else-if="p.type == 'empty'">
         <NDivider />
       </template>
     </div>
-    <div class="mb-2 flex w-full flex-wrap gap-1 px-4 !text-lg">
+    <div class="mb-2 flex w-full flex-wrap gap-1 px-4 text-lg!">
       <NButton
         text
         size="large"
         v-for="tag of union.categories"
         type="primary"
         @click="
-          Utils.eventBus.SharedFunction.call(
+          SharedFunction.call(
             'routeToSearch',
             tag.search.keyword,
-            `${pluginName}:${tag.search.source}`,
+            [pluginName, tag.search.source],
             tag.search.sort
           )
         "
@@ -135,10 +132,10 @@ const {
     </div>
   </NScrollbar>
   <div
-    class="van-hairline--top !fixed bottom-0 flex h-13 w-full items-center justify-around bg-(--van-background-2)"
+    class="van-hairline--top fixed! bottom-0 flex h-13 w-full items-center justify-around bg-(--van-background-2)"
   >
     <Sender :item="union" :aim="union" />
-    <Comp.ToggleIcon
+    <DcToggleIcon
       padding
       size="27px"
       :icon="ChatBubbleOutlineOutlined"
@@ -146,13 +143,13 @@ const {
       @click="showComment = true"
     >
       {{ union.commentNumber || '评论' }}
-    </Comp.ToggleIcon>
-    <Comp.ToggleIcon padding size="27px" v-model="isLiked" @click="handleLike" :icon="LikeFilled">
+    </DcToggleIcon>
+    <DcToggleIcon padding size="27px" v-model="isLiked" @click="handleLike" :icon="LikeFilled">
       {{ union.likeNumber ?? '喜欢' }}
-    </Comp.ToggleIcon>
+    </DcToggleIcon>
     <FavouriteSelect :item="union" />
   </div>
-  <Comp.Popup v-model:show="showComment" class="h-[90vh] w-full" round position="bottom">
+  <DcPopup v-model:show="showComment" class="h-[90vh] w-full" round position="bottom">
     <Comment :item="union" :comments="$props.page.comments" class="h-full" />
-  </Comp.Popup>
+  </DcPopup>
 </template>
