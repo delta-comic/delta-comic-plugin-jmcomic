@@ -1,3 +1,18 @@
+# [0.3.0](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.2.0...0.3.0) (2026-02-20)
+
+
+### Bug Fixes
+
+* [pub] lock file change ([eed315e](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/eed315e52b8ed726ce7691e62ebee1d22878f00a))
+* **ci:** [pub] ci build ([136301e](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/136301e02903e7c1a5c52454b033faa19c583c97))
+* **ci:** no change deps steps ([d9ccca8](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/d9ccca86d8b25a97f932c06817e23ee0ed84a6b8))
+* no wasm [pub] ([641a59b](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/641a59be00210f8287eb5306d59b473172ea0bfb))
+
+
+### Features
+
+* new core ([475098a](https://github.com/delta-comic/delta-comic-plugin-jmcomic/commit/475098a4cdd434e1b7695bbdf2538baec1a03d45))
+
 # [0.2.0](https://github.com/delta-comic/delta-comic-plugin-jmcomic/compare/0.1.2...0.2.0) (2026-02-10)
 
 
