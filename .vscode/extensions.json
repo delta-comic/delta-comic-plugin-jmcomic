@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "oxc.oxc-vscode",
+    "tamasfe.even-better-toml",
+    "rust-lang.rust-analyzer",
+    "Vue.volar",
+    "streetsidesoftware.code-spell-checker",
+    "bradlc.vscode-tailwindcss",
+    "DavidAnson.vscode-markdownlint",
+    "VoidZero.vite-plus-extension-pack"
+  ]
+}
