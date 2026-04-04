@@ -1,9 +1,6 @@
-import {} from 'ofetch'
-
-import { jsonToFormData } from '@/helpers'
-import type { Gender, UserMe } from '@/model/user'
-
 import type { JMComic } from '..'
+import { jsonToFormData } from '../helpers'
+import type { Gender, UserMe } from '../model/user'
 
 export interface LoginData {
   username: string
@@ -24,31 +21,27 @@ export interface LoginUser {
 
 export class Auth {
   constructor(protected sdk: JMComic) {}
-  public loginUsers = new Array<[username: string, user: LoginUser]>()
-  public get latestUser() {
-    return this.loginUsers.at(-1)?.[1]
-  }
+  public user?: LoginUser
 
-  public login(data: LoginData, signal?: AbortSignal) {
-    const fetch = this.sdk.requester.create({}, null)
-    return fetch(this.sdk.config.apiPath.login, {
+  public async login(data: LoginData, signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    const result = ky.post<UserMe>(this.sdk.config.apiPath.login, {
       body: jsonToFormData(data),
-      signal,
-      method: 'POST'
+      signal
     })
+    return (this.user = { user: await result.json(), data })
   }
 
   public signUp(data: SignupData, signal?: AbortSignal) {
-    const fetch = this.sdk.requester.create({}, null)
-    return fetch(this.sdk.config.apiPath.signup, {
-      body: jsonToFormData(data),
-      signal,
-      method: 'POST'
-    })
+    const ky = this.sdk.requester.create()
+    return ky
+      .post<void>(this.sdk.config.apiPath.signup, { body: jsonToFormData(data), signal })
+      .text()
   }
 
-  public logout(signal?: AbortSignal, usingUser = this.latestUser) {
-    const fetch = this.sdk.requester.create({}, usingUser)
-    fetch(this.sdk.config.apiPath.logout, { signal, method: 'POST' })
+  public async logout(signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    await ky.post(this.sdk.config.apiPath.logout, { signal }).text()
+    this.user = undefined
   }
 }
