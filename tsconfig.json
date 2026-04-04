@@ -23,7 +23,8 @@
     "noImplicitThis": true,
     "jsxImportSource": "vue",
     "paths": { "@/*": ["./src/*"] },
-    "types": ["./components.d.ts", "./env.d.ts", "vue-component-type-helpers"]
+    "types": ["./components.d.ts", "./env.d.ts", "vue-component-type-helpers"],
+    "verbatimModuleSyntax": false
   },
   "include": ["src/**/*"],
   "exclude": []

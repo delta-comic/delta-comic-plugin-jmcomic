@@ -1,64 +1,65 @@
-import { uni } from '@delta-comic/model'
+import type { BlogType, RawCommonBlog, RawFullBlog } from '@/model/blog'
+import type { RawRecommendComic } from '@/model/comic'
+import { Comment, type RawComment } from '@/model/comment'
+import type { SortType } from '@/model/search'
+import { jmStore } from '@/store'
 
-import { jm } from '.'
-import type { _jmUser } from './user'
+import { createCommonBlogToUniItem, toStreamQuery } from './utils'
 
-export namespace _jmBlog {
-  export interface RawCommonBlog {
-    id: string
-    uid: string
-    username: string
-    user_photo: string
-    gender: _jmUser.Gender
-    game_url: string
-    gid: string
-    title: string
-    tags: string[]
-    category: { name: string; slug: string }
-    content: string
-    photo: string
-    total_views: string
-    total_comments: string
-    total_likes: string
-    /** @example "2025-04-24" */
-    date: string
-  }
-
-  export class JmBlog extends uni.item.Item {
-    override $$meta: { raw: RawCommonBlog | RawFullBlog }
-    override like(signal?: AbortSignal): PromiseLike<boolean> {
-      return jm.api.blog.likeBlog(this.id, signal)
-    }
-    override report(_signal?: AbortSignal): PromiseLike<any> {
-      throw new Error('Method not implemented.')
-    }
-    override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {
-      return jm.api.blog.sendComment(this.id, text, signal)
-    }
-    constructor(v: uni.item.RawItem) {
-      super(v)
-      this.$$meta = <any>v.$$meta
-    }
-  }
-
-  export interface RawFullBlog {
-    id: string
-    uid: string
-    title: string
-    tags: string[]
-    content: string
-    photo: string
-    total_views: string
-    total_comments: string
-    total_likes: string
-    username: string
-    nickname: string
-    user_photo: null
-    category: { name: string; slug: string }
-    expInfo: _jmUser.RawExpInfo
-    game_url: null
-    is_liked: boolean
-    /** @example "2025-04-24" */
-    date: string
-  }
+export const blogType: Record<BlogType, string> = {
+  dinner: '绅夜食堂',
+  raiders: '游戏文库',
+  sexytalk: '西斯话题'
 }
+export const getBlogSearch = async (
+  type: BlogType,
+  search_query: string = '',
+  order: SortType = '',
+  page: number = 1,
+  signal?: AbortSignal
+) => {
+  const all = await jmStore.api.value!.get<{ list: RawCommonBlog[]; count: number }>('/blogs', {
+    params: { mode: 'blog', page, blog_type: type, search_query, o: order },
+    signal
+  })
+  return { list: all.list.map(v => createCommonBlogToUniItem(v, type)), total: Number(all.count) }
+}
+
+export const createBlogsStream = (type: BlogType, search_query = '', order: SortType = '') =>
+  toStreamQuery((page, signal) => getBlogSearch(type, search_query, order, page, signal))
+
+export const getInfo = (id: string, signal?: AbortSignal) =>
+  jmStore.api.value!.get<{
+    info: RawFullBlog
+    related_comics?: RawRecommendComic[]
+    related_blogs?: RawCommonBlog[]
+  }>('/blog', { signal, params: { id } })
+
+export const getComment = async (blogId: string, page: number = 1, signal?: AbortSignal) => {
+  const all = await jmStore.api.value!.get<{ list: RawComment[]; total: string }>('/forum', {
+    params: { mode: 'blog', page, bid: blogId },
+    signal
+  })
+  return { list: all.list.map(v => new Comment(v)), total: Number(all.total) }
+}
+
+export const createCommentsStream = (blogId: string) =>
+  toStreamQuery((page, signal) => getComment(blogId, page, signal))
+
+export const likeBlog = (id: string, signal?: AbortSignal) =>
+  jmStore.api.value!.postForm('/like', { id, like_type: 'blog' }, { signal })
+
+export const sendComment = (id: string, content: string, signal?: AbortSignal) =>
+  jmStore.api.value!.postForm('/comment', { bid: id, comment: content, content }, { signal })
+
+export const sendChildComment = (
+  id: string,
+  parentCId: string,
+  content: string,
+  signal?: AbortSignal
+) =>
+  jmStore.api.value!.postForm(
+    '/comment',
+    { bid: id, content, comment: content, comment_id: parentCId },
+    { signal }
+  )

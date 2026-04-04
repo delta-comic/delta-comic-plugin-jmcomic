@@ -1,16 +1,12 @@
-import type { _jmUser } from './user'
+import type { LoginData, SignupData } from '@/model/auth'
+import { UserMe, type RawUserMe } from '@/model/user'
+import { jmStore } from '@/store'
 
-export namespace _jmAuth {
-  export interface LoginData {
-    username: string
-    password: string
-  }
-  export interface SignupData {
-    email: string
-    gender: _jmUser.Gender
-    password: string
-    password_confirm: string
-    username: string
-  }
-  export const _ = undefined
-}
+export const login = (data: LoginData, signal?: AbortSignal) =>
+  jmStore.api.value!.postForm<RawUserMe>('/login', data, { signal }).then(v => new UserMe(v))
+
+export const signUp = (data: SignupData, signal?: AbortSignal) =>
+  jmStore.api.value!.post<void>('/register', data, { signal, params: data })
+
+export const logout = (signal?: AbortSignal) =>
+  jmStore.api.value!.postForm<void>('/logout', undefined, { signal })

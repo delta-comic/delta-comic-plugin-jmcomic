@@ -1,105 +1,78 @@
 import { uni } from '@delta-comic/model'
 
-import { jm } from '.'
-import { _jmImage } from './image'
-import type { _jmSearch } from './search'
+import { jmStore } from '@/store'
+import { pluginName } from '@/symbol'
 
-export namespace _jmComic {
-  export interface RawSeries {
-    id: string
-    name: string
-    sort: string
-  }
-  export class Series implements RawSeries {
-    public toJSON() {
-      return this.$$raw
-    }
-    public id: string
-    public get $id() {
-      return Number(this.id)
-    }
-    public name: string
-    public sort: string
-    public get $sort() {
-      return Number(this.sort)
-    }
-    constructor(protected $$raw: RawSeries) {
-      this.id = $$raw.id
-      this.name = $$raw.name
-      this.sort = $$raw.sort
-    }
-    public static is(v: any): v is Series {
-      return v instanceof Series
-    }
-    public toUniEp() {
-      // return new uni.comic.Ep(this)
-    }
-  }
+import type { RawFullComic, RawLessComic } from '../model/comic'
+import { Comment, type RawComment } from '../model/comment'
+import { createFullToUniItem, toStreamQuery } from './utils'
 
-  export interface RawBaseComic {
-    id: string
-    name: string
-    is_favorite: boolean
-    liked: boolean
-  }
+export const getComic = async (id: string, signal?: AbortSignal) =>
+  createFullToUniItem(await jmStore.api.value!.get<RawFullComic>(`/album?id=${id}`, { signal }))
 
-  export interface RawLessComic extends RawBaseComic {
-    addtime: string
-    images: string[]
-    series: RawSeries[]
-    series_id: string
-    tags: string
-  }
-
-  export interface RawCommonComic extends RawBaseComic {
-    author: string
-    description?: string
-    image: string
-    category: _jmSearch.Category
-    category_sub: _jmSearch.Category
-    update_at?: number
-  }
-
-  export interface RawRecommendComic {
-    id: string
-    author: string
-    name: string
-    image: string
-  }
-
-  export interface RawFullComic extends RawBaseComic {
-    images: string[]
-    addtime: string
-    description: string
-    total_views: string
-    series: RawSeries[]
-    series_id: string
-    comment_total: string
-    author: string[]
-    tags: string[]
-    works: string[]
-    actors: string[]
-    related_list: RawRecommendComic[]
-    liked: boolean
-    is_aids: boolean
-    price: string
-    purchased: string
-    likes: string
-  }
-
-  export class JmItem extends uni.item.Item {
-    public override like(signal?: AbortSignal): PromiseLike<boolean> {
-      return jm.api.comic.likeComic(this.id, signal)
-    }
-    public override report(_signal?: AbortSignal): PromiseLike<any> {
-      window.$message.warning('Method not implemented.')
-      throw new Error('Method not implemented.')
-    }
-    public override sendComment(text: string, signal?: AbortSignal): PromiseLike<any> {
-      return jm.api.comic.sendComment(this.id, text, false, signal)
-    }
-    constructor(v: uni.item.RawItem) {
-      super(v)
-    }
-  }
+const comicsPagesDB = new Map<string, RawLessComic>()
+export const getComicPages = async (id: string, signal?: AbortSignal) => {
+  const key = id
+  const pageDB = comicsPagesDB.get(key)
+  if (pageDB) var _chapter = pageDB
+  else var _chapter = await jmStore.api.value!.get<RawLessComic>(`/chapter?id=${id}`, { signal })
+  const chapter = _chapter
+  const imgs = chapter.images.map(img => {
+    const page = Number(img.match(/\d+/g)?.[0])
+    return uni.image.Image.create({
+      $$plugin: pluginName,
+      forkNamespace: 'default',
+      path: `/media/photos/${id}/${img}`,
+      processSteps: ['comicDecode'],
+      $$meta: { page, id: chapter.id }
+    })
+  })
+  comicsPagesDB.set(key, _chapter)
+  return imgs
 }
+
+export const likeComic = (id: string, signal?: AbortSignal) =>
+  jmStore.api.value!.postForm('/like', { id }, { signal })
+
+export const favouriteComic = (aid: string, signal?: AbortSignal) =>
+  jmStore.api.value!.postForm<{ status: string; msg: string; type: 'add' | 'remove' }>(
+    '/favorite',
+    { aid },
+    { signal }
+  )
+
+export const getComment = async (Id: string, page: number = 1, signal?: AbortSignal) => {
+  const all = await jmStore.api.value!.get<{ list: RawComment[]; total: string }>('/forum', {
+    params: { mode: 'manhua', page, aid: Id },
+    signal
+  })
+  return { list: all.list.map(v => new Comment(v)), total: Number(all.total) }
+}
+
+export const createCommentsStream = (blogId: string) =>
+  toStreamQuery((page, signal) => getComment(blogId, page, signal))
+
+export const sendComment = (
+  id: string,
+  content: string,
+  isSpoiler: boolean,
+  signal?: AbortSignal
+) =>
+  jmStore.api.value!.postForm(
+    '/comment',
+    { aid: id, content, comment: content, isSpoiler },
+    { signal }
+  )
+
+export const sendChildComment = (
+  id: string,
+  parentCId: string,
+  content: string,
+  isSpoiler: boolean,
+  signal?: AbortSignal
+) =>
+  jmStore.api.value!.postForm(
+    '/comment',
+    { aid: id, content, comment: content, isSpoiler, comment_id: parentCId },
+    { signal }
+  )

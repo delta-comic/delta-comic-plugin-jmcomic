@@ -1,11 +1,19 @@
-import { Stream } from '@delta-comic/model'
+import { SourcedValue, type PageKey, type StreamQuery } from '@delta-comic/model'
 import dayjs from 'dayjs'
 import { ceil, isEmpty, isString, uniq } from 'es-toolkit/compat'
 
+import { JmBlog, type RawCommonBlog, type RawFullBlog } from '@/model/blog'
+import { JmBook, type RawCommonBook, type RawListBook, type RawRelatedBook } from '@/model/book'
+import {
+  JmItem,
+  type RawCommonComic,
+  type RawFullComic,
+  type RawLessComic,
+  type RawRecommendComic
+} from '@/model/comic'
 import { pluginName } from '@/symbol'
 
-import { jm } from '..'
-import { JmBlogPage, JmBookPage, JmComicPage } from '../page'
+import { JmBlogPage, JmBookPage, JmComicPage } from '../model/page'
 
 export const spiltUsers = (userString = '') =>
   userString
@@ -25,15 +33,20 @@ const createAuthor = (item: { author: string | string[]; tags?: string | string[
     $$plugin: pluginName
   }))
 
-export const createLessToUniItem = (comic: jm.comic.RawLessComic) =>
-  new jm.comic.JmItem({
+export const createLessToUniItem = (comic: RawLessComic) =>
+  new JmItem({
     $$meta: { comic },
     $$plugin: pluginName,
     author: [],
     categories: comic.tags
       .split(' ')
       .filter(v => !isEmpty(v))
-      .map(v => ({ name: v, search: { keyword: v, sort: '', source: 'keyword' }, group: '标签' })),
+      .map(v => ({
+        name: v,
+        search: { keyword: v, sort: '', source: 'keyword' },
+        group: '标签',
+        $$plugin: pluginName
+      })),
     cover: {
       $$plugin: pluginName,
       forkNamespace: 'default',
@@ -50,19 +63,24 @@ export const createLessToUniItem = (comic: jm.comic.RawLessComic) =>
     thisEp: {
       $$plugin: pluginName,
       name: comic.series.find(v => v.sort == comic.series_id)!.name,
-      index: comic.series_id
+      id: comic.series_id
     },
     commentSendable: true
   })
 
-export const createCommonToUniItem = (comic: jm.comic.RawCommonComic) =>
-  new jm.comic.JmItem({
+export const createCommonToUniItem = (comic: RawCommonComic) =>
+  new JmItem({
     $$meta: { comic },
     $$plugin: pluginName,
     author: createAuthor(comic),
     categories: uniq([comic.category.title ?? '', comic.category_sub.title ?? ''])
       .filter(v => !isEmpty(v))
-      .map(v => ({ name: v, group: '分类', search: { keyword: v, sort: '', source: 'keyword' } })),
+      .map(v => ({
+        name: v,
+        group: '分类',
+        search: { keyword: v, sort: '', source: 'keyword' },
+        $$plugin: pluginName
+      })),
     cover: {
       $$plugin: pluginName,
       forkNamespace: 'default',
@@ -76,12 +94,12 @@ export const createCommonToUniItem = (comic: jm.comic.RawCommonComic) =>
     contentType: JmComicPage.contentType,
     length: '',
     epLength: '',
-    thisEp: { $$plugin: pluginName, name: comic.name, index: comic.id },
+    thisEp: { $$plugin: pluginName, name: comic.name, id: comic.id },
     commentSendable: true
   })
 
-export const createRecommendToUniItem = (comic: jm.comic.RawRecommendComic) =>
-  new jm.comic.JmItem({
+export const createRecommendToUniItem = (comic: RawRecommendComic) =>
+  new JmItem({
     $$meta: { comic },
     $$plugin: pluginName,
     author: createAuthor(comic),
@@ -97,30 +115,41 @@ export const createRecommendToUniItem = (comic: jm.comic.RawRecommendComic) =>
     contentType: JmComicPage.contentType,
     length: '',
     epLength: '',
-    thisEp: { $$plugin: pluginName, name: comic.name, index: comic.id },
+    thisEp: { $$plugin: pluginName, name: comic.name, id: comic.id },
     commentSendable: true
   })
 
-export const createFullToUniItem = (comic: jm.comic.RawFullComic) =>
-  new jm.comic.JmItem({
+export const createFullToUniItem = (comic: RawFullComic) =>
+  new JmItem({
     $$meta: { comic },
     $$plugin: pluginName,
     author: createAuthor(comic),
-    categories: comic.tags
-      .filter(v => !isEmpty(v))
-      .map(v => ({ name: v, group: '标签', search: { keyword: v, sort: '', source: 'keyword' } }))
-      .concat(
-        comic.works.map(v => ({
+    categories: [
+      ...comic.tags
+        .filter(v => !isEmpty(v))
+        .map(v => ({
+          name: v,
+          group: '标签',
+          search: { keyword: v, sort: '', source: 'keyword' },
+          $$plugin: pluginName
+        })),
+      ...comic.works
+        .filter(v => !isEmpty(v))
+        .map(v => ({
           name: v,
           group: '作品',
-          search: { keyword: v, sort: '', source: 'keyword' }
+          search: { keyword: v, sort: '', source: 'keyword' },
+          $$plugin: pluginName
         })),
-        comic.actors.map(v => ({
+      ...comic.actors
+        .filter(v => !isEmpty(v))
+        .map(v => ({
           name: v,
           group: '角色',
-          search: { keyword: v, sort: '', source: 'keyword' }
+          search: { keyword: v, sort: '', source: 'keyword' },
+          $$plugin: pluginName
         }))
-      ),
+    ],
     cover: {
       $$plugin: pluginName,
       forkNamespace: 'default',
@@ -132,7 +161,7 @@ export const createFullToUniItem = (comic: jm.comic.RawFullComic) =>
     contentType: JmComicPage.contentType,
     length: comic.images.length.toString(),
     epLength: comic.series.length.toString(),
-    thisEp: { $$plugin: pluginName, name: comic.name, index: comic.id },
+    thisEp: { $$plugin: pluginName, name: comic.name, id: comic.id },
     commentSendable: true,
     description: comic.description,
     commentNumber: Number(comic.comment_total),
@@ -142,11 +171,8 @@ export const createFullToUniItem = (comic: jm.comic.RawFullComic) =>
     viewNumber: Number(comic.total_views)
   })
 
-export const createCommonBlogToUniItem = (
-  blog: jm.blog.RawCommonBlog,
-  searchSource: string = 'keyword'
-) =>
-  new jm.blog.JmBlog({
+export const createCommonBlogToUniItem = (blog: RawCommonBlog, searchSource: string = 'keyword') =>
+  new JmBlog({
     $$plugin: pluginName,
     $$meta: { raw: blog },
     author: [
@@ -164,14 +190,15 @@ export const createCommonBlogToUniItem = (
       .map(v => ({
         name: v,
         search: { keyword: v, sort: '', source: searchSource },
-        group: '标签'
+        group: '标签',
+        $$plugin: pluginName
       })),
     contentType: JmBlogPage.contentType,
     cover: { $$plugin: pluginName, forkNamespace: 'default', path: blog.photo },
     epLength: '1',
     id: blog.id,
     length: blog.content.length.toString(),
-    thisEp: { $$plugin: pluginName, index: blog.id, name: blog.title },
+    thisEp: { $$plugin: pluginName, id: blog.id, name: blog.title },
     title: blog.title,
     commentNumber: Number(blog.total_comments),
     likeNumber: Number(blog.total_likes),
@@ -179,11 +206,8 @@ export const createCommonBlogToUniItem = (
     updateTime: dayjs(blog.date, 'YYYY-MM-DD').toDate().getTime()
   })
 
-export const createFullBlogToUniItem = (
-  blog: jm.blog.RawFullBlog,
-  searchSource: string = 'keyword'
-) =>
-  new jm.blog.JmBlog({
+export const createFullBlogToUniItem = (blog: RawFullBlog, searchSource: string = 'keyword') =>
+  new JmBlog({
     $$plugin: pluginName,
     $$meta: { raw: blog },
     author: [
@@ -201,14 +225,15 @@ export const createFullBlogToUniItem = (
       .map(v => ({
         name: v,
         group: '标签',
-        search: { keyword: v, sort: '', source: searchSource }
+        search: { keyword: v, sort: '', source: searchSource },
+        $$plugin: pluginName
       })),
     contentType: JmBlogPage.contentType,
     cover: { $$plugin: pluginName, forkNamespace: 'default', path: blog.photo },
     epLength: '1',
     id: blog.id,
     length: blog.content.length.toString(),
-    thisEp: { $$plugin: pluginName, index: blog.id, name: blog.title },
+    thisEp: { $$plugin: pluginName, id: blog.id, name: blog.title },
     title: blog.title,
     commentNumber: Number(blog.total_comments),
     likeNumber: Number(blog.total_likes),
@@ -217,8 +242,8 @@ export const createFullBlogToUniItem = (
     isLiked: blog.is_liked
   })
 
-export const createCommonBookToItem = (book: jm.book.RawCommonBook) =>
-  new jm.book.JmBook({
+export const createCommonBookToItem = (book: RawCommonBook) =>
+  new JmBook({
     $$plugin: pluginName,
     $$meta: { raw: book },
     author: [
@@ -237,7 +262,7 @@ export const createCommonBookToItem = (book: jm.book.RawCommonBook) =>
     epLength: '1',
     id: book.id,
     length: 'unknown',
-    thisEp: { $$plugin: pluginName, index: book.id, name: book.name },
+    thisEp: { $$plugin: pluginName, id: book.id, name: book.name },
     title: book.name,
     commentNumber: 0,
     likeNumber: 0,
@@ -245,8 +270,8 @@ export const createCommonBookToItem = (book: jm.book.RawCommonBook) =>
     updateTime: dayjs(book.update_at, 'YYYY-MM-DD').toDate().getTime()
   })
 
-export const createListBookToItem = (book: jm.book.RawListBook) =>
-  new jm.book.JmBook({
+export const createListBookToItem = (book: RawListBook) =>
+  new JmBook({
     $$plugin: pluginName,
     $$meta: {
       raw: book,
@@ -268,7 +293,7 @@ export const createListBookToItem = (book: jm.book.RawListBook) =>
     epLength: '1',
     id: book.id,
     length: 'unknown',
-    thisEp: { $$plugin: pluginName, index: book.id, name: book.author_name },
+    thisEp: { $$plugin: pluginName, id: book.id, name: book.author_name },
     title: book.author_name,
     commentNumber: 0,
     likeNumber: 0,
@@ -276,8 +301,8 @@ export const createListBookToItem = (book: jm.book.RawListBook) =>
     updateTime: dateTranslate(book.update_date).toDate().getTime()
   })
 
-export const createRelatedBookToItem = (book: jm.book.RawRelatedBook) =>
-  new jm.book.JmBook({
+export const createRelatedBookToItem = (book: RawRelatedBook) =>
+  new JmBook({
     $$plugin: pluginName,
     $$meta: { raw: book },
     author: [],
@@ -288,7 +313,7 @@ export const createRelatedBookToItem = (book: jm.book.RawRelatedBook) =>
     epLength: '1',
     id: book.id,
     length: 'unknown',
-    thisEp: { $$plugin: pluginName, index: book.id, name: book.work_title },
+    thisEp: { $$plugin: pluginName, id: book.id, name: book.work_title },
     title: book.work_title,
     commentNumber: 0,
     likeNumber: 0,
@@ -301,19 +326,43 @@ export const dateTranslate = (date: string) => {
   return dayjs().add(-daysAgo, 'day')
 }
 
-export const jmStream = <T>(
-  api: (page: number, signal: AbortSignal) => PromiseLike<{ list: T[]; total: number }>
-) =>
-  Stream.create<T>(async function* (signal, that) {
-    while (true) {
-      if (that.pages.value <= that.page.value) return
-      that.page.value++
-      const { list: result, total } = await api(that.page.value, signal)
-      if (total == 0 || isEmpty(result)) return
-      if (that.page.value == 1) that.pageSize.value = result.length
-      that.total.value = total
-      // eg: total: 300 result: 60 pages: t/r向上取整
-      that.pages.value = ceil(total / that.pageSize.value)
-      yield result
-    }
-  })
+const pageKey = new SourcedValue<[page: string, size: string]>()
+export const toStreamQuery = <T>(
+  api: (page: number, signal?: AbortSignal) => Promise<{ list: T[]; total: number }>
+): StreamQuery<[], T> =>
+  Object.assign(
+    async (pg: PageKey, signal?: AbortSignal) => {
+      const [pStr, sStr] = pageKey.toJSON(pg.toString())
+      const page = Number(pStr)
+      let size = Number(sStr)
+
+      const { list, total } = await api(page, signal)
+
+      if (page == 1) size = list.length
+      else if (size == 0) size = list.length
+
+      const isEnd = total == 0 || isEmpty(list) || ceil(total / size)
+
+      return Object.assign(list, {
+        nextPage: isEnd ? undefined : pageKey.toString([String(page + 1), String(size)])
+      })
+    },
+    { initialPageParam: pageKey.toString(['0', '0']) }
+  )
+// Stream.create<T>(async function* (signal, that) {
+//   while (true) {
+//     if (that.pages.value <= that.page.value) return
+//     that.page.value++
+//     const { list: result, total } = await api(that.page.value, signal)
+//     if (total == 0 || isEmpty(result)) return
+//     if (that.page.value == 1) that.pageSize.value = result.length
+//     that.total.value = total
+//     // eg: total: 300 result: 60 pages: t/r向上取整
+//     that.pages.value = ceil(total / that.pageSize.value)
+//     yield result
+//   }
+// })
+
+export enum QueryKeys {
+  Levelboard = 'jmcomic::levelboard'
+}

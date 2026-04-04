@@ -9,7 +9,7 @@ import {
   createCommonBlogToUniItem,
   createFullBlogToUniItem,
   createRecommendToUniItem
-} from './api/utils'
+} from '../api/utils'
 
 const { model, view } = require(layoutModule)
 
