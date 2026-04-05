@@ -6,13 +6,16 @@ cdnhth
 ciphertext
 diosfjckwpqpdfjkvnqQjsik
 emailverified
+expinfo
 Hcomic
 jmcomic
 jwttoken
+manhua
 newsvr
 ofetch
 PAPP
 qrcode
+replys
 Tokenparam
 voidzero
 wenxig

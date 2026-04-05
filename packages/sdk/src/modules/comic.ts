@@ -1,6 +1,10 @@
 import type { JMComic } from '..'
 import { jsonToFormData } from '../helpers'
 import type { FullComic, LessComic } from '../model/comic'
+import type { MainComment } from '../model/comment'
+import type { List, PaginationQuery } from '../model/utils'
+
+type ComicList<T> = { list: T[]; total: string }
 
 export class Comic {
   constructor(protected sdk: JMComic) {}
@@ -31,47 +35,66 @@ export class Comic {
 
   public async likeComic(data: { id: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
-    return await ky.post('/like', { signal, body: jsonToFormData({ id: data.id }) }).json()
+    return await ky
+      .post(this.sdk.config.apiPath.forum_like, { body: jsonToFormData({ id: data.id }), signal })
+      .json()
   }
 
   public async favoriteComic(data: { id: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .post<{ status: string; msg: string; type: 'add' | 'remove' }>('/favorite', {
-        body: jsonToFormData({ aid: data.id }),
+      .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
+        this.sdk.config.apiPath.forum_getComments,
+        { body: jsonToFormData({ aid: data.id }), signal }
+      )
+      .json()
+  }
+
+  public async getComment(
+    data: PaginationQuery<{ id: string }>,
+    signal?: AbortSignal
+  ): Promise<List<MainComment>> {
+    const ky = this.sdk.requester.create()
+    const list = await ky
+      .get<ComicList<MainComment>>(this.sdk.config.apiPath.forum_getComments, {
+        searchParams: { mode: 'manhua', page: data.page, aid: data.id },
+        signal
+      })
+      .json()
+    return { list: list.list, total: Number(list.total) }
+  }
+
+  public async sendComment(
+    data: { comicId: string; content: string; isSpoiled: boolean },
+    signal?: AbortSignal
+  ) {
+    const ky = this.sdk.requester.create()
+    return await ky
+      .post(this.sdk.config.apiPath.forum_sendComment, {
+        body: jsonToFormData({
+          aid: data.comicId,
+          content: data.content,
+          isSpoiler: data.isSpoiled
+        }),
         signal
       })
       .json()
   }
 
-  public getComment = async (Id: string, page: number = 1, signal?: AbortSignal) => {
-    const all = await jmStore.api.value!.get<{ list: RawComment[]; total: string }>('/forum', {
-      params: { mode: 'manhua', page, aid: Id },
-      signal
-    })
-    return { list: all.list.map(v => new Comment(v)), total: Number(all.total) }
-  }
-
-  public createCommentsStream = (blogId: string) =>
-    toStreamQuery((page, signal) => getComment(blogId, page, signal))
-
-  public sendComment = (id: string, content: string, isSpoiler: boolean, signal?: AbortSignal) =>
-    jmStore.api.value!.postForm(
-      '/comment',
-      { aid: id, content, comment: content, isSpoiler },
-      { signal }
-    )
-
-  public sendChildComment = (
-    id: string,
-    parentCId: string,
-    content: string,
-    isSpoiler: boolean,
+  public async sendChildComment(
+    data: { comicId: string; parentCommentId: string; content: string },
     signal?: AbortSignal
-  ) =>
-    jmStore.api.value!.postForm(
-      '/comment',
-      { aid: id, content, comment: content, isSpoiler, comment_id: parentCId },
-      { signal }
-    )
+  ) {
+    const ky = this.sdk.requester.create()
+    return await ky
+      .post(this.sdk.config.apiPath.forum_sendComment, {
+        body: jsonToFormData({
+          aid: data.comicId,
+          comment_id: data.parentCommentId,
+          comment: data.content
+        }),
+        signal
+      })
+      .json()
+  }
 }

@@ -12,7 +12,14 @@ enum ApiPath {
   book_getBookFullDetail = 'creator_work_info_detail',
   // comic接口
   comic_getInfo = 'album',
-  comic_getPages = 'chapter'
+  comic_getPages = 'chapter',
+  // blog接口
+  blog_getInfo = 'blog',
+  // forum接口
+  forum_getComments = 'forum',
+  forum_sendComment = 'comment',
+  forum_like = 'like',
+  forum_favorite = 'favorite'
 }
 
 export class Config {
