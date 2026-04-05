@@ -30,7 +30,7 @@ export class Fork {
    */
   public async getForks() {
     const { forkGetSource: source, forkGetPath: path } = this.sdk.config
-    const ky = this.sdk.requester.create({ prefixUrl: undefined, })
+    const ky = this.sdk.requester.create({ prefixUrl: undefined })
     let result = ''
     const acs = new Array<AbortController>()
     await Promise.all(
@@ -51,10 +51,11 @@ export class Fork {
     return this.decryptionResponse(result)
   }
   /**
-   * @param forks 传入分流的根url
+   * @param forks 传入分流的根url，如果没有，就会自动`getForks()`
    * @returns 结果会自动存入`config.requestUsingFork`
    */
-  public async autoPickFork(forks_: string[] | Forks) {
+  public async autoPickFork(forks_?: string[] | Forks) {
+    if (!forks_) forks_ = await this.getForks()
     const forks = isArray(forks_) ? forks_ : forks_.Setting.map(p => `https://${p}`)
     if (forks.length == 0) throw new Error('[plugin test] no fork found')
     const { forkTestPath: path } = this.sdk.config

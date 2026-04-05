@@ -9,7 +9,7 @@ type ComicList<T> = { list: T[]; total: string }
 export class Comic {
   constructor(protected sdk: JMComic) {}
 
-  public async getComic(data: { id: string }, signal?: AbortSignal) {
+  public async getComicInfo(data: { id: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<FullComic>(this.sdk.config.apiPath.comic_getInfo, {

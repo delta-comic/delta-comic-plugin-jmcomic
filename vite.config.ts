@@ -74,7 +74,7 @@ export default defineConfig({
     env: { builtin: true },
     globals: {},
     ignorePatterns: ['.vscode', './package.json'],
-    options: { typeAware: false, typeCheck: false }
+    options: { typeAware: true, typeCheck: true }
   },
   run: { cache: { tasks: true, scripts: true } }
 })

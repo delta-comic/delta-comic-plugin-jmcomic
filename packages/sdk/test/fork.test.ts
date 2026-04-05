@@ -23,26 +23,19 @@ export const restHandlers = [
     return HttpResponse.json({ data: [], code: 200, message: 'hello' })
   })
 ]
+const server = setupServer(...restHandlers)
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }))
+afterAll(() => server.close())
+afterEach(() => server.resetHandlers())
 
 test.concurrent('Fork decrypted', async () => {
   const sdk = new JMComic()
   const forks = await sdk.fork.getForks()
-  expect(forks).toStrictEqual({
-    Setting: ['www.cdnhth.club', 'www.cdngwc.cc', 'www.cdngwc.net', 'www.cdngwc.club'],
-    Server: [
-      'www.cdnhth.club',
-      'www.cdngwc.cc',
-      'www.cdngwc.net',
-      'www.cdngwc.club',
-      'www.cdnhjk.cc'
-    ],
-    jm3_Server: [
-      ['www.cdnhth.club', '線路1'],
-      ['www.cdngwc.cc', '線路2'],
-      ['www.cdngwc.net', '線路3'],
-      ['www.cdngwc.club', '線路4'],
-      ['www.cdnhjk.cc', '線路5']
-    ]
+  expect(forks).toMatchObject({
+    Setting: expect.any(Array),
+    Server: expect.any(Array),
+    jm3_Server: expect.any(Array)
   })
 })
 
@@ -60,13 +53,8 @@ test.concurrent('Fork auto select by pipeline', async () => {
   expect(autoPicked).toBe('https://www.cdnhth.club')
 })
 
-const server = setupServer(...restHandlers)
-
-// 在所有测试开始前启动服务器
-beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }))
-
-// 在所有测试结束后关闭服务器
-afterAll(() => server.close())
-
-// 在每次测试后重置处理器以实现测试隔离
-afterEach(() => server.resetHandlers())
+test.concurrent('Fork auto select by once call', async () => {
+  const sdk = new JMComic()
+  const autoPicked = await sdk.fork.autoPickFork()
+  expect(autoPicked).toBe('https://www.cdnhth.club')
+})

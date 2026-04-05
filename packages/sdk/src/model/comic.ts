@@ -10,7 +10,7 @@ export interface Series {
 }
 
 export interface BaseComic {
-  id: string
+  id: number
   name: string
   is_favorite: boolean
   liked: boolean

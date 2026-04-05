@@ -1,5 +1,6 @@
 {
   "name": "jmcomic-sdk",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "npm-build": "vp run build -r"

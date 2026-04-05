@@ -23,7 +23,16 @@ export class Auth {
   constructor(protected sdk: JMComic) {}
   public user?: LoginUser
 
-  public async login(data: LoginData, signal?: AbortSignal) {
+  /**
+   * @param data 不传值仅仅只是dev测试方便，实战必须传值，不传会报错
+   */
+  public async login(data?: LoginData, signal?: AbortSignal) {
+    if (!data) {
+      // 这个账号是公开账号
+      if (import.meta.env.DEV) data = { password: '1q2w3e4r', username: '_wenxig' }
+      else throw new Error('Login must have data param in production mode!')
+    }
+
     await this.logout(signal)
     const ky = this.sdk.requester.create()
     const result = ky.post<UserMe>(this.sdk.config.apiPath.auth_login, {
