@@ -29,7 +29,7 @@
     "access": "public"
   },
   "scripts": {
-    "pack": "vp pack && pnpm pack --out ./dist/pack.tgz"
+    "build": "vp pack && pnpm pack --out ./dist/pack.tgz"
   },
   "devDependencies": {
     "@types/node": "^25.5.2",
