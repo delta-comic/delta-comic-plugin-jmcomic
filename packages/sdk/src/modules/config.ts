@@ -1,9 +1,18 @@
 import type { JMComic } from '..'
 
 enum ApiPath {
-  login = 'login',
-  signup = 'register',
-  logout = 'logout'
+  // auth接口
+  auth_login = 'login',
+  auth_signup = 'register',
+  auth_logout = 'logout',
+  // book接口
+  book_searchBooks = 'creator_author',
+  book_getAuthorDetail = 'creator_author_work',
+  book_getBookDetail = 'creator_work_info',
+  book_getBookFullDetail = 'creator_work_info_detail',
+  // comic接口
+  comic_getInfo = 'album',
+  comic_getPages = 'chapter'
 }
 
 export class Config {

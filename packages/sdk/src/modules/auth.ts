@@ -26,7 +26,7 @@ export class Auth {
   public async login(data: LoginData, signal?: AbortSignal) {
     await this.logout(signal)
     const ky = this.sdk.requester.create()
-    const result = ky.post<UserMe>(this.sdk.config.apiPath.login, {
+    const result = ky.post<UserMe>(this.sdk.config.apiPath.auth_login, {
       body: jsonToFormData(data),
       signal
     })
@@ -41,14 +41,14 @@ export class Auth {
   public signUp(data: SignupData, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return ky
-      .post<void>(this.sdk.config.apiPath.signup, { body: jsonToFormData(data), signal })
+      .post<void>(this.sdk.config.apiPath.auth_signup, { body: jsonToFormData(data), signal })
       .text()
   }
 
   public async logout(signal?: AbortSignal) {
     if (!this.user) return
     const ky = this.sdk.requester.create()
-    await ky.post(this.sdk.config.apiPath.logout, { signal }).text()
+    await ky.post(this.sdk.config.apiPath.auth_logout, { signal }).text()
     this.user = undefined
   }
 }
