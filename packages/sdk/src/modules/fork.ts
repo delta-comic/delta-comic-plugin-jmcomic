@@ -30,7 +30,7 @@ export class Fork {
    */
   public async getForks() {
     const { forkGetSource: source, forkGetPath: path } = this.sdk.config
-    const ky = this.sdk.requester.create({ prefixUrl: undefined })
+    const ky = this.sdk.requester.create({ prefixUrl: undefined, })
     let result = ''
     const acs = new Array<AbortController>()
     await Promise.all(

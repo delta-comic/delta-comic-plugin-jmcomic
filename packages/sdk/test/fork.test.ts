@@ -24,7 +24,7 @@ export const restHandlers = [
   })
 ]
 
-test('Fork decrypted', async () => {
+test.concurrent('Fork decrypted', async () => {
   const sdk = new JMComic()
   const forks = await sdk.fork.getForks()
   expect(forks).toStrictEqual({
@@ -46,14 +46,14 @@ test('Fork decrypted', async () => {
   })
 })
 
-test('Fork auto select by array', async () => {
+test.concurrent('Fork auto select by array', async () => {
   const sdk = new JMComic()
   const forks = ['https://www.cdnhth.club', 'https://www.cdngwc.cc']
   const autoPicked = await sdk.fork.autoPickFork(forks)
   expect(autoPicked).toBe('https://www.cdnhth.club')
 })
 
-test('Fork auto select by pipeline', async () => {
+test.concurrent('Fork auto select by pipeline', async () => {
   const sdk = new JMComic()
   const forks = await sdk.fork.getForks()
   const autoPicked = await sdk.fork.autoPickFork(forks)

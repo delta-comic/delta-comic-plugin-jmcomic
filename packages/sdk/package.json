@@ -32,10 +32,12 @@
     "pack": "vp pack && pnpm pack --out ./dist/pack.tgz"
   },
   "devDependencies": {
+    "@types/node": "^25.5.2",
     "crypto-es": "^3.1.3",
     "dompurify": "^3.3.3",
     "es-toolkit": "^1.45.1",
-    "ky": "^1.14.3"
+    "ky": "^1.14.3",
+    "msw": "^2.12.14"
   },
   "release": {
     "tagFormat": "vite-${version}"
@@ -43,9 +45,5 @@
   "dist": {
     "tarball": "./dist/pack.tgz"
   },
-  "readme": "./README.md",
-  "dependencies": {
-    "@types/node": "^25.5.2",
-    "msw": "^2.12.14"
-  }
+  "readme": "./README.md"
 }

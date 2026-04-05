@@ -1,9 +1,9 @@
 import type { JMComic } from '..'
 
 enum ApiPath {
-  login = '/login',
-  signup = '/register',
-  logout = '/logout'
+  login = 'login',
+  signup = 'register',
+  logout = 'logout'
 }
 
 export class Config {
@@ -15,8 +15,8 @@ export class Config {
     'https://rup4a04-c02.tos-cn-hongkong.bytepluses.com'
   ]
   public forkFetchSecret = 'diosfjckwpqpdfjkvnqQjsik'
-  public forkGetPath = '/newsvr-2025.txt'
-  public forkTestPath = '/promote_list'
+  public forkGetPath = 'newsvr-2025.txt'
+  public forkTestPath = 'promote_list'
 
   // 通用request配置
   public requestTimeout = 10000

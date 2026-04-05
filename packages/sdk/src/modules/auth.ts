@@ -24,14 +24,20 @@ export class Auth {
   public user?: LoginUser
 
   public async login(data: LoginData, signal?: AbortSignal) {
+    await this.logout(signal)
     const ky = this.sdk.requester.create()
     const result = ky.post<UserMe>(this.sdk.config.apiPath.login, {
       body: jsonToFormData(data),
       signal
     })
-    return (this.user = { user: await result.json(), data })
+    const user = await result.json()
+
+    return (this.user = { user, data })
   }
 
+  /**
+   * @deprecated 实际上并非弃用，该接口为实验性功能，不确保内容可以正常使用
+   */
   public signUp(data: SignupData, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return ky
@@ -40,6 +46,7 @@ export class Auth {
   }
 
   public async logout(signal?: AbortSignal) {
+    if (!this.user) return
     const ky = this.sdk.requester.create()
     await ky.post(this.sdk.config.apiPath.logout, { signal }).text()
     this.user = undefined

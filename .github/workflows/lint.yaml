@@ -29,3 +29,4 @@ jobs:
         run: |
           vp run npm-build
           vp check
+          vp test
