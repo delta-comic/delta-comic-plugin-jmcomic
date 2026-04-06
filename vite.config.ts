@@ -54,7 +54,6 @@ export default defineConfig({
       'no-useless-escape': 'allow',
       'no-non-null-asserted-optional-chain': 'allow',
       'no-thenable': 'allow'
-      // 'tsconfig-error': 'allow'
     },
     settings: {
       'jsx-a11y': { components: {}, attributes: {} },
@@ -69,7 +68,7 @@ export default defineConfig({
         exemptDestructuredRootsFromChecks: false,
         tagNamePreference: {}
       },
-      'vitest': { typecheck: false }
+      'vitest': { typecheck: true }
     },
     env: { builtin: true },
     globals: {},

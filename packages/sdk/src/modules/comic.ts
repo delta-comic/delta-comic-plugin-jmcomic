@@ -9,7 +9,7 @@ type ComicList<T> = { list: T[]; total: string }
 export class Comic {
   constructor(protected sdk: JMComic) {}
 
-  public async getComicInfo(data: { id: string }, signal?: AbortSignal) {
+  public async getComicInfo(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<FullComic>(this.sdk.config.apiPath.comic_getInfo, {
@@ -22,7 +22,7 @@ export class Comic {
   /**
    * @returns 形如`["/media/photos/350234/00001.webp"]`的数组，本质`/media/photos/${data.id}/${img}`
    */
-  public getComicPages = async (data: { id: string }, signal?: AbortSignal) => {
+  public getComicPages = async (data: { id: number }, signal?: AbortSignal) => {
     const ky = this.sdk.requester.create()
     const comic = await ky
       .get<LessComic>(this.sdk.config.apiPath.comic_getPages, {
@@ -33,14 +33,14 @@ export class Comic {
     return comic.images.map(img => `/media/photos/${data.id}/${img}`)
   }
 
-  public async likeComic(data: { id: string }, signal?: AbortSignal) {
+  public async likeComic(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post(this.sdk.config.apiPath.forum_like, { body: jsonToFormData({ id: data.id }), signal })
       .json()
   }
 
-  public async favoriteComic(data: { id: string }, signal?: AbortSignal) {
+  public async favoriteComic(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
@@ -50,8 +50,8 @@ export class Comic {
       .json()
   }
 
-  public async getComment(
-    data: PaginationQuery<{ id: string }>,
+  public async getComments(
+    data: PaginationQuery<{ id: number }>,
     signal?: AbortSignal
   ): Promise<List<MainComment>> {
     const ky = this.sdk.requester.create()
@@ -65,7 +65,7 @@ export class Comic {
   }
 
   public async sendComment(
-    data: { comicId: string; content: string; isSpoiled: boolean },
+    data: { comicId: number; content: string; isSpoiled: boolean },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()
@@ -82,7 +82,7 @@ export class Comic {
   }
 
   public async sendChildComment(
-    data: { comicId: string; parentCommentId: string; content: string },
+    data: { comicId: number; parentCommentId: number; content: string },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()

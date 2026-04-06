@@ -39,7 +39,7 @@ export class Book {
     return { total: res.total, list: res.content }
   }
 
-  public async getAuthorDetail(data: { id: string } & Sourced, signal?: AbortSignal) {
+  public async getAuthorDetail(data: { id: number } & Sourced, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<AuthorDetail>(this.sdk.config.apiPath.book_getAuthorDetail, {
@@ -52,7 +52,7 @@ export class Book {
   /**
    * @description 说实在的，我不知道这个接口存在的意义是什么，`getBookFullDetail`返回更加丰富。
    */
-  public async getBookDetail(data: { id: string }, signal?: AbortSignal) {
+  public async getBookDetail(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<CommonBook>(this.sdk.config.apiPath.book_getBookDetail, {
@@ -62,7 +62,7 @@ export class Book {
       .json()
   }
 
-  public async getBookFullDetail(data: { id: string }, signal?: AbortSignal) {
+  public async getBookFullDetail(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<FullBook>(this.sdk.config.apiPath.book_getBookFullDetail, {

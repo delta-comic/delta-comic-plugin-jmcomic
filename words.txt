@@ -11,7 +11,9 @@ Hcomic
 jmcomic
 jwttoken
 manhua
+NCID
 newsvr
+nopic
 ofetch
 PAPP
 qrcode

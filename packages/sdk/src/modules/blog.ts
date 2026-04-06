@@ -32,7 +32,7 @@ export class Blog {
     return { list: all.list, total: Number(all.count) }
   }
 
-  public async getInfo(data: { id: string }, signal?: AbortSignal) {
+  public async getInfo(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<{ info: FullBlog; related_comics?: RecommendComic[]; related_blogs?: CommonBlog[] }>(
@@ -43,7 +43,7 @@ export class Blog {
   }
 
   public async getComment(
-    data: PaginationQuery<{ blogId: string }>,
+    data: PaginationQuery<{ blogId: number }>,
     signal?: AbortSignal
   ): Promise<List<MainComment>> {
     const ky = this.sdk.requester.create()
@@ -56,7 +56,7 @@ export class Blog {
     return { list: list.list, total: Number(list.total) }
   }
 
-  public async likeBlog(data: { id: string }, signal?: AbortSignal) {
+  public async likeBlog(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post(this.sdk.config.apiPath.forum_like, {
@@ -66,7 +66,7 @@ export class Blog {
       .json()
   }
 
-  public async sendComment(data: { id: string; content: string }, signal?: AbortSignal) {
+  public async sendComment(data: { id: number; content: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post(this.sdk.config.apiPath.forum_sendComment, {
@@ -77,7 +77,7 @@ export class Blog {
   }
 
   public async sendChildComment(
-    data: { id: string; parentCommentId: string; content: string },
+    data: { id: number; parentCommentId: number; content: string },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()

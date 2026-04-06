@@ -1,17 +1,56 @@
-export type Gender = 'Male' | 'Female'
+export type Gender = 'Male' | 'Female' | 'null'
 export interface Badge {
+  /**
+   * @description 勋章图片路径，图是正方形
+   * @example '/static/resources/images/%E5%8B%B3%E7%AB%A0/2021.8%E5%8B%B3%E7%AB%A0/maidragon_7.png'
+  */
   content: string
+  /**
+   * @description 该勋章唯一id，本质数字
+   * @description '175'
+  */
   id: string
+  /**
+   * @description 由于勋章是人物头像，因此这个就是人物名称
+   * @example '尔科亚'
+  */
   name: string
 }
 
 export interface ExpInfo {
+  /**
+   * @description 用户实际使用的称号
+   * @example '地上的月影'
+   */
   level_name: string
+  /**
+   * @description 用户等级
+   * @example 4
+   */
   level: number
-  nextLevelExp: string
+  /**
+   * @description 当前经验值，本质数字
+   * @example '1085'
+   */
   exp: string
+  /**
+   * @description 下一等级总共所需的经验
+   * @example 2100
+   */
+  nextLevelExp: string
+  /**
+   * @description 升级进度
+   * @example 51.66666666666667
+   */
   expPercent: number
+  /**
+   * @description 用户唯一id，本质数字
+   * @example '11451419'
+   */
   uid: string
+  /**
+   * @description 用户勋章
+  */
   badges: Badge[]
 }
 
