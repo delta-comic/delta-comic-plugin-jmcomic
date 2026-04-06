@@ -6,14 +6,6 @@ export interface LoginData {
   username: string
   password: string
 }
-export interface SignupData {
-  email: string
-  gender: Gender
-  password: string
-  password_confirm: string
-  username: string
-}
-
 export interface LoginUser {
   data: LoginData
   user: UserMe
@@ -47,7 +39,16 @@ export class Auth {
   /**
    * @deprecated 实际上并非弃用，该接口为实验性功能，不确保内容可以正常使用
    */
-  public signUp(data: SignupData, signal?: AbortSignal) {
+  public signUp(
+    data: {
+      email: string
+      gender: Gender
+      password: string
+      password_confirm: string
+      username: string
+    },
+    signal?: AbortSignal
+  ) {
     const ky = this.sdk.requester.create()
     return ky
       .post<void>(this.sdk.config.apiPath.auth_signup, { body: jsonToFormData(data), signal })
@@ -59,5 +60,16 @@ export class Auth {
     const ky = this.sdk.requester.create()
     await ky.post(this.sdk.config.apiPath.auth_logout, { signal }).text()
     this.user = undefined
+  }
+
+  public async forgetPassword(data: { email: string }, signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    const result = await ky
+      .post(this.sdk.config.apiPath.auth_forgetPassword, {
+        body: jsonToFormData({ email: data.email }),
+        signal
+      })
+      .json()
+    return result
   }
 }

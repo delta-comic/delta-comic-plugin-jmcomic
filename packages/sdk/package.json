@@ -31,23 +31,20 @@
   "scripts": {
     "build": "vp pack && pnpm pack --out ./dist/pack.tgz"
   },
+  "dependencies": {
+    "@delta-comic/model": "^1.3.4"
+  },
   "devDependencies": {
     "@types/node": "^25.5.2",
     "crypto-es": "^3.1.3",
     "dompurify": "^3.3.3",
     "es-toolkit": "^1.45.1",
-    "ky": "^1.14.3",
+    "ky": "^2.0.0",
     "msw": "^2.12.14",
     "typescript": "^6.0.2"
-  },
-  "release": {
-    "tagFormat": "vite-${version}"
   },
   "dist": {
     "tarball": "./dist/pack.tgz"
   },
-  "readme": "./README.md",
-  "dependencies": {
-    "@delta-comic/model": "^1.3.2"
-  }
+  "readme": "./README.md"
 }

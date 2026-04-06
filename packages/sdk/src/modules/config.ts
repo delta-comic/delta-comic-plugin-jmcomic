@@ -2,24 +2,25 @@ import type { JMComic } from '..'
 
 enum ApiPath {
   // auth接口
-  auth_login = 'login',
-  auth_signup = 'register',
-  auth_logout = 'logout',
+  auth_login = '/login',
+  auth_signup = '/register',
+  auth_logout = '/logout',
+  auth_forgetPassword = '/forget',
   // book接口
-  book_searchBooks = 'creator_author',
-  book_getAuthorDetail = 'creator_author_work',
-  book_getBookDetail = 'creator_work_info',
-  book_getBookFullDetail = 'creator_work_info_detail',
+  book_searchBooks = '/creator_author',
+  book_getAuthorDetail = '/creator_author_work',
+  book_getBookDetail = '/creator_work_info',
+  book_getBookFullDetail = '/creator_work_info_detail',
   // comic接口
-  comic_getInfo = 'album',
-  comic_getPages = 'chapter',
+  comic_getInfo = '/album',
+  comic_getPages = '/chapter',
   // blog接口
-  blog_getInfo = 'blog',
+  blog_getInfo = '/blog',
   // forum接口
-  forum_getComments = 'forum',
-  forum_sendComment = 'comment',
-  forum_like = 'like',
-  forum_favorite = 'favorite'
+  forum_getComments = '/forum',
+  forum_sendComment = '/comment',
+  forum_like = '/like',
+  forum_favorite = '/favorite'
 }
 
 export class Config {
