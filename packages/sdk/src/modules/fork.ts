@@ -75,23 +75,23 @@ export class Fork {
             const end = Date.now()
             const time = end - begin
             record.push([fork, time])
-            console.log(`test url ${fork} connected time ${time}ms`)
+            // console.info(`test url ${fork} connected time ${time}ms`)
             abortController.abort()
           } catch {
             record.push([fork, false])
-            console.log(`test url ${fork} can not connected`)
+            // console.info(`test url ${fork} can not connected`)
           }
         })
       )
     } catch (err) {
-      console.log('test aborted', err)
+      // console.info('test aborted', err)
     }
-    console.log(record)
+    // console.info(record)
     const result = sortBy(
       record.filter(v => v[1] != false),
       v => v[1]
     )[0]
-    console.log(`test done`, result)
+    // console.info(`test done`, result)
     if (!result) throw new Error("Can't select fork")
 
     return (this.sdk.config.requestUsingFork = result[0])

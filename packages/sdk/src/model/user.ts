@@ -3,17 +3,17 @@ export interface Badge {
   /**
    * @description 勋章图片路径，图是正方形
    * @example '/static/resources/images/%E5%8B%B3%E7%AB%A0/2021.8%E5%8B%B3%E7%AB%A0/maidragon_7.png'
-  */
+   */
   content: string
   /**
    * @description 该勋章唯一id，本质数字
    * @description '175'
-  */
+   */
   id: string
   /**
    * @description 由于勋章是人物头像，因此这个就是人物名称
    * @example '尔科亚'
-  */
+   */
   name: string
 }
 
@@ -50,7 +50,7 @@ export interface ExpInfo {
   uid: string
   /**
    * @description 用户勋章
-  */
+   */
   badges: Badge[]
 }
 
@@ -106,13 +106,36 @@ export interface UserEdit {
 
 export interface BadgeItem extends Badge {
   type: 'badge'
+  /**
+   * @description 消耗的coin数量，本质数字
+   * @example '120'
+   */
   coin: string
   rule: string
-  begin_time: string // 2021-05-06 00:00:00
-  end_time: string //2080-05-06 23:59:59
-  created_at: string //2021-05-06 13:48:16
-  updated_at: string // 2021-05-06 13:48:16
-  done: boolean //是否已经购买
+  /**
+   * @description 起售日期
+   * @example "2021-05-06 00:00:00"
+   */
+  begin_time: string
+  /**
+   * @description 创建日期，通常与begin_time极为接近(相差<=1天)
+   * @example "2021-05-06 13:48:16"
+   */
+  created_at: string
+  /**
+   * @description 更新日期，如果没有更新，则与created_at相同
+   * @example "2021-05-06 13:48:16"
+   */
+  updated_at: string
+  /**
+   * @description 购买截止日期，疑似永不下架
+   * @example 2080-05-06 23:59:59
+   */
+  end_time: string
+  /**
+   * @description 是否已经购买
+   */
+  done: boolean
 }
 
 export interface TitleItem {

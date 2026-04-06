@@ -36,7 +36,7 @@ export class Comic {
   public async likeComic(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .post(this.sdk.config.apiPath.forum_like, { body: jsonToFormData({ id: data.id }), signal })
+      .post<{ msg: string, status: string, code: number }>(this.sdk.config.apiPath.forum_like, { body: jsonToFormData({ id: data.id }), signal })
       .json()
   }
 
@@ -44,7 +44,7 @@ export class Comic {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
-        this.sdk.config.apiPath.forum_getComments,
+        this.sdk.config.apiPath.forum_favorite,
         { body: jsonToFormData({ aid: data.id }), signal }
       )
       .json()

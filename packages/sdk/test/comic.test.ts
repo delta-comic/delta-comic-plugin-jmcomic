@@ -21,7 +21,26 @@ test.concurrent('Comic comments get', { timeout: 1000 * 20 }, async () => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork()
   const result = await sdk.comic.getComments({ id: 350234, page: 1 })
-  console.log(result.list.filter(v => v.expinfo.badges.length > 0).map(v => v.expinfo.badges))
   expect(result.list).toBeInstanceOf(Array)
   expect(result.list[0].AID).toMatch(/\d+/)
+})
+
+test.concurrent('Like comic', { timeout: 1000 * 20 }, async () => {
+  const sdk = new JMComic()
+  await sdk.fork.autoPickFork()
+  const result = await sdk.comic.likeComic({ id: 350234 })
+  expect(result).toMatchObject({ msg: '评价成功!', status: 'success', code: 200 })
+})
+
+test.concurrent('Favorite comic', { timeout: 1000 * 20 }, async () => {
+  const sdk = new JMComic()
+  await sdk.fork.autoPickFork()
+  await sdk.auth.login()
+  const result = await sdk.comic.favoriteComic({ id: 350234 })
+  console.log(result)
+  expect(result).toMatchObject({
+    status: 'ok',
+    msg: expect.toBeOneOf(['漫画添加到您最喜爱的清单!', '已移除收藏']),
+    type: expect.toBeOneOf(['add', 'remove'])
+  })
 })
