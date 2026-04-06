@@ -54,44 +54,53 @@ export class Fork {
    * @param forks 传入分流的根url，如果没有，就会自动`getForks()`
    * @returns 结果会自动存入`config.requestUsingFork`
    */
-  public async autoPickFork(forks_?: string[] | Forks) {
+  public async autoPickFork(forks_?: string[] | Forks, signal?: AbortSignal) {
     if (!forks_) forks_ = await this.getForks()
     const forks = isArray(forks_) ? forks_ : forks_.Setting.map(p => `https://${p}`)
     if (forks.length == 0) throw new Error('[plugin test] no fork found')
     const { forkTestPath: path } = this.sdk.config
 
+    if (signal?.aborted) {
+      throw Object.assign(new Error('The operation was aborted.'), { name: 'AbortError' })
+    }
+
     const record: [url: string, result: false | number][] = []
-    const abortController = new AbortController()
+    const controller = new AbortController()
+    const onAbort = () => controller.abort()
+    signal?.addEventListener('abort', onAbort, { once: true })
+
     try {
       await Promise.all(
         forks.map(async fork => {
+          const requestController = new AbortController()
+          const timeoutId = setTimeout(() => requestController.abort(), 10000)
+          controller.signal.addEventListener('abort', () => requestController.abort(), {
+            once: true
+          })
+
           try {
             const begin = Date.now()
-            const stopTimeout = setTimeout(() => {
-              abortController.abort()
-            }, 10000)
-            await ky.get(path, { prefixUrl: fork, signal: abortController.signal })
-            clearTimeout(stopTimeout)
-            const end = Date.now()
-            const time = end - begin
-            record.push([fork, time])
-            // console.info(`test url ${fork} connected time ${time}ms`)
-            abortController.abort()
+            await ky.get(path, { prefixUrl: fork, signal: requestController.signal })
+            record.push([fork, Date.now() - begin])
           } catch {
             record.push([fork, false])
-            // console.info(`test url ${fork} can not connected`)
+          } finally {
+            clearTimeout(timeoutId)
           }
         })
       )
-    } catch (err) {
-      // console.info('test aborted', err)
+    } finally {
+      signal?.removeEventListener('abort', onAbort)
     }
-    // console.info(record)
+
+    if (signal?.aborted) {
+      throw Object.assign(new Error('The operation was aborted.'), { name: 'AbortError' })
+    }
+
     const result = sortBy(
       record.filter(v => v[1] != false),
       v => v[1]
     )[0]
-    // console.info(`test done`, result)
     if (!result) throw new Error("Can't select fork")
 
     return (this.sdk.config.requestUsingFork = result[0])

@@ -39,22 +39,22 @@ test.concurrent('Fork decrypted', async () => {
   })
 })
 
-test.concurrent('Fork auto select by array', async () => {
+test.concurrent('Fork auto select by array', async ({ signal }) => {
   const sdk = new JMComic()
   const forks = ['https://www.cdnhth.club', 'https://www.cdngwc.cc']
-  const autoPicked = await sdk.fork.autoPickFork(forks)
+  const autoPicked = await sdk.fork.autoPickFork(forks, signal)
   expect(autoPicked).toBe('https://www.cdnhth.club')
 })
 
-test.concurrent('Fork auto select by pipeline', async () => {
+test.concurrent('Fork auto select by pipeline', async ({ signal }) => {
   const sdk = new JMComic()
   const forks = await sdk.fork.getForks()
-  const autoPicked = await sdk.fork.autoPickFork(forks)
+  const autoPicked = await sdk.fork.autoPickFork(forks, signal)
   expect(autoPicked).toBe('https://www.cdnhth.club')
 })
 
-test.concurrent('Fork auto select by once call', async () => {
+test.concurrent('Fork auto select by once call', async ({ signal }) => {
   const sdk = new JMComic()
-  const autoPicked = await sdk.fork.autoPickFork()
+  const autoPicked = await sdk.fork.autoPickFork(undefined, signal)
   expect(autoPicked).toBe('https://www.cdnhth.club')
 })

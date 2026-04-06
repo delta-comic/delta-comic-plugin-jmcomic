@@ -46,5 +46,8 @@
   "dist": {
     "tarball": "./dist/pack.tgz"
   },
-  "readme": "./README.md"
+  "readme": "./README.md",
+  "dependencies": {
+    "@delta-comic/model": "^1.3.2"
+  }
 }

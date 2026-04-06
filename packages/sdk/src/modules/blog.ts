@@ -37,19 +37,19 @@ export class Blog {
     return await ky
       .get<{ info: FullBlog; related_comics?: RecommendComic[]; related_blogs?: CommonBlog[] }>(
         this.sdk.config.apiPath.blog_getInfo,
-        { body: jsonToFormData({ id: data.id }), signal }
+        { searchParams: { id: data.id }, signal }
       )
       .json()
   }
 
-  public async getComment(
-    data: PaginationQuery<{ blogId: number }>,
+  public async getComments(
+    data: PaginationQuery<{ id: number }>,
     signal?: AbortSignal
   ): Promise<List<MainComment>> {
     const ky = this.sdk.requester.create()
     const list = await ky
       .get<BlogList2<MainComment>>(this.sdk.config.apiPath.forum_getComments, {
-        searchParams: { mode: 'blog', page: data.page, bid: data.blogId },
+        searchParams: { mode: 'blog', page: data.page, bid: data.id },
         signal
       })
       .json()

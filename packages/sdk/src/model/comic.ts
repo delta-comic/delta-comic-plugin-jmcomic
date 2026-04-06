@@ -10,6 +10,10 @@ export interface Series {
 }
 
 export interface BaseComic {
+  /**
+   * @description 漫画的唯一id
+   * @alias `AID`
+   */
   id: number
   name: string
   is_favorite: boolean
