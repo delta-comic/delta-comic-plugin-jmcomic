@@ -2,13 +2,13 @@ packages:
   - packages/*
 
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
+  '@types/crypto-js': ^4.2.2
+  crypto-js: ^4.2.0
+  dompurify: ^3.3.3
+  es-toolkit: ^1.45.1
+  vite: npm:@voidzero-dev/vite-plus-core@^0.1.16
+  vite-plus: ^0.1.16
   vitest: npm:@voidzero-dev/vite-plus-test@latest
-  vite-plus: latest
-  "crypto-js": "^4.2.0"
-  "@types/crypto-js": "^4.2.2"
-  "dompurify": "^3.3.3"
-  "es-toolkit": "^1.45.1"
 
 overrides:
   vite: 'catalog:'
