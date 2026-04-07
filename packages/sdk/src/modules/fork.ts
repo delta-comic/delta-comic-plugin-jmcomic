@@ -30,15 +30,15 @@ export class Fork {
    */
   public async getForks() {
     const { forkGetSource: source, forkGetPath: path } = this.sdk.config
-    const ky = this.sdk.requester.create({ prefixUrl: undefined })
+    const ky = this.sdk.requester.create({ baseUrl: undefined })
     let result = ''
     const acs = new Array<AbortController>()
     await Promise.all(
-      source.map(async baseURL => {
+      source.map(async baseUrl => {
         try {
           const ac = new AbortController()
           acs.push(ac)
-          const body = await ky.get<string>(path, { prefixUrl: baseURL, signal: ac.signal })
+          const body = await ky.get<string>(path, { baseUrl, signal: ac.signal })
           result = await body.text()
           for (const ac of acs) ac.abort()
         } catch (error) {
@@ -80,7 +80,7 @@ export class Fork {
 
           try {
             const begin = Date.now()
-            await ky.get(path, { prefixUrl: fork, signal: requestController.signal })
+            await ky.get(path, { baseUrl: fork, signal: requestController.signal })
             record.push([fork, Date.now() - begin])
           } catch {
             record.push([fork, false])

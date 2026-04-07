@@ -23,7 +23,13 @@ enum ApiPath {
   forum_getComments = '/forum',
   forum_sendComment = '/comment',
   forum_like = '/like',
-  forum_favorite = '/favorite'
+  forum_favorite = '/favorite',
+  // user接口
+  user_daily = '/daily',
+  user_dailyCheck = '/daily_chk',
+  user_edit = '/useredit/',
+  user_buyBadge = '/coin',
+  user_task = '/tasks'
 }
 
 export class Config {
