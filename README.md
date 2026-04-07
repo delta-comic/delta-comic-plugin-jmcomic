@@ -6,6 +6,8 @@
   - 一为封装的禁漫天堂的移动端[接口](#sdk介绍)
   - 二为[**Delta Comic**](https://github.com/delta-comic/delta-comic)的禁漫天堂[插件](#插件介绍)
 
+<!-- SDK begin -->
+
 ## SDK介绍
 
 - sdk内置了解密与网络请求，账户管理
@@ -62,12 +64,15 @@
   - [ ] 游戏
   - [ ] 视频
 
+<!-- SDK end -->
+<!-- Plugin begin -->
+
 ## 插件介绍
 
 ### Delta Comic Plugin Jmcomic - _<span style="font-weight: lighter;font-size:16px">何以哀怮</span>_
 
-[![GitHub](https://img.shields.io/github/license/delta-comic/delta-comic-plugin-jmcomic)](https://raw.githubusercontent.com/delta-comic/delta-comic-plugin-jmcomic/main/LICENSE)
-![Download](https://img.shields.io/github/downloads/delta-comic/delta-comic-plugin-jmcomic/total)
+[![GitHub](https://img.shields.io/github/license/delta-comic/jmcomic-sdk)](https://raw.githubusercontent.com/delta-comic/jmcomic-sdk/main/LICENSE)
+![Download](https://img.shields.io/github/downloads/delta-comic/jmcomic-sdk/total)
 
 #### 功能
 
@@ -82,6 +87,8 @@
 
 [![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=delta-comic&user&theme=transparent)](https://github.com/delta-comic/delta-comic)
 
+<!-- Plugin end -->
+
 ## 星图
 
-[![Star History Chart](https://api.star-history.com/svg?repos=delta-comic/delta-comic-plugin-jmcomic&type=Date)](https://www.star-history.com/#delta-comic/delta-comic-plugin-jmcomic&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=delta-comic/jmcomic-sdk&type=Date)](https://www.star-history.com/#delta-comic/jmcomic-sdk&Date)

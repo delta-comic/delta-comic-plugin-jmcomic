@@ -25,7 +25,7 @@ export interface FullBlog {
    * @description 这个字段是blog的唯一id，本质数字
    * @example '1145'
    * @alias `BID`
-  */
+   */
   id: string
   uid: string
   title: string

@@ -26,7 +26,7 @@ export class Requester {
           baseUrl,
           hooks: {
             beforeRequest: [
-              ({request}) => {
+              ({ request }) => {
                 const authorization = user?.user.jwttoken ?? ''
                 const key = Date.now().toString()
                 const token = MD5(`${key}185Hcomic3PAPP7R`).toString()
@@ -45,7 +45,7 @@ export class Requester {
               }
             ],
             afterResponse: [
-              async ({request, response}) => {
+              async ({ request, response }) => {
                 const jmKey = request.headers.get(Requester.innerHeaderKey)
                 if (!jmKey) return
                 try {
