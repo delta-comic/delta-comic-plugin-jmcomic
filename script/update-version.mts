@@ -2,6 +2,7 @@ import fs from 'node:fs'
 
 import semantic from 'semantic-release'
 
+// @ts-ignore
 import config from '../.releaserc.mjs'
 import pkg from '../package.json' with { type: 'json' }
 

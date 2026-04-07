@@ -17,6 +17,7 @@ nopic
 ofetch
 PAPP
 qrcode
+releaserc
 replys
 Tokenparam
 useredit
