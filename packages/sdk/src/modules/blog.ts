@@ -12,13 +12,13 @@ type BlogList2<T> = { list: T[]; total: string }
 export class Blog {
   constructor(protected sdk: JMComic) {}
 
-  public async getBlogSearch(
+  public async search(
     data: PaginationQuery<{ type: string; keyword?: string; order?: SortType }>,
     signal?: AbortSignal
   ): Promise<List<CommonBlog>> {
     const ky = this.sdk.requester.create()
     const all = await ky
-      .get<BlogType<CommonBlog>>('/blogs', {
+      .get<BlogType<CommonBlog>>(this.sdk.config.apiPath.blog_search, {
         searchParams: {
           mode: 'blog',
           page: data.page,

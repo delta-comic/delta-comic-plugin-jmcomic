@@ -1,13 +1,44 @@
 import type { JMComic } from '..'
 import { jsonToFormData } from '../helpers'
-import type { FullComic, LessComic } from '../model/comic'
+import type { CommonComic, FullComic, LessComic } from '../model/comic'
 import type { MainComment } from '../model/comment'
+import type { SortType } from '../model/search'
 import type { List, PaginationQuery } from '../model/utils'
 
 type ComicList<T> = { list: T[]; total: string }
 
+type SearchList<T> = { search_query: string; total: string; content: T[] }
+
 export class Comic {
   constructor(protected sdk: JMComic) {}
+
+  public async searchByKeyword(
+    data: PaginationQuery<{ keyword: string; order: SortType }>,
+    signal?: AbortSignal
+  ): Promise<List<CommonComic>> {
+    const ky = this.sdk.requester.create()
+    const result = await ky
+      .get<SearchList<CommonComic>>(this.sdk.config.apiPath.comic_searchByKeyword, {
+        searchParams: { search_query: data.keyword, o: data.order, page: data.page },
+        signal
+      })
+      .json()
+    return { list: result.content, total: Number(result.total) }
+  }
+
+  public async searchByCategory(
+    data: PaginationQuery<{ category: string; order: SortType }>,
+    signal?: AbortSignal
+  ): Promise<List<CommonComic>> {
+    const ky = this.sdk.requester.create()
+    const result = await ky
+      .get<SearchList<CommonComic> & { tags: string[] }>(
+        this.sdk.config.apiPath.comic_searchByCategory,
+        { searchParams: { c: data.category, o: data.order, page: data.page }, signal }
+      )
+      .json()
+    return { list: result.content, total: Number(result.total) }
+  }
 
   public async getComicInfo(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
@@ -36,7 +67,10 @@ export class Comic {
   public async likeComic(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .post<{ msg: string, status: string, code: number }>(this.sdk.config.apiPath.forum_like, { body: jsonToFormData({ id: data.id }), signal })
+      .post<{ msg: string; status: string; code: number }>(this.sdk.config.apiPath.forum_like, {
+        body: jsonToFormData({ id: data.id }),
+        signal
+      })
       .json()
   }
 

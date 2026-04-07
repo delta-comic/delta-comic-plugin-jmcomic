@@ -20,13 +20,13 @@ export interface Sourced {
 export class Book {
   constructor(protected sdk: JMComic) {}
 
-  public async searchByKeyword(
+  public async search(
     data: PaginationQuery<{ keyword?: string } & Sourced>,
     signal?: AbortSignal
   ): Promise<List<LessBook>> {
     const ky = this.sdk.requester.create()
     const res = await ky
-      .get<BookList<LessBook>>(this.sdk.config.apiPath.book_searchBooks, {
+      .get<BookList<LessBook>>(this.sdk.config.apiPath.book_search, {
         searchParams: {
           page: data.keyword,
           search_query: data.keyword,

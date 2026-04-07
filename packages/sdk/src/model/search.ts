@@ -48,15 +48,13 @@ export interface CategoryResult {
   sub_categories?: { CID: string; name: string; slug: string }[]
 }
 
-export type SearchMode = 'jid' | 'keyword' | 'category' | 'tag'
-export type SortType = 'mv' | 'mp' | 'tf' | '' | LevelSort
-export type LevelSort = 'mv_m' | 'mv_w' | 'mv_t'
-export const sortMap = [
-  { text: '相关性最高', value: '' },
-  { text: '点赞数最多', value: 'tf' },
-  { text: '图片数最多', value: 'mp' },
-  { text: '观看数最多', value: 'mv' },
-  { text: '本月观看数最多', value: 'mv_m' },
-  { text: '本周观看数最多', value: 'mv_w' },
-  { text: '今日观看数最多', value: 'mv_t' }
-]
+export enum SortType {
+  Relate = '',
+  Like = 'tf',
+  ImageMost = 'mp',
+
+  TotalViewBest = 'mv',
+  MonthViewBest = 'mv_m',
+  WeekViewBest = 'mv_w',
+  TodayViewBest = 'mv_t'
+}

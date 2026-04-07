@@ -7,14 +7,17 @@ enum ApiPath {
   auth_logout = '/logout',
   auth_forgetPassword = '/forget',
   // book接口
-  book_searchBooks = '/creator_author',
+  book_search = '/creator_author',
   book_getAuthorDetail = '/creator_author_work',
   book_getBookDetail = '/creator_work_info',
   book_getBookFullDetail = '/creator_work_info_detail',
   // comic接口
+  comic_searchByKeyword = '/search',
+  comic_searchByCategory = '/categories/filter',
   comic_getInfo = '/album',
   comic_getPages = '/chapter',
   // blog接口
+  blog_search = '/blogs',
   blog_getInfo = '/blog',
   // forum接口
   forum_getComments = '/forum',
