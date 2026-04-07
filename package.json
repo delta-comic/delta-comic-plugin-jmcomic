@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "npm-build": "vp run build -r"
+    "npm-build": "vp run -r build"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
