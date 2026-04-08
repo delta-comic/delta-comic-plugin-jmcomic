@@ -1,4 +1,16 @@
+import { z } from 'zod'
+
+export const sGender = z.enum(['Male', 'Female', 'null'], 'Gender is illegal.')
 export type Gender = 'Male' | 'Female' | 'null'
+
+export const sBadge = z.object(
+  {
+    content: z.stringFormat('path', /^(\/[\w%\.\-\(\)]+)+\.\w+$/, 'Content is not a path.'),
+    id: z.stringFormat('Numeric', /\d+/, 'Id is not a numeric string.'),
+    name: z.string('Badge`s name is illegal.')
+  },
+  'Badge is illegal.'
+)
 export interface Badge {
   /**
    * @description 勋章图片路径，图是正方形
@@ -17,6 +29,18 @@ export interface Badge {
   name: string
 }
 
+export const sExpInfo = z.object(
+  {
+    level_name: z.string('Level name is illegal.'),
+    level: z.number('Level is illegal.'),
+    exp: z.stringFormat('Numeric', /\d+/, 'Exp is not a numeric string.'),
+    nextLevelExp: z.stringFormat('Numeric', /\d+/, 'NextLevelExp is not a numeric string.'),
+    expPercent: z.number('ExpPercent is illegal.'),
+    uid: z.stringFormat('Numeric', /\d+/, 'Uid is not a numeric string.'),
+    badges: z.array(sBadge, 'Badges is illegal.')
+  },
+  'ExpInfo is illegal.'
+)
 export interface ExpInfo {
   /**
    * @description 用户实际使用的称号
@@ -54,6 +78,27 @@ export interface ExpInfo {
   badges: Badge[]
 }
 
+export const sUserMe = sExpInfo.extend({
+  ad_free: z.boolean('Ad free is illegal.'),
+  ad_free_before: z.string('Ad free before is illegal.'),
+  album_favorites: z.number('Album favorites is illegal.'),
+  album_favorites_max: z.number('Album favorites max is illegal.'),
+  charge: z.string('Charge is illegal.'),
+  coin: z.number('Coin is illegal.'),
+  email: z.string('Email is illegal.'),
+  emailverified: z.string('Emailverified is illegal.'),
+  fname: z.string('Fname is illegal.'),
+  gender: sGender,
+  invitation_qrcode: z.string('Invitation qrcode is illegal.'),
+  invitation_url: z.string('Invitation url is illegal.'),
+  invited_cnt: z.stringFormat('Numeric', /\d+/, 'Invited cnt is not a numeric string.'),
+  jar: z.string('Jar is illegal.'),
+  jwttoken: z.string().optional(),
+  message: z.string('Message is illegal.'),
+  photo: z.string('Photo is illegal.'),
+  s: z.string('S is illegal.'),
+  username: z.string('Username is illegal.')
+})
 export interface UserMe extends ExpInfo {
   ad_free: boolean
   ad_free_before: string
@@ -76,6 +121,36 @@ export interface UserMe extends ExpInfo {
   username: string
 }
 
+export const sUserEdit = z.object(
+  {
+    aboutMe: z.string('AboutMe is illegal.'),
+    birthPlace: z.string('BirthPlace is illegal.'),
+    birthday: z.string('Birthday is illegal.'),
+    city: z.string('City is illegal.'),
+    collections: z.string('Collections is illegal.'),
+    company: z.string('Company is illegal.'),
+    country: z.string('Country is illegal.'),
+    erogenic: z.string('Erogenic is illegal.'),
+    email: z.string('Email is illegal.'),
+    favorite: z.string('Favorite is illegal.'),
+    firstName: z.string('FirstName is illegal.'),
+    gender: z.string('Gender is illegal.'),
+    hate: z.string('Hate is illegal.'),
+    ideal: z.string('Ideal is illegal.'),
+    infoHere: z.string('InfoHere is illegal.'),
+    lastName: z.string('LastName is illegal.'),
+    nickName: z.string('NickName is illegal.'),
+    occupation: z.string('Occupation is illegal.'),
+    password: z.string('Password is illegal.'),
+    password_confirm: z.string('Password confirm is illegal.'),
+    relations: z.string('Relations is illegal.'),
+    school: z.string('School is illegal.'),
+    sexuality: z.string('Sexuality is illegal.'),
+    status: z.string('Status is illegal.'),
+    website: z.string('Website is illegal.')
+  },
+  'UserEdit is illegal.'
+)
 export interface UserEdit {
   aboutMe: string
   birthPlace: string
@@ -104,6 +179,16 @@ export interface UserEdit {
   website: string
 }
 
+export const sBadgeItem = sBadge.extend({
+  type: z.literal('badge', 'Type is not badge.'),
+  coin: z.stringFormat('Numeric', /\d+/, 'Coin is not a numeric string.'),
+  rule: z.string('Rule is illegal.'),
+  begin_time: z.string('Begin time is illegal.'),
+  created_at: z.string('Created at is illegal.'),
+  updated_at: z.string('Updated at is illegal.'),
+  end_time: z.string('End time is illegal.'),
+  done: z.boolean('Done is illegal.')
+})
 export interface BadgeItem extends Badge {
   type: 'badge'
   /**
@@ -111,6 +196,10 @@ export interface BadgeItem extends Badge {
    * @example '120'
    */
   coin: string
+  /**
+   * @description 可用判定条件，本质json
+   * @example '{"type":"buy","operator":"<","value":1,"unique":1}'
+   */
   rule: string
   /**
    * @description 起售日期
@@ -138,6 +227,22 @@ export interface BadgeItem extends Badge {
   done: boolean
 }
 
+export const sTitleItem = z.object(
+  {
+    id: z.stringFormat('Numeric', /\d+/, 'Id is not a numeric string.'),
+    name: z.string('Name is illegal.'),
+    type: z.literal('title', 'Type is not title.'),
+    content: z.string('Content is illegal.'),
+    coin: z.literal('0', 'Coin is not 0.'),
+    rule: z.string('Rule is illegal.'),
+    begin_time: z.string('Begin time is illegal.'),
+    end_time: z.string('End time is illegal.'),
+    created_at: z.string('Created at is illegal.'),
+    updated_at: z.string('Updated at is illegal.'),
+    done: z.boolean('Done is illegal.')
+  },
+  'TitleItem is illegal.'
+)
 export interface TitleItem {
   id: string
   name: string

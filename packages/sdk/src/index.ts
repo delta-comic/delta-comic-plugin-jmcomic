@@ -5,12 +5,14 @@ import { Comic } from './modules/comic'
 import { Config } from './modules/config'
 import { Fork } from './modules/fork'
 import { Requester } from './modules/requester'
+import { User } from './modules/user'
 
 export class JMComic {
   public config = new Config(this)
   public requester = new Requester(this)
   public fork = new Fork(this)
   public auth = new Auth(this)
+  public user = new User(this)
   public comic = new Comic(this)
   public blog = new Blog(this)
   public book = new Book(this)

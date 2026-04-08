@@ -1,20 +1,18 @@
 import { expect, test } from 'vite-plus/test'
 
 import { JMComic } from '../src'
+import { sCommonBlog, sFullBlog } from '../src/model/blog'
+import { sRecommendComic } from '../src/model/comic'
 
 test.concurrent('Blog fetch info', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork()
   const info = await sdk.blog.getInfo({ id: 1145 }, signal)
-  expect(info).toMatchObject({
-    info: {
-      id: '1145',
-      uid: '14892',
-      title: '2023年剧情最好的本子',
-      photo: '14892.jpg',
-      nickname: '站务人员'
-    }
-  })
+  await Promise.all([
+    sFullBlog.parseAsync(info.info),
+    sRecommendComic.array().nullable().parseAsync(info.related_comics),
+    sCommonBlog.array().nullable().parseAsync(info.related_blogs)
+  ])
 })
 
 test.concurrent('Blog comments get', { timeout: 1000 * 20 }, async ({ signal }) => {

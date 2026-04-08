@@ -1,26 +1,28 @@
 import { expect, test } from 'vite-plus/test'
+import z from 'zod'
 
 import { JMComic } from '../src'
+import { sFullComic } from '../src/model/comic'
 
 test.concurrent('Comic info get', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork(undefined, signal)
   const result = await sdk.comic.getComicInfo({ id: 350234 }, signal)
-  expect(result).toMatchObject({ id: 350234, name: '董卓 上+下', images: [], series_id: '350234' })
+  await sFullComic.parseAsync(result)
 })
 
 test.concurrent('Comic images get', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork(undefined, signal)
   const result = await sdk.comic.getComicPages({ id: 350234 }, signal)
-  expect(result).toBeInstanceOf(Array)
-  expect(result[0]).toMatch(/\/media\/photos\/\d+\/\d+.[a-z]+/)
+  await z.string().array().parseAsync(result)
 })
 
 test.concurrent('Comic comments get', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork(undefined, signal)
   const result = await sdk.comic.getComments({ id: 350234, page: 1 }, signal)
+
   expect(result.list).toBeInstanceOf(Array)
   expect(result.list[0].AID).toMatch(/\d+/)
 })

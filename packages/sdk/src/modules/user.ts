@@ -70,11 +70,13 @@ export class User {
   public getAllBadges = async (signal?: AbortSignal) => {
     const ky = this.sdk.requester.create()
     const all = await ky
-      .get<{ list: BadgeItem[] }>(this.sdk.config.apiPath.user_task, {
+      .get<{ list?: BadgeItem[] }>(this.sdk.config.apiPath.user_task, {
         searchParams: { type: 'badge', filter: 'all' },
         signal
       })
       .json()
+
+    if (!all.list) throw new Error('You not login any account.')
     return all.list
   }
 
@@ -109,14 +111,14 @@ export class User {
     return all.list
   }
 
-  public async setTitles(id: string, signal?: AbortSignal) {
+  public async setTitles(data: { id: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     const uid = this.sdk.auth.user?.user.uid
     if (!uid) throw new Error('You not login any account.')
 
     const result = await ky
       .post(this.sdk.config.apiPath.user_task, {
-        body: jsonToFormData({ type: 'title', uid, task_id: id }),
+        body: jsonToFormData({ type: 'title', uid, task_id: data.id }),
         signal
       })
       .json()
