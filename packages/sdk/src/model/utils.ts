@@ -1,7 +1,7 @@
 import z from 'zod'
 
-export const createListSchema = <T extends z.ZodAny>(type: T) =>
-  z.object({ total: z.number(), list: z.array(type) })
+export const createListSchema = <T extends z.ZodType>(item: T) =>
+  z.object({ total: z.number(), list: z.array(item) })
 export interface List<T> {
   total: number
   list: T[]

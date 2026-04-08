@@ -48,15 +48,16 @@ export class Requester {
               async ({ request, response }) => {
                 const jmKey = request.headers.get(Requester.innerHeaderKey)
                 if (!jmKey) return
+                const _body = await response.text()
                 try {
-                  var body = (await response.json()) as {
+                  var body = JSON.parse(_body) as {
                     data?: string | []
-                    code: number
-                    message: string
+                    code?: number
+                    message?: string
                     error?: string
                   }
                 } catch {
-                  return
+                  return new Response(_body, response)
                 }
                 const keyTemplates: string[] = ['185Hcomic3PAPP7R', '18comicAPPContent'] // 预定义的密钥模板
                 const decrypt = (cipherText: string) => {

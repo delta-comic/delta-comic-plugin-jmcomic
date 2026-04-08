@@ -1,6 +1,62 @@
-import type { ExpInfo, Gender } from './user'
+import z from 'zod'
 
+import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
+
+export const sChildComment = z.object(
+  {
+    CID: z.stringFormat('Numeric', /\d+/, {
+      error: r => `CID is not a numeric string. (Input ${r.input})`
+    }),
+    AID: z
+      .stringFormat('Numeric', /\d+/, {
+        error: r => `AID is not a numeric string. (Input ${r.input})`
+      })
+      .nullable()
+      .optional(),
+    BID: z
+      .stringFormat('Numeric', /\d+/, {
+        error: r => `BID is not a numeric string. (Input ${r.input})`
+      })
+      .nullable()
+      .optional(),
+    NID: z
+      .stringFormat('Numeric', /\d+/, {
+        error: r => `NID is not a numeric string. (Input ${r.input})`
+      })
+      .nullable()
+      .optional(),
+    NCID: z
+      .stringFormat('Numeric', /\d+/, {
+        error: r => `NCID is not a numeric string. (Input ${r.input})`
+      })
+      .nullable()
+      .optional(),
+    UID: z.stringFormat('Numeric', /\d+/, {
+      error: r => `UID is not a numeric string. (Input ${r.input})`
+    }),
+    likes: z.stringFormat('Numeric', /\d+/, {
+      error: r => `Likes is not a numeric string. (Input ${r.input})`
+    }),
+    username: z.string({ error: r => `User name is illegal. (Input ${r.input})` }),
+    nickname: z.string({ error: r => `User nick name is illegal. (Input ${r.input})` }),
+    gender: sGender,
+    update_at: z.string({ error: r => `update_at is illegal. (Input ${r.input})` }),
+    addtime: z.string({ error: r => `addtime is illegal. (Input ${r.input})` }),
+    parent_CID: z.string({ error: r => `parent_CID is illegal. (Input ${r.input})` }),
+    expinfo: sExpInfo,
+    name: z.string({ error: r => `name is illegal. (Input ${r.input})` }),
+    content: z.string({ error: r => `content is illegal. (Input ${r.input})` }),
+    photo: z.string({ error: r => `photo is illegal. (Input ${r.input})` }),
+    spoiler: z.string({ error: r => `spoiler is illegal. (Input ${r.input})` })
+  },
+  'Comment is illegal.'
+)
 export interface ChildComment {
+  /**
+   * @description 评论id
+   * @example '10215272'
+   */
+  CID: string
   /**
    * @description 漫画id
    * @example '350234'
@@ -11,11 +67,6 @@ export interface ChildComment {
    * @example '1145'
    */
   BID?: string
-  /**
-   * @description 评论id
-   * @example '10215272'
-   */
-  CID: string
   /**
    * @description 小说id
    */
@@ -36,6 +87,7 @@ export interface ChildComment {
   nickname: string
   /**
    * @description 点赞数，本质number
+   * @deprecated 评论没有任何方式点赞
    */
   likes: string
   /**
@@ -88,6 +140,7 @@ export interface ChildComment {
   spoiler: string
 }
 
+export const sMainComment = sChildComment.extend({ replys: sChildComment.array().optional() })
 export interface MainComment extends ChildComment {
   /**
    * @description 子评论，

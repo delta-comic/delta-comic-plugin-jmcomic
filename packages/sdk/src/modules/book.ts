@@ -12,7 +12,7 @@ interface BookList<T> {
   total: number
 }
 
-export interface Sourced {
+interface Sourced {
   lang?: string
   source?: string
 }

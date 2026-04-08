@@ -1,15 +1,7 @@
 import type { JMComic } from '..'
 import { jsonToFormData } from '../helpers'
+import type { LoginData, LoginUser } from '../model/auth'
 import type { Gender, UserMe } from '../model/user'
-
-export interface LoginData {
-  username: string
-  password: string
-}
-export interface LoginUser {
-  data: LoginData
-  user: UserMe
-}
 
 export class Auth {
   constructor(protected sdk: JMComic) {}

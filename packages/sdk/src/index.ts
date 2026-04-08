@@ -7,6 +7,15 @@ import { Fork } from './modules/fork'
 import { Requester } from './modules/requester'
 import { User } from './modules/user'
 
+export * from './model/auth'
+export * from './model/blog'
+export * from './model/book'
+export * from './model/comic'
+export * from './model/comment'
+export * from './model/search'
+export * from './model/user'
+export * from './model/utils'
+
 export class JMComic {
   public config = new Config(this)
   public requester = new Requester(this)
