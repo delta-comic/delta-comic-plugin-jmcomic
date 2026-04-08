@@ -44,7 +44,7 @@ export const sChildComment = z.object(
     addtime: z.string({ error: r => `addtime is illegal. (Input ${r.input})` }),
     parent_CID: z.string({ error: r => `parent_CID is illegal. (Input ${r.input})` }),
     expinfo: sExpInfo,
-    name: z.string({ error: r => `name is illegal. (Input ${r.input})` }),
+    name: z.string({ error: r => `name is illegal. (Input ${r.input})` }).nullable(),
     content: z.string({ error: r => `content is illegal. (Input ${r.input})` }),
     photo: z.string({ error: r => `photo is illegal. (Input ${r.input})` }),
     spoiler: z.string({ error: r => `spoiler is illegal. (Input ${r.input})` })
@@ -115,7 +115,7 @@ export interface ChildComment {
    * @description 不是用户名，是禁漫车牌号
    * @example "JM350234"
    */
-  name: string
+  name: string | null
   /**
    * @description 评论内容，html格式，外层一定是<div>
    * @example

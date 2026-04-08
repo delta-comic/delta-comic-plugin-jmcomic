@@ -1,7 +1,7 @@
 import { expect, test } from 'vite-plus/test'
 import z from 'zod'
 
-import { JMComic } from '../src'
+import { createListSchema, JMComic, sMainComment } from '../src'
 import { sFullComic } from '../src/model/comic'
 
 test.concurrent('Comic info get', { timeout: 1000 * 20 }, async ({ signal }) => {
@@ -21,10 +21,9 @@ test.concurrent('Comic images get', { timeout: 1000 * 20 }, async ({ signal }) =
 test.concurrent('Comic comments get', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
   await sdk.fork.autoPickFork(undefined, signal)
-  const result = await sdk.comic.getComments({ id: 350234, page: 1 }, signal)
+  const comments = await sdk.comic.getComments({ id: 350234, page: 1 }, signal)
 
-  expect(result.list).toBeInstanceOf(Array)
-  expect(result.list[0].AID).toMatch(/\d+/)
+  await createListSchema(sMainComment).parseAsync(comments)
 })
 
 test.concurrent('Like comic', { timeout: 1000 * 20 }, async ({ signal }) => {

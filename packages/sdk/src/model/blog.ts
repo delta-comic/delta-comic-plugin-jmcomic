@@ -30,17 +30,17 @@ export const sCommonBlog = z.object(
       .string({ error: r => `Avatar is illegal. (Input ${r.input})` })
       .nullable()
       .optional(),
-    gender: sGender,
+    gender: sGender.optional(),
     game_url: z
       .string({ error: r => `Game url is illegal. (Input ${r.input})` })
       .nullable()
       .optional(),
     title: z.string({ error: r => `Title is illegal. (Input ${r.input})` }),
     tags: z.string({ error: r => `Tag is illegal. (Input ${r.input})` }).array(),
-    category: z.object({ name: z.string(), slug: z.string() }),
+    category: z.object({ name: z.string().nullable(), slug: z.string().nullable() }),
     content: z.string({ error: r => `Content is illegal. (Input ${r.input})` }),
     photo: z.string({ error: r => `Cover is illegal. (Input ${r.input})` }),
-    date: z.date({ error: r => `Date is illegal. (Input ${r.input})` })
+    date: z.string({ error: r => `Date is illegal. (Input ${r.input})` }).optional()
   },
   'CommonBlog is illegal.'
 )
@@ -74,12 +74,12 @@ export interface CommonBlog {
      * @description 中文的分类名称
      * @example 绅夜食堂
      */
-    name: string
+    name: string|null
     /**
      * @description 分类id
      * @example dinner
      */
-    slug: string
+    slug: string|null
   }
   content: string
   photo: string
@@ -87,7 +87,7 @@ export interface CommonBlog {
   total_comments: string
   total_likes: string
   /** @example "2025-04-24" */
-  date: string
+  date?: string
 }
 
 export const sFullBlog = sCommonBlog.extend({

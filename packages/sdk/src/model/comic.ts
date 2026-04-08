@@ -47,7 +47,7 @@ export interface BaseComic {
 }
 
 export const sLessComic = sBaseComic.extend({
-  addtime: z.date({ error: r => `Addtime is illegal. (Input ${r.input})` }),
+  addtime: z.string({ error: r => `Addtime is illegal. (Input ${r.input})` }),
   images: z.array(z.string({ error: r => `Image is illegal. (Input ${r.input})` })),
   tags: z.string({ error: r => `Tags is illegal. (Input ${r.input})` }),
   series: z.array(sSeries),
@@ -69,7 +69,7 @@ export const sCommonComic = sBaseComic.extend({
   image: z.string({ error: r => `Image is illegal. (Input ${r.input})` }),
   category: sCategory,
   category_sub: sCategory,
-  update_at: z.date({ error: r => `Update at is illegal. (Input ${r.input})` }).optional()
+  update_at: z.string({ error: r => `Update at is illegal. (Input ${r.input})` }).optional()
 })
 export interface CommonComic extends BaseComic {
   author: string
@@ -98,7 +98,7 @@ export interface RecommendComic {
 
 export const sFullComic = sBaseComic.extend({
   images: z.array(z.string({ error: r => `Image is illegal. (Input ${r.input})` })),
-  addtime: z.date({ error: r => `Addtime is illegal. (Input ${r.input})` }),
+  addtime: z.string({ error: r => `Addtime is illegal. (Input ${r.input})` }),
   description: z.string({ error: r => `Description is illegal. (Input ${r.input})` }),
   total_views: z.stringFormat('Numeric', /\d+/, {
     error: r => `Total views is illegal. (Input ${r.input})`
@@ -118,7 +118,7 @@ export const sFullComic = sBaseComic.extend({
   liked: z.boolean({ error: r => `Liked is illegal. (Input ${r.input})` }),
   is_aids: z.boolean({ error: r => `Is aids is illegal. (Input ${r.input})` }),
   purchased: z.string({ error: r => `Purchased is illegal. (Input ${r.input})` }),
-  price: z.stringFormat('Numeric', /\d+/, { error: r => `Price is illegal. (Input ${r.input})` }),
+  price: z.stringFormat('Numeric', /\d*/, { error: r => `Price is illegal. (Input ${r.input})` }),
   likes: z.stringFormat('Numeric', /\d+/, { error: r => `Likes is illegal. (Input ${r.input})` })
 })
 export interface FullComic extends BaseComic {

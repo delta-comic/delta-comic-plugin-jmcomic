@@ -1,7 +1,9 @@
 import { z } from 'zod'
 
-export const sGender = z.enum(['Male', 'Female', 'null'], 'Gender is illegal.')
-export type Gender = 'Male' | 'Female' | 'null'
+export const sGender = z
+  .enum(['Male', 'Female', 'null'], { error: r => `Gender is illegal. (Input ${r.input})` })
+  .nullable()
+export type Gender = 'Male' | 'Female' | null
 
 export const sBadge = z.object(
   {
@@ -114,10 +116,10 @@ export interface UserMe extends ExpInfo {
   album_favorites_max: number
   charge: string
   coin: number
-  email: string
+  email?: string
   emailverified: string
   fname: string
-  gender: Gender
+  gender: Gender | null
   invitation_qrcode: string
   invitation_url: string
   invited_cnt: string
@@ -139,10 +141,10 @@ export const sUserEdit = z.object(
     company: z.string({ error: r => `Company is illegal. (Input ${r.input})` }),
     country: z.string({ error: r => `Country is illegal. (Input ${r.input})` }),
     erogenic: z.string({ error: r => `Erogenic is illegal. (Input ${r.input})` }),
-    email: z.string({ error: r => `Email is illegal. (Input ${r.input})` }),
+    email: z.string({ error: r => `Email is illegal. (Input ${r.input})` }).optional(),
     favorite: z.string({ error: r => `Favorite is illegal. (Input ${r.input})` }),
     firstName: z.string({ error: r => `FirstName is illegal. (Input ${r.input})` }),
-    gender: z.string({ error: r => `Gender is illegal. (Input ${r.input})` }),
+    gender: sGender,
     hate: z.string({ error: r => `Hate is illegal. (Input ${r.input})` }),
     ideal: z.string({ error: r => `Ideal is illegal. (Input ${r.input})` }),
     infoHere: z.string({ error: r => `InfoHere is illegal. (Input ${r.input})` }),
@@ -171,7 +173,7 @@ export interface UserEdit {
   email: string
   favorite: string
   firstName: string
-  gender: string
+  gender: Gender
   hate: string
   ideal: string
   infoHere: string

@@ -57,7 +57,7 @@ export class Auth {
   public async forgetPassword(data: { email: string }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     const result = await ky
-      .post(this.sdk.config.apiPath.auth_forgetPassword, {
+      .post<never>(this.sdk.config.apiPath.auth_forgetPassword, {
         body: jsonToFormData({ email: data.email }),
         signal
       })
