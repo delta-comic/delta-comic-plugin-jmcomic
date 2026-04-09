@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite-plus'
 
 export default defineConfig({
-  staged: { '*': 'vp check --fix && vp exec cspell --no-exit-code --no-must-find-files' },
+  staged: { '*': 'vp check --fix' },
   fmt: {
     ignorePatterns: ['*.md', 'components.d.ts', 'typed-router.d.ts'],
     endOfLine: 'lf',
