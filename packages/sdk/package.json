@@ -32,15 +32,15 @@
     "build": "vp pack && pnpm pack --out ./dist/pack.tgz"
   },
   "devDependencies": {
-    "@delta-comic/model": "^1.3.4",
-    "@types/node": "^25.5.2",
-    "crypto-es": "^3.1.3",
-    "dompurify": "^3.3.3",
-    "es-toolkit": "^1.45.1",
-    "ky": "^2.0.0",
-    "msw": "^2.12.14",
-    "typescript": "^6.0.2",
-    "zod": "^4.3.6"
+    "@delta-comic/model": "catalog:",
+    "@types/node": "catalog:",
+    "crypto-es": "catalog:",
+    "dompurify": "catalog:",
+    "es-toolkit": "catalog:",
+    "ky": "catalog:",
+    "msw": "catalog:",
+    "typescript": "catalog:",
+    "zod": "catalog:"
   },
   "dist": {
     "tarball": "./dist/pack.tgz"
