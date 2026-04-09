@@ -1,16 +1,12 @@
 import type { JMComic } from '..'
-import type {
-  AuthorDetail,
-  BookDetail as CommonBook,
-  BookPages as FullBook,
-  LessBook
-} from '../model/book'
+import type { AuthorDetail, BookDetail, BookPages, LessBook } from '../model/book'
 import type { List, PaginationQuery } from '../model/utils'
 
 interface BookList<T> {
   content: T[]
-  total: number
+  total: string
 }
+type BookResult<T> = { data: T }
 
 interface Sourced {
   lang?: string
@@ -26,9 +22,9 @@ export class Book {
   ): Promise<List<LessBook>> {
     const ky = this.sdk.requester.create()
     const res = await ky
-      .get<BookList<LessBook>>(this.sdk.config.apiPath.book_search, {
+      .get<BookResult<BookList<LessBook>>>(this.sdk.config.apiPath.book_search, {
         searchParams: {
-          page: data.keyword,
+          page: data.page,
           search_query: data.keyword,
           lang: data.lang,
           source: data.source
@@ -36,10 +32,11 @@ export class Book {
         signal
       })
       .json()
-    return { total: res.total, list: res.content }
+      .then(v => v.data)
+    return { total: Number(res.total), list: res.content }
   }
 
-  public async getAuthorDetail(data: { id: number } & Sourced, signal?: AbortSignal) {
+  public async getAuthorDetail(data: { id: string } & Sourced, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<AuthorDetail>(this.sdk.config.apiPath.book_getAuthorDetail, {
@@ -55,17 +52,18 @@ export class Book {
   public async getBookDetail(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<CommonBook>(this.sdk.config.apiPath.book_getBookDetail, {
+      .get<BookResult<BookDetail>>(this.sdk.config.apiPath.book_getBookDetail, {
         searchParams: { id: data.id },
         signal
       })
       .json()
+      .then(v => v.data)
   }
 
-  public async getBookFullDetail(data: { id: number }, signal?: AbortSignal) {
+  public async getBookPages(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<FullBook>(this.sdk.config.apiPath.book_getBookFullDetail, {
+      .get<BookPages>(this.sdk.config.apiPath.book_getBookFullDetail, {
         searchParams: { id: data.id },
         signal
       })

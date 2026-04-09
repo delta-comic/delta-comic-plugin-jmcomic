@@ -29,7 +29,10 @@ enum ApiPath {
   user_dailyCheck = '/daily_chk',
   user_edit = '/useredit/',
   user_buyBadge = '/coin',
-  user_task = '/tasks'
+  user_task = '/tasks',
+  // search接口
+  promote_get = '/promote',
+  promote_list = '/promote_list'
 }
 
 export class Config {

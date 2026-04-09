@@ -1,18 +1,13 @@
 import type { CommonBook } from './book'
 import type { CommonComic } from './comic'
 
-export interface RawPromote {
+export interface PromoteItem {
   id: string
   title: string
   slug: string
   type: string
   filter_val: string | number
   content: (CommonComic | CommonBook)[]
-}
-
-export interface PromoteItem {
-  list: CommonComic[]
-  total: number
 }
 
 export interface WeekBestList {

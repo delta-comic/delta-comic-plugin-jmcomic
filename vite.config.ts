@@ -49,7 +49,8 @@ export default defineConfig({
       'no-unused-expressions': 'allow',
       'no-useless-escape': 'allow',
       'no-non-null-asserted-optional-chain': 'allow',
-      'no-thenable': 'allow'
+      'no-thenable': 'allow',
+      'restrict-template-expressions': 'allow'
     },
     settings: {
       'jsx-a11y': { components: {}, attributes: {} },

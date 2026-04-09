@@ -74,12 +74,12 @@ export interface CommonBlog {
      * @description 中文的分类名称
      * @example 绅夜食堂
      */
-    name: string|null
+    name: string | null
     /**
      * @description 分类id
      * @example dinner
      */
-    slug: string|null
+    slug: string | null
   }
   content: string
   photo: string

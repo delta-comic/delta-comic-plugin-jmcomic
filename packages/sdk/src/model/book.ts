@@ -1,12 +1,40 @@
+import z from 'zod'
+
+export const sCommonBook = z.object({
+  author: z.string({ error: r => `Author is illegal. (Input ${r.input})` }),
+  id: z.stringFormat('Numeric', /\d+/, {
+    error: r => `Id is not a numeric string. (Input ${r.input})`
+  }),
+  image: z.string({ error: r => `Image is illegal. (Input ${r.input})` }),
+  name: z.string({ error: r => `Name is illegal. (Input ${r.input})` }),
+  update_at: z.number({ error: r => `Update time is illegal. (Input ${r.input})` })
+})
 export interface CommonBook {
   author: string
+  /**
+   * @description 这个字段是book的唯一id，本质数字
+   * @example '1145'
+   */
   id: string
   image: string
   name: string
   update_at: number
 }
 
+export const sLessBook = z.object({
+  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
+  id: z.stringFormat('Numeric', /\d+/, {
+    error: r => `Id is not a numeric string. (Input ${r.input})`
+  }),
+  update_date: z.string({ error: r => `Update date is illegal. (Input ${r.input})` }),
+  author_avatar: z.string({ error: r => `Author avatar is illegal. (Input ${r.input})` }),
+  background_image: z.string({ error: r => `Background image is illegal. (Input ${r.input})` })
+})
 export interface LessBook {
+  /**
+   * @description 这个字段是book的唯一id，本质数字
+   * @example '1145'
+   */
   id: string
   author_name: string
   /**
@@ -17,7 +45,20 @@ export interface LessBook {
   background_image: string
 }
 
+export const sRelatedBook = z.object({
+  id: z.stringFormat('Numeric', /\d+/, {
+    error: r => `Id is not a numeric string. (Input ${r.input})`
+  }),
+  work_image: z.string({ error: r => `Work image is illegal. (Input ${r.input})` }),
+  work_title: z.string({ error: r => `Work title is illegal. (Input ${r.input})` }),
+  work_date: z.string({ error: r => `Work date is illegal. (Input ${r.input})` }),
+  platform_name: z.string({ error: r => `Platform name is illegal. (Input ${r.input})` })
+})
 export interface RelatedBook {
+  /**
+   * @description 这个字段是book的唯一id，本质数字
+   * @example '1145'
+   */
   id: string
   /**
    * @example "/media/library/album/1043902/thumb/album.jpg"
@@ -28,6 +69,29 @@ export interface RelatedBook {
   platform_name: string
 }
 
+export const sAuthorDetail = z.object({
+  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
+  author_avatar: z.string({ error: r => `Author avatar is illegal. (Input ${r.input})` }),
+  background_image: z.string({ error: r => `Background image is illegal. (Input ${r.input})` }),
+  sponsor: z
+    .object({
+      platform_url: z.string({ error: r => `Sponsor platform url is illegal. (Input ${r.input})` }),
+      platform_name: z.string({
+        error: r => `Sponsor platform name is illegal. (Input ${r.input})`
+      })
+    })
+    .array(),
+  related_works: sRelatedBook.array(),
+  filters: z.object({
+    language: z.string({ error: r => `Filter language is illegal. (Input ${r.input})` }).array(),
+    source: z
+      .object({
+        service: z.string({ error: r => `Filter source service is illegal. (Input ${r.input})` }),
+        name: z.string({ error: r => `Filter source name is illegal. (Input ${r.input})` })
+      })
+      .array()
+  })
+})
 export interface AuthorDetail {
   /**
    * @deprecated 恒定为该无意义值
@@ -37,6 +101,7 @@ export interface AuthorDetail {
    * @deprecated 恒定为该无意义值
    */
   work_date: ''
+  author_id: string
   author_name: string
   /**
    * @example "/media/library/artists/6212623/icon/136650067.gif"
@@ -57,6 +122,12 @@ export interface AuthorDetail {
   filters: { language: string[]; source: { service: string; name: string }[] }
 }
 
+export const sBookDetail = z.object({
+  work_date: z.string({ error: r => `Work date is illegal. (Input ${r.input})` }),
+  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
+  work_title: z.string({ error: r => `Work title is illegal. (Input ${r.input})` }),
+  related_works: sRelatedBook.array()
+})
 export interface BookDetail {
   /**
    * @example "20392 days ago"
@@ -67,7 +138,25 @@ export interface BookDetail {
   related_works: RelatedBook[]
 }
 
+export const sBookPages = z.object({
+  id: z.number({ error: r => `Id is illegal. (Input ${r.input})` }),
+  name: z.string({ error: r => `Name is illegal. (Input ${r.input})` }),
+  total_page: z.number({ error: r => `Total page is illegal. (Input ${r.input})` }),
+  images: z
+    .object({
+      page: z.number({ error: r => `Page number is illegal. (Input ${r.input})` }),
+      image: z.string({ error: r => `Image url is illegal. (Input ${r.input})` })
+    })
+    .array(),
+  content: z.string({ error: r => `Content is illegal. (Input ${r.input})` }),
+  addtime: z.number({ error: r => `Add time is illegal. (Input ${r.input})` }),
+  adddt: z.string({ error: r => `Add date is illegal. (Input ${r.input})` })
+})
 export interface BookPages {
+  /**
+   * @description 这个字段是book的唯一id，本质数字
+   * @example '1145'
+   */
   id: number
   name: string
   total_page: number
