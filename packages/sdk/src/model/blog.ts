@@ -5,42 +5,42 @@ import { type Gender, type ExpInfo, sGender, sExpInfo } from './user'
 export const sCommonBlog = z.object(
   {
     id: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Id is not a numeric string. (Input ${r.input})`
+      error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     uid: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Uid is not a numeric string. (Input ${r.input})`
+      error: r => `Uid is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     gid: z
       .stringFormat('Numeric', /\d+/, {
-        error: r => `Gid is not a numeric string. (Input ${r.input})`
+        error: r => `Gid is not a numeric string. (Input ${JSON.stringify(r.input)})`
       })
       .nullable()
       .optional(),
     total_views: z.stringFormat('Numeric', /\d+/, {
-      error: r => `total_views is not a numeric string. (Input ${r.input})`
+      error: r => `total_views is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     total_comments: z.stringFormat('Numeric', /\d+/, {
-      error: r => `total_comments is not a numeric string. (Input ${r.input})`
+      error: r => `total_comments is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     total_likes: z.stringFormat('Numeric', /\d+/, {
-      error: r => `total_likes is not a numeric string. (Input ${r.input})`
+      error: r => `total_likes is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
-    username: z.string({ error: r => `User name is illegal. (Input ${r.input})` }),
+    username: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
     user_photo: z
-      .string({ error: r => `Avatar is illegal. (Input ${r.input})` })
+      .string({ error: r => `Avatar is illegal. (Input ${JSON.stringify(r.input)})` })
       .nullable()
       .optional(),
     gender: sGender.optional(),
     game_url: z
-      .string({ error: r => `Game url is illegal. (Input ${r.input})` })
+      .string({ error: r => `Game url is illegal. (Input ${JSON.stringify(r.input)})` })
       .nullable()
       .optional(),
-    title: z.string({ error: r => `Title is illegal. (Input ${r.input})` }),
-    tags: z.string({ error: r => `Tag is illegal. (Input ${r.input})` }).array(),
+    title: z.string({ error: r => `Title is illegal. (Input ${JSON.stringify(r.input)})` }),
+    tags: z.string({ error: r => `Tag is illegal. (Input ${JSON.stringify(r.input)})` }).array(),
     category: z.object({ name: z.string().nullable(), slug: z.string().nullable() }),
-    content: z.string({ error: r => `Content is illegal. (Input ${r.input})` }),
-    photo: z.string({ error: r => `Cover is illegal. (Input ${r.input})` }),
-    date: z.string({ error: r => `Date is illegal. (Input ${r.input})` }).optional()
+    content: z.string({ error: r => `Content is illegal. (Input ${JSON.stringify(r.input)})` }),
+    photo: z.string({ error: r => `Cover is illegal. (Input ${JSON.stringify(r.input)})` }),
+    date: z.string({ error: r => `Date is illegal. (Input ${JSON.stringify(r.input)})` }).optional()
   },
   'CommonBlog is illegal.'
 )
@@ -91,9 +91,11 @@ export interface CommonBlog {
 }
 
 export const sFullBlog = sCommonBlog.extend({
-  nickname: z.string({ error: r => `User nick name is illegal. (Input ${r.input})` }),
+  nickname: z.string({
+    error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
   expInfo: sExpInfo,
-  is_liked: z.boolean({ error: r => `isLiked is illegal. (Input ${r.input})` })
+  is_liked: z.boolean({ error: r => `isLiked is illegal. (Input ${JSON.stringify(r.input)})` })
 })
 export interface FullBlog extends CommonBlog {
   nickname: string

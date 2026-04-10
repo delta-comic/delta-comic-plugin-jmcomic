@@ -58,7 +58,7 @@ export class Requester {
                   }
                 } catch (error) {
                   console.error('Fail to decode response in jm format.')
-                  console.error(error)
+                  if (error instanceof Error) console.error(error.message)
                   return new Response(_body, response)
                 }
                 const keyTemplates: string[] = ['185Hcomic3PAPP7R', '18comicAPPContent'] // 预定义的密钥模板

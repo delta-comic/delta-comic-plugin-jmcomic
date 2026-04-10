@@ -5,49 +5,55 @@ import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
 export const sChildComment = z.object(
   {
     CID: z.stringFormat('Numeric', /\d+/, {
-      error: r => `CID is not a numeric string. (Input ${r.input})`
+      error: r => `CID is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     AID: z
       .stringFormat('Numeric', /\d+/, {
-        error: r => `AID is not a numeric string. (Input ${r.input})`
+        error: r => `AID is not a numeric string. (Input ${JSON.stringify(r.input)})`
       })
       .nullable()
       .optional(),
     BID: z
       .stringFormat('Numeric', /\d+/, {
-        error: r => `BID is not a numeric string. (Input ${r.input})`
+        error: r => `BID is not a numeric string. (Input ${JSON.stringify(r.input)})`
       })
       .nullable()
       .optional(),
     NID: z
       .stringFormat('Numeric', /\d+/, {
-        error: r => `NID is not a numeric string. (Input ${r.input})`
+        error: r => `NID is not a numeric string. (Input ${JSON.stringify(r.input)})`
       })
       .nullable()
       .optional(),
     NCID: z
       .stringFormat('Numeric', /\d+/, {
-        error: r => `NCID is not a numeric string. (Input ${r.input})`
+        error: r => `NCID is not a numeric string. (Input ${JSON.stringify(r.input)})`
       })
       .nullable()
       .optional(),
     UID: z.stringFormat('Numeric', /\d+/, {
-      error: r => `UID is not a numeric string. (Input ${r.input})`
+      error: r => `UID is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     likes: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Likes is not a numeric string. (Input ${r.input})`
+      error: r => `Likes is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
-    username: z.string({ error: r => `User name is illegal. (Input ${r.input})` }),
-    nickname: z.string({ error: r => `User nick name is illegal. (Input ${r.input})` }),
+    username: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
+    nickname: z.string({
+      error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`
+    }),
     gender: sGender,
-    update_at: z.string({ error: r => `update_at is illegal. (Input ${r.input})` }),
-    addtime: z.string({ error: r => `addtime is illegal. (Input ${r.input})` }),
-    parent_CID: z.string({ error: r => `parent_CID is illegal. (Input ${r.input})` }),
+    update_at: z.string({ error: r => `update_at is illegal. (Input ${JSON.stringify(r.input)})` }),
+    addtime: z.string({ error: r => `addtime is illegal. (Input ${JSON.stringify(r.input)})` }),
+    parent_CID: z.string({
+      error: r => `parent_CID is illegal. (Input ${JSON.stringify(r.input)})`
+    }),
     expinfo: sExpInfo,
-    name: z.string({ error: r => `name is illegal. (Input ${r.input})` }).nullable(),
-    content: z.string({ error: r => `content is illegal. (Input ${r.input})` }),
-    photo: z.string({ error: r => `photo is illegal. (Input ${r.input})` }),
-    spoiler: z.string({ error: r => `spoiler is illegal. (Input ${r.input})` })
+    name: z
+      .string({ error: r => `name is illegal. (Input ${JSON.stringify(r.input)})` })
+      .nullable(),
+    content: z.string({ error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }),
+    photo: z.string({ error: r => `photo is illegal. (Input ${JSON.stringify(r.input)})` }),
+    spoiler: z.string({ error: r => `spoiler is illegal. (Input ${JSON.stringify(r.input)})` })
   },
   'Comment is illegal.'
 )
@@ -124,10 +130,9 @@ export interface ChildComment {
   content: string
   /**
    * @description 头像路径
-   * @deprecated 你不应当使用这个获得头像，使用`@example`中的拼接获取最合适(个人观点)
-   * @example `/media/users/${this.uid}.jpg` // 个人认为最佳实践
+   * @example this.photo.startsWith('nopic') ? `你的fallback` : `/media/users/${this.photo}`
    * @example
-   * 'nopic-Male.gif
+   * 'nopic-Male.gif'
    * '2328401.jpg'
    */
   photo: string

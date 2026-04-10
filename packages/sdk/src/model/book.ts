@@ -1,13 +1,13 @@
 import z from 'zod'
 
 export const sCommonBook = z.object({
-  author: z.string({ error: r => `Author is illegal. (Input ${r.input})` }),
+  author: z.string({ error: r => `Author is illegal. (Input ${JSON.stringify(r.input)})` }),
   id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${r.input})`
+    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
   }),
-  image: z.string({ error: r => `Image is illegal. (Input ${r.input})` }),
-  name: z.string({ error: r => `Name is illegal. (Input ${r.input})` }),
-  update_at: z.number({ error: r => `Update time is illegal. (Input ${r.input})` })
+  image: z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` }),
+  name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
+  update_at: z.number({ error: r => `Update time is illegal. (Input ${JSON.stringify(r.input)})` })
 })
 export interface CommonBook {
   author: string
@@ -22,13 +22,21 @@ export interface CommonBook {
 }
 
 export const sLessBook = z.object({
-  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
-  id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${r.input})`
+  author_name: z.string({
+    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
   }),
-  update_date: z.string({ error: r => `Update date is illegal. (Input ${r.input})` }),
-  author_avatar: z.string({ error: r => `Author avatar is illegal. (Input ${r.input})` }),
-  background_image: z.string({ error: r => `Background image is illegal. (Input ${r.input})` })
+  id: z.stringFormat('Numeric', /\d+/, {
+    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+  }),
+  update_date: z.string({
+    error: r => `Update date is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
+  author_avatar: z.string({
+    error: r => `Author avatar is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
+  background_image: z.string({
+    error: r => `Background image is illegal. (Input ${JSON.stringify(r.input)})`
+  })
 })
 export interface LessBook {
   /**
@@ -47,12 +55,14 @@ export interface LessBook {
 
 export const sRelatedBook = z.object({
   id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${r.input})`
+    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
   }),
-  work_image: z.string({ error: r => `Work image is illegal. (Input ${r.input})` }),
-  work_title: z.string({ error: r => `Work title is illegal. (Input ${r.input})` }),
-  work_date: z.string({ error: r => `Work date is illegal. (Input ${r.input})` }),
-  platform_name: z.string({ error: r => `Platform name is illegal. (Input ${r.input})` })
+  work_image: z.string({ error: r => `Work image is illegal. (Input ${JSON.stringify(r.input)})` }),
+  work_title: z.string({ error: r => `Work title is illegal. (Input ${JSON.stringify(r.input)})` }),
+  work_date: z.string({ error: r => `Work date is illegal. (Input ${JSON.stringify(r.input)})` }),
+  platform_name: z.string({
+    error: r => `Platform name is illegal. (Input ${JSON.stringify(r.input)})`
+  })
 })
 export interface RelatedBook {
   /**
@@ -70,24 +80,38 @@ export interface RelatedBook {
 }
 
 export const sAuthorDetail = z.object({
-  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
-  author_avatar: z.string({ error: r => `Author avatar is illegal. (Input ${r.input})` }),
-  background_image: z.string({ error: r => `Background image is illegal. (Input ${r.input})` }),
+  author_name: z.string({
+    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
+  author_avatar: z.string({
+    error: r => `Author avatar is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
+  background_image: z.string({
+    error: r => `Background image is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
   sponsor: z
     .object({
-      platform_url: z.string({ error: r => `Sponsor platform url is illegal. (Input ${r.input})` }),
+      platform_url: z.string({
+        error: r => `Sponsor platform url is illegal. (Input ${JSON.stringify(r.input)})`
+      }),
       platform_name: z.string({
-        error: r => `Sponsor platform name is illegal. (Input ${r.input})`
+        error: r => `Sponsor platform name is illegal. (Input ${JSON.stringify(r.input)})`
       })
     })
     .array(),
   related_works: sRelatedBook.array(),
   filters: z.object({
-    language: z.string({ error: r => `Filter language is illegal. (Input ${r.input})` }).array(),
+    language: z
+      .string({ error: r => `Filter language is illegal. (Input ${JSON.stringify(r.input)})` })
+      .array(),
     source: z
       .object({
-        service: z.string({ error: r => `Filter source service is illegal. (Input ${r.input})` }),
-        name: z.string({ error: r => `Filter source name is illegal. (Input ${r.input})` })
+        service: z.string({
+          error: r => `Filter source service is illegal. (Input ${JSON.stringify(r.input)})`
+        }),
+        name: z.string({
+          error: r => `Filter source name is illegal. (Input ${JSON.stringify(r.input)})`
+        })
       })
       .array()
   })
@@ -123,9 +147,11 @@ export interface AuthorDetail {
 }
 
 export const sBookDetail = z.object({
-  work_date: z.string({ error: r => `Work date is illegal. (Input ${r.input})` }),
-  author_name: z.string({ error: r => `Author name is illegal. (Input ${r.input})` }),
-  work_title: z.string({ error: r => `Work title is illegal. (Input ${r.input})` }),
+  work_date: z.string({ error: r => `Work date is illegal. (Input ${JSON.stringify(r.input)})` }),
+  author_name: z.string({
+    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
+  }),
+  work_title: z.string({ error: r => `Work title is illegal. (Input ${JSON.stringify(r.input)})` }),
   related_works: sRelatedBook.array()
 })
 export interface BookDetail {
@@ -139,18 +165,18 @@ export interface BookDetail {
 }
 
 export const sBookPages = z.object({
-  id: z.number({ error: r => `Id is illegal. (Input ${r.input})` }),
-  name: z.string({ error: r => `Name is illegal. (Input ${r.input})` }),
-  total_page: z.number({ error: r => `Total page is illegal. (Input ${r.input})` }),
+  id: z.number({ error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})` }),
+  name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
+  total_page: z.number({ error: r => `Total page is illegal. (Input ${JSON.stringify(r.input)})` }),
   images: z
     .object({
-      page: z.number({ error: r => `Page number is illegal. (Input ${r.input})` }),
-      image: z.string({ error: r => `Image url is illegal. (Input ${r.input})` })
+      page: z.number({ error: r => `Page number is illegal. (Input ${JSON.stringify(r.input)})` }),
+      image: z.string({ error: r => `Image url is illegal. (Input ${JSON.stringify(r.input)})` })
     })
     .array(),
-  content: z.string({ error: r => `Content is illegal. (Input ${r.input})` }),
-  addtime: z.number({ error: r => `Add time is illegal. (Input ${r.input})` }),
-  adddt: z.string({ error: r => `Add date is illegal. (Input ${r.input})` })
+  content: z.string({ error: r => `Content is illegal. (Input ${JSON.stringify(r.input)})` }),
+  addtime: z.number({ error: r => `Add time is illegal. (Input ${JSON.stringify(r.input)})` }),
+  adddt: z.string({ error: r => `Add date is illegal. (Input ${JSON.stringify(r.input)})` })
 })
 export interface BookPages {
   /**

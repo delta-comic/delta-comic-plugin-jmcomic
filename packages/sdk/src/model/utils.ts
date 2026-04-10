@@ -3,10 +3,12 @@ import z from 'zod'
 export const createListSchema = <T extends z.ZodType>(item: T) =>
   z.object(
     {
-      total: z.number({ error: r => `List total is illegal. (Input ${r.input})` }),
-      list: z.array(item, { error: r => `List data is illegal. (Input ${r.input})` })
+      total: z.number({ error: r => `List total is illegal. (Input ${JSON.stringify(r.input)})` }),
+      list: z.array(item, {
+        error: r => `List data is illegal. (Input ${JSON.stringify(r.input)})`
+      })
     },
-    { error: r => `List is illegal. (Input ${r.input})` }
+    { error: r => `List is illegal. (Input ${JSON.stringify(r.input)})` }
   )
 export interface List<T> {
   total: number

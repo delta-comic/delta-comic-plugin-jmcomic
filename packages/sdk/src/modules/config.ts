@@ -32,7 +32,10 @@ enum ApiPath {
   user_task = '/tasks',
   // search接口
   promote_get = '/promote',
-  promote_list = '/promote_list'
+  promote_list = '/promote_list',
+  // weekBest接口
+  weekBest_cate = '/week',
+  weekBest_list = '/week/filter'
 }
 
 export class Config {
