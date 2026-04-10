@@ -15,6 +15,7 @@ manhua
 NCID
 newsvr
 nopic
+novelchapters
 ofetch
 PAPP
 qrcode

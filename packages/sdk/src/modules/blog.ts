@@ -1,10 +1,5 @@
-import type { JMComic } from '..'
+import type { CommonBlog, FullBlog, JMComic, List, MainComment, PaginationQuery, RecommendComic, SortType } from '..'
 import { jsonToFormData } from '../helpers'
-import type { CommonBlog, FullBlog } from '../model/blog'
-import type { RecommendComic } from '../model/comic'
-import type { MainComment } from '../model/comment'
-import type { SortType } from '../model/search'
-import type { List, PaginationQuery } from '../model/utils'
 
 type BlogType<T> = { list: T[]; count: number }
 type BlogList2<T> = { list: T[]; total: string }

@@ -35,7 +35,15 @@ enum ApiPath {
   promote_list = '/promote_list',
   // weekBest接口
   weekBest_cate = '/week',
-  weekBest_list = '/week/filter'
+  weekBest_list = '/week/filter',
+  // novel接口
+  novel_list = 'novels',
+  novel_detail = 'novel',
+  novel_chapters = 'novelchapters',
+  novel_search = 'search_novels',
+  novel_favorites = 'novel_favorites',
+  novel_favorites_folder = 'novel_favorites_folder',
+  novel_buy = 'coin_buy_nc'
 }
 
 export class Config {

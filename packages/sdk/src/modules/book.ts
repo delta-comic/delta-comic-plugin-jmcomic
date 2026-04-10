@@ -1,6 +1,4 @@
-import type { JMComic } from '..'
-import type { AuthorDetail, BookDetail, BookPages, LessBook } from '../model/book'
-import type { List, PaginationQuery } from '../model/utils'
+import type { AuthorDetail, BookDetail, BookPages, JMComic, LessBook, List, PaginationQuery } from '..'
 
 interface BookList<T> {
   content: T[]

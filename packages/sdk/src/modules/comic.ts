@@ -1,9 +1,5 @@
-import type { JMComic } from '..'
+import type { CommonComic, FullComic, JMComic, LessComic, List, MainComment, PaginationQuery, SortType } from '..'
 import { jsonToFormData } from '../helpers'
-import type { CommonComic, FullComic, LessComic } from '../model/comic'
-import type { MainComment } from '../model/comment'
-import type { SortType } from '../model/search'
-import type { List, PaginationQuery } from '../model/utils'
 
 type ComicList<T> = { list: T[]; total: string }
 

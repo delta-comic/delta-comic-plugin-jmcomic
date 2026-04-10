@@ -1,6 +1,5 @@
-import type { JMComic } from '..'
+import type { BadgeItem, JMComic, TitleItem, UserEdit } from '..'
 import { jsonToFormData } from '../helpers'
-import type { BadgeItem, TitleItem, UserEdit } from '../model/user'
 
 export class User {
   constructor(protected sdk: JMComic) {}
