@@ -2,6 +2,7 @@ import z from 'zod'
 
 import { sCommonBook, type CommonBook } from './book'
 import { sCommonComic, type CommonComic } from './comic'
+import { sLessNovel, type LessNovel } from './novel'
 
 export const sPromoteItem = z.object({
   id: z.union([z.stringFormat('Numeric', /\d+/), z.number()], {
@@ -14,10 +15,11 @@ export const sPromoteItem = z.object({
     z.stringFormat('Numeric', /\d+/, {
       error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})`
     }),
-    z.number({ error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})` })
+    z.number({ error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})` }),
+    z.literal('')
   ]),
   content: z.array(
-    z.union([sCommonComic, sCommonBook], {
+    z.union([sCommonComic, sCommonBook, sLessNovel], {
       error: r => `content is illegal. (Input ${JSON.stringify(r.input)})`
     }),
     { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }
@@ -33,7 +35,7 @@ export interface PromoteItem {
   slug: string
   type: string
   filter_val: string | number
-  content: (CommonComic | CommonBook)[]
+  content: (CommonComic | CommonBook | LessNovel)[]
 }
 
 export const sWeekBest = z.object({

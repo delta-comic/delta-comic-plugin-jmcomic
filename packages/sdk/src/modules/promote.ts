@@ -1,4 +1,13 @@
-import type { CommonComic, JMComic, List, PaginationQuery, PromoteItem, WeekBest } from '..'
+import type {
+  CommonBook,
+  CommonComic,
+  CommonNovel,
+  JMComic,
+  List,
+  PaginationQuery,
+  PromoteItem,
+  WeekBest
+} from '..'
 
 interface PromoteList {
   list: CommonComic[]
@@ -36,7 +45,7 @@ export class Promote {
   public async getWeekBestList(
     data: { id: number; type: string },
     signal?: AbortSignal
-  ): Promise<List<CommonComic>> {
+  ): Promise<List<CommonComic | CommonBook | CommonNovel>> {
     const ky = this.sdk.requester.create()
     const result = await ky
       .get<WeekBestList>(this.sdk.config.apiPath.weekBest_list, {

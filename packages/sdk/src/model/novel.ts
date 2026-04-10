@@ -1,5 +1,36 @@
 import z from 'zod'
 
+export const sLessNovel = z.object({
+  id: z.stringFormat('Numeric', /\d+/, {
+    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+  }),
+  author: z.string({ error: r => `'Author is illegal. (Input ${JSON.stringify(r.input)})` }),
+  name: z.string({ error: r => `'Name is illegal. (Input ${JSON.stringify(r.input)})` }),
+  image: z.string({ error: r => `'Image is illegal. (Input ${JSON.stringify(r.input)})` }),
+  update_at: z.stringFormat('Numeric', /\d+/, {
+    error: r => `'Update at is not a numeric string. (Input ${JSON.stringify(r.input)})`
+  })
+})
+export interface LessNovel {
+  /**
+   * @description 唯一id，本质数字
+   * @example '53'
+   */
+  id: string
+  author: string
+  name: string
+  /**
+   * @description 封面图链接，相对路径
+   * @example '/media/novels/53_tmb.jpg'
+   */
+  image: string
+  /**
+   * @description 更新日期，本质数字
+   * @example '1775404800'
+   */
+  update_at: string
+}
+
 export const sCommonNovel = z.object({
   id: z.stringFormat('Numeric', /\d+/, {
     error: r => `'Id is not numeric string. (Input ${JSON.stringify(r.input)})`
