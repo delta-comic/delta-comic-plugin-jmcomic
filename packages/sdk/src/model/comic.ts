@@ -58,7 +58,7 @@ export const sLessComic = sBaseComic.extend({
   tags: z.string({ error: r => `Tags is illegal. (Input ${JSON.stringify(r.input)})` }),
   series: z.array(sSeries),
   series_id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `'Series id is illegal. (Input ${JSON.stringify(r.input)})`
+    error: r => `Series id is illegal. (Input ${JSON.stringify(r.input)})`
   })
 })
 export interface LessComic extends BaseComic {
