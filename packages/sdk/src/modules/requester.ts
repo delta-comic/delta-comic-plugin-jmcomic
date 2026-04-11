@@ -57,8 +57,8 @@ export class Requester {
                     error?: string
                   }
                 } catch (error) {
-                  console.error('Fail to decode response in jm format.')
-                  if (error instanceof Error) console.error(error.message)
+                  console.warn('sdk > Fail to decode response in jm format.')
+                  if (error instanceof Error) console.warn('sdk > ', error.message)
                   return new Response(_body, response)
                 }
                 const keyTemplates: string[] = ['185Hcomic3PAPP7R', '18comicAPPContent'] // 预定义的密钥模板
@@ -74,7 +74,7 @@ export class Requester {
                       continue
                     }
                   }
-                  console.error('Decryption failed', body, cipherText)
+                  console.error('sdk > Decryption failed', body, cipherText)
                   throw new Error('Decryption failed')
                 }
                 if (!body.data) {

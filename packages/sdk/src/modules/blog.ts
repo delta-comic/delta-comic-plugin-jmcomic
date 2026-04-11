@@ -4,6 +4,7 @@ import type {
   JMComic,
   List,
   MainComment,
+  Numeric,
   PaginationQuery,
   RecommendComic,
   SortType
@@ -36,7 +37,7 @@ export class Blog {
     return { list: all.list, total: Number(all.count) }
   }
 
-  public async getInfo(data: { id: number }, signal?: AbortSignal) {
+  public async getInfo(data: { id: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<{ info: FullBlog; related_comics?: RecommendComic[]; related_blogs?: CommonBlog[] }>(
@@ -47,7 +48,7 @@ export class Blog {
   }
 
   public async getComments(
-    data: PaginationQuery<{ id: number }>,
+    data: PaginationQuery<{ id: Numeric }>,
     signal?: AbortSignal
   ): Promise<List<MainComment>> {
     const ky = this.sdk.requester.create()
@@ -60,7 +61,7 @@ export class Blog {
     return { list: list.list, total: Number(list.total) }
   }
 
-  public async like(data: { id: number }, signal?: AbortSignal) {
+  public async like(data: { id: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post(this.sdk.config.apiPath.forum_like, {
@@ -70,18 +71,8 @@ export class Blog {
       .json()
   }
 
-  public async sendComment(data: { id: number; content: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_sendComment, {
-        body: jsonToFormData({ bid: data.id, comment: data.content }),
-        signal
-      })
-      .json()
-  }
-
-  public async sendChildComment(
-    data: { id: number; parentCommentId: number; content: string },
+  public async sendComment(
+    data: { id: Numeric; parentCommentId: number; content: string },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()

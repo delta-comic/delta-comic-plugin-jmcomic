@@ -122,5 +122,3 @@ export interface MainComment extends ChildComment {
    */
   replys?: ChildComment[]
 }
-
-export interface NovelComment {}

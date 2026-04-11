@@ -5,6 +5,7 @@ import type {
   LessComic,
   List,
   MainComment,
+  Numeric,
   PaginationQuery,
   SortType
 } from '..'
@@ -45,7 +46,7 @@ export class Comic {
     return { list: result.content, total: Number(result.total) }
   }
 
-  public async getInfo(data: { id: number }, signal?: AbortSignal) {
+  public async getInfo(data: { id: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<FullComic>(this.sdk.config.apiPath.comic_getInfo, {
@@ -58,7 +59,7 @@ export class Comic {
   /**
    * @returns 形如`["/media/photos/350234/00001.webp"]`的数组，本质`/media/photos/${data.id}/${img}`
    */
-  public getPages = async (data: { id: number }, signal?: AbortSignal) => {
+  public getPages = async (data: { id: Numeric }, signal?: AbortSignal) => {
     const ky = this.sdk.requester.create()
     const comic = await ky
       .get<LessComic>(this.sdk.config.apiPath.comic_getPages, {
@@ -69,7 +70,7 @@ export class Comic {
     return comic.images.map(img => `/media/photos/${data.id}/${img}`)
   }
 
-  public async like(data: { id: number }, signal?: AbortSignal) {
+  public async like(data: { id: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ msg: string; status: string; code: number }>(this.sdk.config.apiPath.forum_like, {
@@ -79,7 +80,7 @@ export class Comic {
       .json()
   }
 
-  public async favorite(data: { id: number }, signal?: AbortSignal) {
+  public async favorite(data: { id: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
@@ -90,7 +91,7 @@ export class Comic {
   }
 
   public async getComments(
-    data: PaginationQuery<{ id: number }>,
+    data: PaginationQuery<{ id: Numeric }>,
     signal?: AbortSignal
   ): Promise<List<MainComment>> {
     const ky = this.sdk.requester.create()
@@ -104,7 +105,7 @@ export class Comic {
   }
 
   public async sendComment(
-    data: { comicId: number; content: string; isSpoiled: boolean },
+    data: { comicId: Numeric; parentCommentId?: Numeric; content: string; isSpoiled: boolean },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()
@@ -113,24 +114,9 @@ export class Comic {
         body: jsonToFormData({
           aid: data.comicId,
           content: data.content,
-          isSpoiler: data.isSpoiled
-        }),
-        signal
-      })
-      .json()
-  }
-
-  public async sendChildComment(
-    data: { comicId: number; parentCommentId: number; content: string },
-    signal?: AbortSignal
-  ) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_sendComment, {
-        body: jsonToFormData({
-          aid: data.comicId,
           comment_id: data.parentCommentId,
-          comment: data.content
+          isSpoiler: data.isSpoiled,
+          is_spoiler: data.isSpoiled
         }),
         signal
       })
