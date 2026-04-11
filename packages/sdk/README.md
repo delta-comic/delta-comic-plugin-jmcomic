@@ -1,5 +1,8 @@
 # 禁漫天堂 SDK
 
+![NPM Downloads](https://img.shields.io/npm/dw/jmcomic-sdk)
+
+
 ## 简介
 
 - 从[官方源码](https://github.com/wenxig/jmcomic-source-code)分析优化而来。
@@ -49,10 +52,9 @@ const comic = await sdk.comic.getInfo({ id: 350234 })
 
 网络部分使用`ky`对`fetch`封装，要求需要你所在的平台支持跨越CORS，或者通过主动修改分流为你的代理节点。
 
+## 路线图
 <!-- Insert -->
 <!-- SDK begin -->
-
-## SDK介绍
 
 - sdk内置了解密与网络请求，账户管理
 - 接口推断来自[禁漫天堂解包源码(Github)](https://github.com/wenxig/jmcomic-source-code)

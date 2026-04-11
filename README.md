@@ -6,9 +6,17 @@
   - 一为封装的禁漫天堂的移动端[接口](#sdk介绍)
   - 二为[**Delta Comic**](https://github.com/delta-comic/delta-comic)的禁漫天堂[插件](#插件介绍)
 
-<!-- SDK begin -->
-
 ## SDK介绍
+
+### 安装
+
+```sh
+pnpm add jmcomic-sdk
+```
+
+然后详见[ReadMe](/packages/sdk/README.md)
+
+<!-- SDK begin -->
 
 - sdk内置了解密与网络请求，账户管理
 - 接口推断来自[禁漫天堂解包源码(Github)](https://github.com/wenxig/jmcomic-source-code)
