@@ -16,7 +16,7 @@ interface NovelList<T> {
 export class Novel {
   constructor(protected sdk: JMComic) {}
   public async getPromoteList(
-    data: PaginationQuery<{}>,
+    data: PaginationQuery,
     signal?: AbortSignal
   ): Promise<List<CommonNovel>> {
     const ky = this.sdk.requester.create()
@@ -84,7 +84,7 @@ export class Novel {
       .json()
   }
 
-  public async getFavoriteList(data: PaginationQuery<{}>, signal?: AbortSignal) {
+  public async getFavoriteList(data: PaginationQuery, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ status: string; msg: string; type: 'add' | 'remove' }>(

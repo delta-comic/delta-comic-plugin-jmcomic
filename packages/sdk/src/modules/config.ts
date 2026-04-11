@@ -30,11 +30,13 @@ enum ApiPath {
   user_edit = '/useredit/',
   user_buyBadge = '/coin',
   user_task = '/tasks',
+  user_history = '/watch_list',
   // search接口
   promote_get = '/promote',
   promote_list = '/promote_list',
   promote_hotTags = '/hot_tags',
   promote_random = '/random_recommend',
+  promote_latest = '/latest',
   // weekBest接口
   weekBest_cate = '/week',
   weekBest_list = '/week/filter',

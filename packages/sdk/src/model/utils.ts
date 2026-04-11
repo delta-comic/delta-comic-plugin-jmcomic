@@ -15,7 +15,7 @@ export interface List<T> {
   list: T[]
 }
 
-export type PaginationQuery<T extends object> = T & { page: number }
+export type PaginationQuery<T extends object = {}> = T & { page: number }
 
 export const sNumeric = z.union([z.stringFormat('Numeric', /^\d+$/), z.number()], {
   error: r =>

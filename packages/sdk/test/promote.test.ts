@@ -44,6 +44,12 @@ test.concurrent('Promote get random', { timeout: 1000 * 20 }, async ({ signal })
   const sdk = new JMComic()
   await sdk.fork.autoPickFork(undefined, signal)
   const result = await sdk.promote.getRandomProvide(signal)
-  console.log(result)
+  await sCommonComic.array().parseAsync(result)
+})
+
+test.concurrent('Promote get latest', { timeout: 1000 * 20 }, async ({ signal }) => {
+  const sdk = new JMComic()
+  await sdk.fork.autoPickFork(undefined, signal)
+  const result = await sdk.promote.getLatest({ page: 1 }, signal)
   await sCommonComic.array().parseAsync(result)
 })

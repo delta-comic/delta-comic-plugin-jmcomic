@@ -64,9 +64,19 @@ export class Promote {
   public async getRandomProvide(signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<unknown>(this.sdk.config.apiPath.promote_random, {
+      .get<CommonComic[]>(this.sdk.config.apiPath.promote_random, {
         signal,
         searchParams: { time: Date.now() }
+      })
+      .json()
+  }
+
+  public async getLatest(data: PaginationQuery, signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    return await ky
+      .get<CommonComic[]>(this.sdk.config.apiPath.promote_latest, {
+        signal,
+        searchParams: { page: data.page }
       })
       .json()
   }

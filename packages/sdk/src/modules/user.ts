@@ -1,4 +1,13 @@
-import type { BadgeItem, JMComic, TitleItem, UserEdit } from '..'
+import type {
+  BadgeItem,
+  CommonComic,
+  JMComic,
+  List,
+  Numeric,
+  PaginationQuery,
+  TitleItem,
+  UserEdit
+} from '..'
 import { jsonToFormData } from '../helpers'
 
 export class User {
@@ -23,15 +32,17 @@ export class User {
     }
   }
 
-  public getUser(data: { uid: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return ky.get<UserEdit>(data.uid, { prefix: this.sdk.config.apiPath.user_edit, signal }).json()
-  }
-
-  public setUser(data: { uid: string; user: UserEdit }, signal?: AbortSignal) {
+  public getUser(data: { uid: Numeric }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return ky
-      .get<UserEdit>(data.uid, {
+      .get<UserEdit>(data.uid.toString(), { prefix: this.sdk.config.apiPath.user_edit, signal })
+      .json()
+  }
+
+  public setUser(data: { uid: Numeric; user: UserEdit }, signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    return ky
+      .get<UserEdit>(data.uid.toString(), {
         body: jsonToFormData(data.user),
         prefix: this.sdk.config.apiPath.user_edit,
         signal
@@ -39,7 +50,7 @@ export class User {
       .json()
   }
 
-  public buyBadge = (data: { badgeId: number | string }, signal?: AbortSignal) => {
+  public buyBadge = (data: { badgeId: Numeric }, signal?: AbortSignal) => {
     const ky = this.sdk.requester.create()
     const uid = this.sdk.auth.user?.user.uid
     if (!uid) throw new Error('You not login any account.')
@@ -118,6 +129,34 @@ export class User {
     const result = await ky
       .post(this.sdk.config.apiPath.user_task, {
         body: jsonToFormData({ type: 'title', uid, task_id: data.id }),
+        signal
+      })
+      .json()
+    return result
+  }
+
+  public async getHistory(data: PaginationQuery, signal?: AbortSignal): Promise<List<CommonComic>> {
+    const ky = this.sdk.requester.create()
+    const uid = this.sdk.auth.user?.user.uid
+    if (!uid) throw new Error('You not login any account.')
+
+    const result = await ky
+      .get<List<CommonComic>>(this.sdk.config.apiPath.user_history, {
+        searchParams: { page: data.page },
+        signal
+      })
+      .json()
+    return result
+  }
+
+  public async getRemoveSingleHistory(data: { comicId: Numeric }, signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    const uid = this.sdk.auth.user?.user.uid
+    if (!uid) throw new Error('You not login any account.')
+
+    const result = await ky
+      .post(this.sdk.config.apiPath.user_history, {
+        body: jsonToFormData({ id: data.comicId }),
         signal
       })
       .json()
