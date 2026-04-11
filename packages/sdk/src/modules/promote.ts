@@ -55,4 +55,19 @@ export class Promote {
       .json()
     return { list: result.list, total: Number(result.total) }
   }
+
+  public async getHotTags(signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    return await ky.get<string[]>(this.sdk.config.apiPath.promote_hotTags, { signal }).json()
+  }
+
+  public async getRandomProvide(signal?: AbortSignal) {
+    const ky = this.sdk.requester.create()
+    return await ky
+      .get<unknown>(this.sdk.config.apiPath.promote_random, {
+        signal,
+        searchParams: { time: Date.now() }
+      })
+      .json()
+  }
 }

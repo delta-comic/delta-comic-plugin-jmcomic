@@ -2,10 +2,13 @@ import z from 'zod'
 
 import { sNumeric, sString, type Numeric } from './utils'
 
-export const sCategory = z.object({ id: sString, title: sString }, 'Category is illegal.')
+export const sCategory = z.object(
+  { id: sString.nullable(), title: sString.nullable() },
+  'Category is illegal.'
+)
 export interface Category {
-  id: string
-  title: string
+  id: string | null
+  title: string | null
 }
 
 export const sSeries = z.object(
