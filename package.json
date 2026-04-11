@@ -9,6 +9,7 @@
   },
   "type": "module",
   "scripts": {
+    "md": "node ./script/markdown-make.ts",
     "npm-build": "vp run -r build",
     "prepare": "vp config"
   },
