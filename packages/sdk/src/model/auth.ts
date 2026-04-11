@@ -1,4 +1,4 @@
-import type { UserMe } from "./user"
+import type { UserMe } from './user'
 
 export interface LoginData {
   username: string

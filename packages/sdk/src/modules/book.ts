@@ -1,4 +1,12 @@
-import type { AuthorDetail, BookDetail, BookPages, JMComic, LessBook, List, PaginationQuery } from '..'
+import type {
+  AuthorDetail,
+  BookDetail,
+  BookPages,
+  JMComic,
+  LessBook,
+  List,
+  PaginationQuery
+} from '..'
 
 interface BookList<T> {
   content: T[]

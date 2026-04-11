@@ -1,8 +1,19 @@
 import { expect, test } from 'vite-plus/test'
 import z from 'zod'
 
-import { createListSchema, JMComic, sMainComment } from '../src'
-import { sFullComic } from '../src/model/comic'
+import { createListSchema, JMComic, sMainComment, SortType } from '../src'
+import { sCommonComic, sFullComic } from '../src/model/comic'
+
+test.concurrent('Comic search', { timeout: 1000 * 20 }, async ({ signal }) => {
+  const sdk = new JMComic()
+  await sdk.fork.autoPickFork(undefined, signal)
+  const result = await sdk.comic.searchByKeyword(
+    { keyword: '你', order: SortType.Relate, page: 1 },
+    signal
+  )
+
+  await createListSchema(sCommonComic).parseAsync(result)
+})
 
 test.concurrent('Comic info get', { timeout: 1000 * 20 }, async ({ signal }) => {
   const sdk = new JMComic()
