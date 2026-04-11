@@ -1,4 +1,13 @@
-import type { CommonBlog, FullBlog, JMComic, List, MainComment, PaginationQuery, RecommendComic, SortType } from '..'
+import type {
+  CommonBlog,
+  FullBlog,
+  JMComic,
+  List,
+  MainComment,
+  PaginationQuery,
+  RecommendComic,
+  SortType
+} from '..'
 import { jsonToFormData } from '../helpers'
 
 type BlogType<T> = { list: T[]; count: number }
@@ -51,7 +60,7 @@ export class Blog {
     return { list: list.list, total: Number(list.total) }
   }
 
-  public async likeBlog(data: { id: number }, signal?: AbortSignal) {
+  public async like(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post(this.sdk.config.apiPath.forum_like, {

@@ -1,13 +1,13 @@
 import z from 'zod'
 
+import { sNumeric, sString, type Numeric } from './utils'
+
 export const sCommonBook = z.object({
-  author: z.string({ error: r => `Author is illegal. (Input ${JSON.stringify(r.input)})` }),
-  id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
-  }),
-  image: z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` }),
-  name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
-  update_at: z.number({ error: r => `Update time is illegal. (Input ${JSON.stringify(r.input)})` })
+  author: sString,
+  id: sNumeric,
+  image: sString,
+  name: sString,
+  update_at: sNumeric
 })
 export interface CommonBook {
   author: string
@@ -15,35 +15,25 @@ export interface CommonBook {
    * @description 这个字段是book的唯一id，本质数字
    * @example '1145'
    */
-  id: string
+  id: Numeric
   image: string
   name: string
-  update_at: number
+  update_at: Numeric
 }
 
 export const sLessBook = z.object({
-  author_name: z.string({
-    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
-  }),
-  update_date: z.string({
-    error: r => `Update date is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  author_avatar: z.string({
-    error: r => `Author avatar is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  background_image: z.string({
-    error: r => `Background image is illegal. (Input ${JSON.stringify(r.input)})`
-  })
+  id: sNumeric,
+  author_name: sString,
+  update_date: sString,
+  author_avatar: sString,
+  background_image: sString
 })
 export interface LessBook {
   /**
    * @description 这个字段是book的唯一id，本质数字
    * @example '1145'
    */
-  id: string
+  id: Numeric
   author_name: string
   /**
    * @example "77 days ago"
@@ -54,22 +44,18 @@ export interface LessBook {
 }
 
 export const sRelatedBook = z.object({
-  id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
-  }),
-  work_image: z.string({ error: r => `Work image is illegal. (Input ${JSON.stringify(r.input)})` }),
-  work_title: z.string({ error: r => `Work title is illegal. (Input ${JSON.stringify(r.input)})` }),
-  work_date: z.string({ error: r => `Work date is illegal. (Input ${JSON.stringify(r.input)})` }),
-  platform_name: z.string({
-    error: r => `Platform name is illegal. (Input ${JSON.stringify(r.input)})`
-  })
+  id: sNumeric,
+  work_image: sString,
+  work_title: sString,
+  work_date: sString,
+  platform_name: sString
 })
 export interface RelatedBook {
   /**
    * @description 这个字段是book的唯一id，本质数字
    * @example '1145'
    */
-  id: string
+  id: Numeric
   /**
    * @example "/media/library/album/1043902/thumb/album.jpg"
    */
@@ -80,40 +66,14 @@ export interface RelatedBook {
 }
 
 export const sAuthorDetail = z.object({
-  author_name: z.string({
-    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  author_avatar: z.string({
-    error: r => `Author avatar is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  background_image: z.string({
-    error: r => `Background image is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  sponsor: z
-    .object({
-      platform_url: z.string({
-        error: r => `Sponsor platform url is illegal. (Input ${JSON.stringify(r.input)})`
-      }),
-      platform_name: z.string({
-        error: r => `Sponsor platform name is illegal. (Input ${JSON.stringify(r.input)})`
-      })
-    })
-    .array(),
+  author_name: sString,
+  author_avatar: sString,
+  background_image: sString,
+  sponsor: z.object({ platform_url: sString, platform_name: sString }).array(),
   related_works: sRelatedBook.array(),
   filters: z.object({
-    language: z
-      .string({ error: r => `Filter language is illegal. (Input ${JSON.stringify(r.input)})` })
-      .array(),
-    source: z
-      .object({
-        service: z.string({
-          error: r => `Filter source service is illegal. (Input ${JSON.stringify(r.input)})`
-        }),
-        name: z.string({
-          error: r => `Filter source name is illegal. (Input ${JSON.stringify(r.input)})`
-        })
-      })
-      .array()
+    language: sString.array(),
+    source: z.object({ service: sString, name: sString }).array()
   })
 })
 export interface AuthorDetail {
@@ -147,11 +107,9 @@ export interface AuthorDetail {
 }
 
 export const sBookDetail = z.object({
-  work_date: z.string({ error: r => `Work date is illegal. (Input ${JSON.stringify(r.input)})` }),
-  author_name: z.string({
-    error: r => `Author name is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  work_title: z.string({ error: r => `Work title is illegal. (Input ${JSON.stringify(r.input)})` }),
+  work_date: sString,
+  author_name: sString,
+  work_title: sString,
   related_works: sRelatedBook.array()
 })
 export interface BookDetail {
@@ -165,29 +123,24 @@ export interface BookDetail {
 }
 
 export const sBookPages = z.object({
-  id: z.number({ error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})` }),
-  name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
-  total_page: z.number({ error: r => `Total page is illegal. (Input ${JSON.stringify(r.input)})` }),
-  images: z
-    .object({
-      page: z.number({ error: r => `Page number is illegal. (Input ${JSON.stringify(r.input)})` }),
-      image: z.string({ error: r => `Image url is illegal. (Input ${JSON.stringify(r.input)})` })
-    })
-    .array(),
-  content: z.string({ error: r => `Content is illegal. (Input ${JSON.stringify(r.input)})` }),
-  addtime: z.number({ error: r => `Add time is illegal. (Input ${JSON.stringify(r.input)})` }),
-  adddt: z.string({ error: r => `Add date is illegal. (Input ${JSON.stringify(r.input)})` })
+  id: sNumeric,
+  name: sString,
+  total_page: sNumeric,
+  images: z.object({ page: sNumeric, image: sString }).array(),
+  content: sString,
+  addtime: sNumeric,
+  adddt: sString
 })
 export interface BookPages {
   /**
    * @description 这个字段是book的唯一id，本质数字
    * @example '1145'
    */
-  id: number
+  id: Numeric
   name: string
-  total_page: number
+  total_page: Numeric
   images: {
-    page: number
+    page: Numeric
     /**
      * @example "https://cdn-msp12.jmdanjonproxy.xyz/media/library/album/1023045/00000.jpg"
      */
@@ -202,7 +155,7 @@ export interface BookPages {
    * @deprecated 使用`adddt`代替
    * @example 1970 // 恒定为该无意义值
    */
-  addtime: number
+  addtime: Numeric
   /**
    * @example "2025-05-18 01:00:14"
    */

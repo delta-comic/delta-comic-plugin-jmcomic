@@ -1,39 +1,27 @@
 import z from 'zod'
 
-export const sCategory = z.object(
-  {
-    id: z.string({ error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})` }),
-    title: z.string({ error: r => `Title is illegal. (Input ${JSON.stringify(r.input)})` })
-  },
-  'Category is illegal.'
-)
+import { sNumeric, sString, type Numeric } from './utils'
+
+export const sCategory = z.object({ id: sString, title: sString }, 'Category is illegal.')
 export interface Category {
   id: string
   title: string
 }
 
 export const sSeries = z.object(
-  {
-    id: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
-    sort: z.string({ error: r => `Sort is illegal. (Input ${JSON.stringify(r.input)})` })
-  },
+  { id: sNumeric, name: sString, sort: sString },
   'Series is illegal.'
 )
 export interface Series {
-  id: string
+  id: Numeric
   name: string
   sort: string
 }
 
 export const sBaseComic = z.object(
   {
-    id: z.union([z.number(), z.stringFormat('Numeric', /\d+/)], {
-      error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
+    id: sNumeric,
+    name: sString,
     is_favorite: z.boolean({
       error: r => `Is favorite is illegal. (Input ${JSON.stringify(r.input)})`
     }),
@@ -46,40 +34,34 @@ export interface BaseComic {
    * @description 漫画的唯一id
    * @alias `AID`
    */
-  id: number | string
+  id: Numeric
   name: string
   is_favorite: boolean
   liked: boolean
 }
 
 export const sLessComic = sBaseComic.extend({
-  addtime: z.string({ error: r => `Addtime is illegal. (Input ${JSON.stringify(r.input)})` }),
-  images: z.array(z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` })),
-  tags: z.string({ error: r => `Tags is illegal. (Input ${JSON.stringify(r.input)})` }),
+  addtime: sString,
+  images: z.array(sString),
+  tags: sString,
   series: z.array(sSeries),
-  series_id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Series id is illegal. (Input ${JSON.stringify(r.input)})`
-  })
+  series_id: sNumeric
 })
 export interface LessComic extends BaseComic {
   addtime: string
   images: string[]
   series: Series[]
-  series_id: string
+  series_id: Numeric
   tags: string
 }
 
 export const sCommonComic = sBaseComic.extend({
-  author: z.string({ error: r => `Author is illegal. (Input ${JSON.stringify(r.input)})` }),
-  description: z
-    .string({ error: r => `Description is illegal. (Input ${JSON.stringify(r.input)})` })
-    .optional(),
-  image: z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` }),
+  author: sString,
+  description: sString.optional(),
+  image: sString,
   category: sCategory,
   category_sub: sCategory,
-  update_at: z
-    .number({ error: r => `Update at is illegal. (Input ${JSON.stringify(r.input)})` })
-    .optional()
+  update_at: sNumeric.optional()
 })
 export interface CommonComic extends BaseComic {
   author: string
@@ -87,68 +69,47 @@ export interface CommonComic extends BaseComic {
   image: string
   category: Category
   category_sub: Category
-  update_at?: number
+  update_at?: Numeric
 }
 
 export const sRecommendComic = z.object(
-  {
-    id: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Id is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    author: z.string({ error: r => `Author is illegal. (Input ${JSON.stringify(r.input)})` }),
-    name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
-    image: z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` })
-  },
+  { id: sNumeric, author: sString, name: sString, image: sString },
   'RecommendComic is illegal.'
 )
 export interface RecommendComic {
-  id: string
+  id: Numeric
   author: string
   name: string
   image: string
 }
 
 export const sFullComic = sBaseComic.extend({
-  images: z.array(z.string({ error: r => `Image is illegal. (Input ${JSON.stringify(r.input)})` })),
-  addtime: z.string({ error: r => `Addtime is illegal. (Input ${JSON.stringify(r.input)})` }),
-  description: z.string({
-    error: r => `Description is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  total_views: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Total views is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
+  images: z.array(sString),
+  addtime: sNumeric,
+  description: sString,
+  total_views: sNumeric,
   series: z.array(sSeries),
-  series_id: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Series id is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  comment_total: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Comment total is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  author: z.array(
-    z.string({ error: r => `Author is illegal. (Input ${JSON.stringify(r.input)})` })
-  ),
-  tags: z.array(z.string({ error: r => `Tag is illegal. (Input ${JSON.stringify(r.input)})` })),
-  works: z.array(z.string({ error: r => `Work is illegal. (Input ${JSON.stringify(r.input)})` })),
-  actors: z.array(z.string({ error: r => `Actor is illegal. (Input ${JSON.stringify(r.input)})` })),
+  series_id: sNumeric,
+  comment_total: sNumeric,
+  author: z.array(sString),
+  tags: z.array(sString),
+  works: z.array(sString),
+  actors: z.array(sString),
   related_list: z.array(sRecommendComic),
   liked: z.boolean({ error: r => `Liked is illegal. (Input ${JSON.stringify(r.input)})` }),
   is_aids: z.boolean({ error: r => `Is aids is illegal. (Input ${JSON.stringify(r.input)})` }),
-  purchased: z.string({ error: r => `Purchased is illegal. (Input ${JSON.stringify(r.input)})` }),
-  price: z.stringFormat('Numeric', /\d*/, {
-    error: r => `Price is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  likes: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Likes is illegal. (Input ${JSON.stringify(r.input)})`
-  })
+  purchased: sNumeric,
+  price: sNumeric,
+  likes: sNumeric
 })
 export interface FullComic extends BaseComic {
   images: string[]
   addtime: string
   description: string
-  total_views: string
+  total_views: Numeric
   series: Series[]
-  series_id: string
-  comment_total: string
+  series_id: Numeric
+  comment_total: Numeric
   author: string[]
   tags: string[]
   works: string[]
@@ -156,7 +117,7 @@ export interface FullComic extends BaseComic {
   related_list: RecommendComic[]
   liked: boolean
   is_aids: boolean
-  price: string
-  purchased: string
-  likes: string
+  price: Numeric
+  purchased: Numeric
+  likes: Numeric
 }

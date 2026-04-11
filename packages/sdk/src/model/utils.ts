@@ -16,3 +16,14 @@ export interface List<T> {
 }
 
 export type PaginationQuery<T extends object> = T & { page: number }
+
+export const sNumeric = z.union([z.stringFormat('Numeric', /^\d+$/), z.number()], {
+  error: r =>
+    `${String(r.path?.at(-1) ?? 'It')} must be a numeric string or number. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`
+})
+export type Numeric = string | number
+
+export const sString = z.string({
+  error: r =>
+    `${String(r.path?.at(-1) ?? 'It')} must be string. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`
+})

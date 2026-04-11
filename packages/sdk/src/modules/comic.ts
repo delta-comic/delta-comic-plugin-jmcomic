@@ -1,4 +1,13 @@
-import type { CommonComic, FullComic, JMComic, LessComic, List, MainComment, PaginationQuery, SortType } from '..'
+import type {
+  CommonComic,
+  FullComic,
+  JMComic,
+  LessComic,
+  List,
+  MainComment,
+  PaginationQuery,
+  SortType
+} from '..'
 import { jsonToFormData } from '../helpers'
 
 type ComicList<T> = { list: T[]; total: string }
@@ -36,7 +45,7 @@ export class Comic {
     return { list: result.content, total: Number(result.total) }
   }
 
-  public async getComicInfo(data: { id: number }, signal?: AbortSignal) {
+  public async getInfo(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .get<FullComic>(this.sdk.config.apiPath.comic_getInfo, {
@@ -49,7 +58,7 @@ export class Comic {
   /**
    * @returns 形如`["/media/photos/350234/00001.webp"]`的数组，本质`/media/photos/${data.id}/${img}`
    */
-  public getComicPages = async (data: { id: number }, signal?: AbortSignal) => {
+  public getPages = async (data: { id: number }, signal?: AbortSignal) => {
     const ky = this.sdk.requester.create()
     const comic = await ky
       .get<LessComic>(this.sdk.config.apiPath.comic_getPages, {
@@ -60,7 +69,7 @@ export class Comic {
     return comic.images.map(img => `/media/photos/${data.id}/${img}`)
   }
 
-  public async likeComic(data: { id: number }, signal?: AbortSignal) {
+  public async like(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ msg: string; status: string; code: number }>(this.sdk.config.apiPath.forum_like, {
@@ -70,7 +79,7 @@ export class Comic {
       .json()
   }
 
-  public async favoriteComic(data: { id: number }, signal?: AbortSignal) {
+  public async favorite(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
       .post<{ status: string; msg: string; type: 'add' | 'remove' }>(

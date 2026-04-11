@@ -1,59 +1,28 @@
 import z from 'zod'
 
 import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
+import { sNumeric, sString, type Numeric } from './utils'
 
 export const sChildComment = z.object(
   {
-    CID: z.stringFormat('Numeric', /\d+/, {
-      error: r => `CID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-    }),
-    AID: z
-      .stringFormat('Numeric', /\d+/, {
-        error: r => `AID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-      })
-      .nullable()
-      .optional(),
-    BID: z
-      .stringFormat('Numeric', /\d+/, {
-        error: r => `BID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-      })
-      .nullable()
-      .optional(),
-    NID: z
-      .stringFormat('Numeric', /\d+/, {
-        error: r => `NID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-      })
-      .nullable()
-      .optional(),
-    NCID: z
-      .stringFormat('Numeric', /\d+/, {
-        error: r => `NCID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-      })
-      .nullable()
-      .optional(),
-    UID: z.stringFormat('Numeric', /\d+/, {
-      error: r => `UID is not a numeric string. (Input ${JSON.stringify(r.input)})`
-    }),
-    likes: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Likes is not a numeric string. (Input ${JSON.stringify(r.input)})`
-    }),
-    username: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
-    nickname: z.string({
-      error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
+    CID: sNumeric,
+    AID: sNumeric.nullable().optional(),
+    BID: sNumeric.nullable().optional(),
+    NID: sNumeric.nullable().optional(),
+    NCID: sNumeric.nullable().optional(),
+    UID: sNumeric,
+    likes: sNumeric,
+    username: sString,
+    nickname: sString,
     gender: sGender,
-    update_at: z.string({ error: r => `update_at is illegal. (Input ${JSON.stringify(r.input)})` }),
-    addtime: z.string({ error: r => `addtime is illegal. (Input ${JSON.stringify(r.input)})` }),
-    parent_CID: z.string({
-      error: r => `parent_CID is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
+    update_at: sNumeric,
+    addtime: sString,
+    parent_CID: sNumeric,
     expinfo: sExpInfo,
-    name: z
-      .string({ error: r => `name is illegal. (Input ${JSON.stringify(r.input)})` })
-      .nullable(),
-    content: z.string({ error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }),
-    photo: z.string({ error: r => `photo is illegal. (Input ${JSON.stringify(r.input)})` }),
-    spoiler: z.string({ error: r => `spoiler is illegal. (Input ${JSON.stringify(r.input)})` })
+    name: sString.nullable(),
+    content: sString,
+    photo: sString,
+    spoiler: sNumeric
   },
   'Comment is illegal.'
 )
@@ -62,27 +31,27 @@ export interface ChildComment {
    * @description 评论id
    * @example '10215272'
    */
-  CID: string
+  CID: Numeric
   /**
    * @description 漫画id
    * @example '350234'
    */
-  AID?: string
+  AID?: Numeric
   /**
    * @description 博客id
    * @example '1145'
    */
-  BID?: string
+  BID?: Numeric
   /**
    * @description 小说id
    */
-  NID?: string
-  NCID?: string
+  NID?: Numeric
+  NCID?: Numeric
   /**
    * @description 用户id
    * @example ‘11451419’
    */
-  UID: string
+  UID: Numeric
   /**
    * @description 用户注册名
    */
@@ -95,7 +64,7 @@ export interface ChildComment {
    * @description 点赞数，本质number
    * @deprecated 评论没有任何方式点赞
    */
-  likes: string
+  likes: Numeric
   /**
    * @description 性别
    */
@@ -106,7 +75,7 @@ export interface ChildComment {
    * "0"
    * "1639290342"
    */
-  update_at: string
+  update_at: Numeric
   /**
    * @description 发送时间
    * @example 'Apr 05, 2026'
@@ -115,7 +84,7 @@ export interface ChildComment {
   /**
    * @description 父评论id，没有则为`"0"`
    */
-  parent_CID: string
+  parent_CID: Numeric
   expinfo: ExpInfo
   /**
    * @description 不是用户名，是禁漫车牌号
@@ -137,19 +106,21 @@ export interface ChildComment {
    */
   photo: string
   /**
-   * @description 是否剧透，本质布尔值，但`boolean->number->string`；经实测，为真的数量占比异常巨大
+   * @description 是否剧透，本质布尔值，但`boolean->(number + 1)->string`
    * @example
-   * '1'
-   * '0'
+   * '1' // false
+   * '2' // true
    */
-  spoiler: string
+  spoiler: Numeric
 }
 
 export const sMainComment = sChildComment.extend({ replys: sChildComment.array().optional() })
 export interface MainComment extends ChildComment {
   /**
    * @description 子评论，
-   * @summary 接口就是这么个东西，错拼没人发现吗
+   * @ps 接口就是这么个东西，错拼没人发现吗
    */
   replys?: ChildComment[]
 }
+
+export interface NovelComment {}

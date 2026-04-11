@@ -3,16 +3,15 @@ import z from 'zod'
 import { sCommonBook, type CommonBook } from './book'
 import { sCommonComic, type CommonComic } from './comic'
 import { sLessNovel, type LessNovel } from './novel'
+import { sNumeric, type Numeric } from './utils'
 
 export const sPromoteItem = z.object({
-  id: z.union([z.stringFormat('Numeric', /\d+/), z.number()], {
-    error: r => `Id is not a numeric string or number. (Input ${JSON.stringify(r.input)})`
-  }),
+  id: sNumeric,
   title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
   slug: z.string({ error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})` }),
   type: z.string({ error: r => `update_at is illegal. (Input ${JSON.stringify(r.input)})` }),
   filter_val: z.union([
-    z.stringFormat('Numeric', /\d+/, {
+    z.stringFormat('Numeric', /^\d+$/, {
       error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})`
     }),
     z.number({ error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})` }),
@@ -30,7 +29,7 @@ export interface PromoteItem {
    * @description 推荐列表的唯一id，本质数字，不保证连续
    * @example ['26', '29', '30', 999, 1000] // 可见存在突变
    */
-  id: string | number
+  id: Numeric
   title: string
   slug: string
   type: string
@@ -41,7 +40,7 @@ export interface PromoteItem {
 export const sWeekBest = z.object({
   categories: z.array(
     z.object({
-      id: z.stringFormat('Numeric', /\d+/, {
+      id: z.stringFormat('Numeric', /^\d+$/, {
         error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
       }),
       title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
@@ -67,19 +66,19 @@ export interface WeekBest {
 }
 
 export const sCategoryResult = z.object({
-  id: z.stringFormat('Numeric', /\d+/, {
+  id: z.stringFormat('Numeric', /^\d+$/, {
     error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
   }),
   name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
   slug: z.string({ error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})` }),
-  total_albums: z.stringFormat('Numeric', /\d+/, {
+  total_albums: z.stringFormat('Numeric', /^\d+$/, {
     error: r => `total_albums is not a numeric string. (Input ${JSON.stringify(r.input)})`
   }),
   type: z.string({ error: r => `type is illegal. (Input ${JSON.stringify(r.input)})` }),
   sub_categories: z
     .array(
       z.object({
-        Id: z.stringFormat('Numeric', /\d+/, {
+        Id: z.stringFormat('Numeric', /^\d+$/, {
           error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
         }),
         name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),

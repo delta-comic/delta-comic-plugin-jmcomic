@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { sNumeric, sString, type Numeric } from './utils'
+
 export const sGender = z
   .enum(['Male', 'Female', 'null'], {
     error: r => `Gender is illegal. (Input ${JSON.stringify(r.input)})`
@@ -8,11 +10,7 @@ export const sGender = z
 export type Gender = 'Male' | 'Female' | null
 
 export const sBadge = z.object(
-  {
-    content: z.stringFormat('path', /^(\/[\w%\.\-\(\)]+)+\.\w+$/, 'Content is not a path.'),
-    id: z.stringFormat('Numeric', /\d+/, 'Id is not a numeric string.'),
-    name: z.string('Badge`s name is illegal.')
-  },
+  { content: sString, id: sNumeric, name: sString },
   'Badge is illegal.'
 )
 export interface Badge {
@@ -25,7 +23,7 @@ export interface Badge {
    * @description 该勋章唯一id，本质数字
    * @description '175'
    */
-  id: string
+  id: Numeric
   /**
    * @description 由于勋章是人物头像，因此这个就是人物名称
    * @example '尔科亚'
@@ -35,22 +33,12 @@ export interface Badge {
 
 export const sExpInfo = z.object(
   {
-    level_name: z.string({
-      error: r => `Level name is illegal. (Input: ${JSON.stringify(r.input)})`
-    }),
-    level: z.number({ error: r => `Level is illegal. (Input: ${JSON.stringify(r.input)})` }),
-    exp: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Exp is not a numeric string. (Input: ${JSON.stringify(r.input)})`
-    }),
-    nextLevelExp: z.number({
-      error: r => `NextLevelExp is illegal. (Input: ${JSON.stringify(r.input)})`
-    }),
-    expPercent: z.number({
-      error: r => `ExpPercent is illegal. (Input: ${JSON.stringify(r.input)})`
-    }),
-    uid: z.stringFormat('Numeric', /\d+/, {
-      error: r => `Uid is not a numeric string. (Input: ${JSON.stringify(r.input)})`
-    }),
+    level_name: sString,
+    level: sNumeric,
+    exp: sNumeric,
+    nextLevelExp: sNumeric,
+    expPercent: sNumeric,
+    uid: sNumeric,
     badges: z.array(sBadge, {
       error: r => `Badges is illegal. (Input: ${JSON.stringify(r.input)})`
     })
@@ -67,27 +55,27 @@ export interface ExpInfo {
    * @description 用户等级
    * @example 4
    */
-  level: number
+  level: Numeric
   /**
    * @description 当前经验值，本质数字
    * @example '1085'
    */
-  exp: string
+  exp: Numeric
   /**
    * @description 下一等级总共所需的经验
    * @example 2100
    */
-  nextLevelExp: number
+  nextLevelExp: Numeric
   /**
    * @description 升级进度
    * @example 51.66666666666667
    */
-  expPercent: number
+  expPercent: Numeric
   /**
    * @description 用户唯一id，本质数字
    * @example '11451419'
    */
-  uid: string
+  uid: Numeric
   /**
    * @description 用户勋章
    */
@@ -96,55 +84,39 @@ export interface ExpInfo {
 
 export const sUserMe = sExpInfo.extend({
   ad_free: z.boolean({ error: r => `Ad free is illegal. (Input ${JSON.stringify(r.input)})` }),
-  ad_free_before: z.string({
-    error: r => `Ad free before is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  album_favorites: z.number({
-    error: r => `Album favorites is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  album_favorites_max: z.number({
-    error: r => `Album favorites max is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  charge: z.string({ error: r => `Charge is illegal. (Input ${JSON.stringify(r.input)})` }),
-  coin: z.number({ error: r => `Coin is illegal. (Input ${JSON.stringify(r.input)})` }),
-  email: z.string({ error: r => `Email is illegal. (Input ${JSON.stringify(r.input)})` }),
-  emailverified: z.string({
-    error: r => `Emailverified is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  fname: z.string({ error: r => `Fname is illegal. (Input ${JSON.stringify(r.input)})` }),
+  ad_free_before: sString,
+  album_favorites: sNumeric,
+  album_favorites_max: sNumeric,
+  charge: sString,
+  coin: sNumeric,
+  email: sString,
+  emailverified: sString,
+  fname: sString,
   gender: sGender,
-  invitation_qrcode: z.string({
-    error: r => `Invitation qrcode is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  invitation_url: z.string({
-    error: r => `Invitation url is illegal. (Input ${JSON.stringify(r.input)})`
-  }),
-  invited_cnt: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Invited cnt is not a numeric string. (Input ${JSON.stringify(r.input)})`
-  }),
-  jar: z.string({ error: r => `Jar is illegal. (Input ${JSON.stringify(r.input)})` }),
-  jwttoken: z
-    .string({ error: r => `Jwt token is illegal. (Input ${JSON.stringify(r.input)})` })
-    .optional(),
-  message: z.string({ error: r => `Message is illegal. (Input ${JSON.stringify(r.input)})` }),
-  photo: z.string({ error: r => `Photo is illegal. (Input ${JSON.stringify(r.input)})` }),
-  s: z.string({ error: r => `S is illegal. (Input ${JSON.stringify(r.input)})` }),
-  username: z.string({ error: r => `Username is illegal. (Input ${JSON.stringify(r.input)})` })
+  invitation_qrcode: sString,
+  invitation_url: sString,
+  invited_cnt: sNumeric,
+  jar: sString,
+  jwttoken: sString.optional(),
+  message: sString,
+  photo: sString,
+  s: sString,
+  username: sString
 })
 export interface UserMe extends ExpInfo {
   ad_free: boolean
   ad_free_before: string
-  album_favorites: number
-  album_favorites_max: number
+  album_favorites: Numeric
+  album_favorites_max: Numeric
   charge: string
-  coin: number
+  coin: Numeric
   email?: string
   emailverified: string
   fname: string
   gender: Gender | null
   invitation_qrcode: string
   invitation_url: string
-  invited_cnt: string
+  invited_cnt: Numeric
   jar: string
   jwttoken?: string
   message: string
@@ -155,41 +127,31 @@ export interface UserMe extends ExpInfo {
 
 export const sUserEdit = z.object(
   {
-    aboutMe: z.string({ error: r => `AboutMe is illegal. (Input ${JSON.stringify(r.input)})` }),
-    birthPlace: z.string({
-      error: r => `BirthPlace is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    birthday: z.string({ error: r => `Birthday is illegal. (Input ${JSON.stringify(r.input)})` }),
-    city: z.string({ error: r => `City is illegal. (Input ${JSON.stringify(r.input)})` }),
-    collections: z.string({
-      error: r => `Collections is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    company: z.string({ error: r => `Company is illegal. (Input ${JSON.stringify(r.input)})` }),
-    country: z.string({ error: r => `Country is illegal. (Input ${JSON.stringify(r.input)})` }),
-    erogenic: z.string({ error: r => `Erogenic is illegal. (Input ${JSON.stringify(r.input)})` }),
-    email: z
-      .string({ error: r => `Email is illegal. (Input ${JSON.stringify(r.input)})` })
-      .optional(),
-    favorite: z.string({ error: r => `Favorite is illegal. (Input ${JSON.stringify(r.input)})` }),
-    firstName: z.string({ error: r => `FirstName is illegal. (Input ${JSON.stringify(r.input)})` }),
+    aboutMe: sString,
+    birthPlace: sString,
+    birthday: sString,
+    city: sString,
+    collections: sString,
+    company: sString,
+    country: sString,
+    erogenic: sString,
+    email: sString.optional(),
+    favorite: sString,
+    firstName: sString,
     gender: sGender,
-    hate: z.string({ error: r => `Hate is illegal. (Input ${JSON.stringify(r.input)})` }),
-    ideal: z.string({ error: r => `Ideal is illegal. (Input ${JSON.stringify(r.input)})` }),
-    infoHere: z.string({ error: r => `InfoHere is illegal. (Input ${JSON.stringify(r.input)})` }),
-    lastName: z.string({ error: r => `LastName is illegal. (Input ${JSON.stringify(r.input)})` }),
-    nickName: z.string({ error: r => `NickName is illegal. (Input ${JSON.stringify(r.input)})` }),
-    occupation: z.string({
-      error: r => `Occupation is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    password: z.string({ error: r => `Password is illegal. (Input ${JSON.stringify(r.input)})` }),
-    password_confirm: z.string({
-      error: r => `Password confirm is illegal. (Input ${JSON.stringify(r.input)})`
-    }),
-    relations: z.string({ error: r => `Relations is illegal. (Input ${JSON.stringify(r.input)})` }),
-    school: z.string({ error: r => `School is illegal. (Input ${JSON.stringify(r.input)})` }),
-    sexuality: z.string({ error: r => `Sexuality is illegal. (Input ${JSON.stringify(r.input)})` }),
-    status: z.string({ error: r => `Status is illegal. (Input ${JSON.stringify(r.input)})` }),
-    website: z.string({ error: r => `Website is illegal. (Input ${JSON.stringify(r.input)})` })
+    hate: sString,
+    ideal: sString,
+    infoHere: sString,
+    lastName: sString,
+    nickName: sString,
+    occupation: sString,
+    password: sString,
+    password_confirm: sString,
+    relations: sString,
+    school: sString,
+    sexuality: sString,
+    status: sString,
+    website: sString
   },
   'UserEdit is illegal.'
 )
@@ -223,14 +185,12 @@ export interface UserEdit {
 
 export const sBadgeItem = sBadge.extend({
   type: z.literal('badge', { error: r => `Type is not badge. (Input ${JSON.stringify(r.input)})` }),
-  coin: z.stringFormat('Numeric', /\d+/, {
-    error: r => `Coin is not a numeric string. (Input ${JSON.stringify(r.input)})`
-  }),
-  rule: z.string({ error: r => `Rule is illegal. (Input ${JSON.stringify(r.input)})` }),
-  begin_time: z.string({ error: r => `Begin time is illegal. (Input ${JSON.stringify(r.input)})` }),
-  created_at: z.string({ error: r => `Created at is illegal. (Input ${JSON.stringify(r.input)})` }),
-  updated_at: z.string({ error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})` }),
-  end_time: z.string({ error: r => `End time is illegal. (Input ${JSON.stringify(r.input)})` }),
+  coin: sNumeric,
+  rule: sString,
+  begin_time: sString,
+  created_at: sString,
+  updated_at: sString,
+  end_time: sString,
   done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` })
 })
 export interface BadgeItem extends Badge {
@@ -239,7 +199,7 @@ export interface BadgeItem extends Badge {
    * @description 消耗的coin数量，本质数字
    * @example '120'
    */
-  coin: string
+  coin: Numeric
   /**
    * @description 可用判定条件，本质json
    * @example '{"type":"buy","operator":"<","value":1,"unique":1}'
@@ -273,7 +233,7 @@ export interface BadgeItem extends Badge {
 
 export const sTitleItem = z.object(
   {
-    id: z.stringFormat('Numeric', /\d+/, {
+    id: z.stringFormat('Numeric', /^\d+$/, {
       error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
     }),
     name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),

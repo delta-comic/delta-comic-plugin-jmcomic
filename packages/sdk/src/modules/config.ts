@@ -42,8 +42,7 @@ enum ApiPath {
   novel_chapters = 'novelchapters',
   novel_search = 'search_novels',
   novel_favorites = 'novel_favorites',
-  novel_favorites_folder = 'novel_favorites_folder',
-  novel_buy = 'coin_buy_nc'
+  novel_favorites_folder = 'novel_favorites_folder'
 }
 
 export class Config {
