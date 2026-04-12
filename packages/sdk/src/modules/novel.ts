@@ -98,7 +98,7 @@ export class Novel {
     data: {
       novelId: Numeric
       chapterId?: Numeric
-      parentCommentId: Numeric
+      parentCommentId?: Numeric
       content: string
       isSpoiled: boolean
     },

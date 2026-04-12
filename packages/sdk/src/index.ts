@@ -1,7 +1,7 @@
 import { Auth } from './modules/auth'
 import { Blog } from './modules/blog'
 import { Book } from './modules/book'
-import { Comic } from './modules/comic'
+import { Comic, ImageDecryptor } from './modules/comic'
 import { Config } from './modules/config'
 import { Fork } from './modules/fork'
 import { Novel } from './modules/novel'
@@ -26,6 +26,7 @@ export class JMComic {
   public auth = new Auth(this)
   public user = new User(this)
   public comic = new Comic(this)
+  public image = new ImageDecryptor(this)
   public blog = new Blog(this)
   public book = new Book(this)
   public novel = new Novel(this)

@@ -3,7 +3,7 @@ import z from 'zod'
 import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
 import { sNumeric, sString, type Numeric } from './utils'
 
-export const sChildComment = z.object(
+export const sComment = z.object(
   {
     CID: sNumeric,
     AID: sNumeric.nullable().optional(),
@@ -22,11 +22,12 @@ export const sChildComment = z.object(
     name: sString.nullable(),
     content: sString,
     photo: sString,
-    spoiler: sNumeric
+    spoiler: sNumeric,
+    replys: z.array(z.any()).optional()
   },
   'Comment is illegal.'
 )
-export interface ChildComment {
+export interface Comment {
   /**
    * @description 评论id
    * @example '10215272'
@@ -112,13 +113,9 @@ export interface ChildComment {
    * '2' // true
    */
   spoiler: Numeric
-}
-
-export const sMainComment = sChildComment.extend({ replys: sChildComment.array().optional() })
-export interface MainComment extends ChildComment {
   /**
    * @description 子评论，
    * @ps 接口就是这么个东西，错拼没人发现吗
    */
-  replys?: ChildComment[]
+  replys?: Comment[]
 }

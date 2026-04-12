@@ -1,6 +1,6 @@
 import { test } from 'vite-plus/test'
 
-import { createListSchema, JMComic, sMainComment } from '../src'
+import { createListSchema, JMComic, sComment } from '../src'
 import { sCommonBlog, sFullBlog } from '../src/model/blog'
 import { sRecommendComic } from '../src/model/comic'
 
@@ -19,5 +19,5 @@ test.concurrent('Blog comments get', { timeout: 1000 * 20 }, async ({ signal }) 
   const sdk = new JMComic()
   await sdk.fork.autoPickFork()
   const comments = await sdk.blog.getComments({ id: 1145, page: 1 }, signal)
-  await createListSchema(sMainComment).parseAsync(comments)
+  await createListSchema(sComment).parseAsync(comments)
 })

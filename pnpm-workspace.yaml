@@ -1,7 +1,9 @@
 packages:
   - packages/*
 allowBuilds:
+  canvas: false
   esbuild: true
+  sharp: true
 
 catalog:
   '@commitlint/cli': '^20.5.0'
@@ -68,3 +70,5 @@ peerDependencyRules:
   allowedVersions:
     vite: '*'
     vitest: '*'
+onlyBuiltDependencies:
+  - delta-comic-plugin-layout

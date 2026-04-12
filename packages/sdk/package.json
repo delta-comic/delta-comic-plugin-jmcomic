@@ -45,5 +45,8 @@
   "dist": {
     "tarball": "./dist/pack.tgz"
   },
-  "readme": "./README.md"
+  "readme": "./README.md",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
 }

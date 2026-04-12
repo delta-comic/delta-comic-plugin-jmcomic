@@ -1,5 +1,6 @@
 import z from 'zod'
 
+import type { Comment } from './comment'
 import { type Gender, type ExpInfo, sGender, sExpInfo } from './user'
 import { sNumeric, sString, type Numeric } from './utils'
 
@@ -79,4 +80,9 @@ export interface FullBlog extends CommonBlog {
   nickname: string
   expInfo: ExpInfo
   is_liked: boolean
+}
+
+export interface BlogComment extends Comment {
+  BID: Numeric
+  replys?: BlogComment[]
 }

@@ -1,9 +1,9 @@
 import type {
+  BlogComment,
   CommonBlog,
   FullBlog,
   JMComic,
   List,
-  MainComment,
   Numeric,
   PaginationQuery,
   RecommendComic,
@@ -50,10 +50,10 @@ export class Blog {
   public async getComments(
     data: PaginationQuery<{ id: Numeric }>,
     signal?: AbortSignal
-  ): Promise<List<MainComment>> {
+  ): Promise<List<BlogComment>> {
     const ky = this.sdk.requester.create()
     const list = await ky
-      .get<BlogList2<MainComment>>(this.sdk.config.apiPath.forum_getComments, {
+      .get<BlogList2<BlogComment>>(this.sdk.config.apiPath.forum_getComments, {
         searchParams: { mode: 'blog', page: data.page, bid: data.id },
         signal
       })

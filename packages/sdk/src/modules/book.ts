@@ -1,7 +1,7 @@
 import type {
-  AuthorDetail,
-  BookDetail,
-  BookPages,
+  BookAuthor,
+  BookRelates,
+  BookContents,
   JMComic,
   LessBook,
   List,
@@ -45,7 +45,7 @@ export class Book {
   public async getAuthorDetail(data: { id: string } & Sourced, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<AuthorDetail>(this.sdk.config.apiPath.book_getAuthorDetail, {
+      .get<BookAuthor>(this.sdk.config.apiPath.book_getAuthorDetail, {
         searchParams: { id: data.id, lang: data.lang, source: data.source },
         signal
       })
@@ -53,12 +53,12 @@ export class Book {
   }
 
   /**
-   * @description 说实在的，我不知道这个接口存在的意义是什么，`getBookFullDetail`返回更加丰富。
+   * @description 说实在的，我不知道这个接口存在的意义是什么，`getBookPages`返回更加丰富。
    */
   public async getBookDetail(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<BookResult<BookDetail>>(this.sdk.config.apiPath.book_getBookDetail, {
+      .get<BookResult<BookRelates>>(this.sdk.config.apiPath.book_getBookDetail, {
         searchParams: { id: data.id },
         signal
       })
@@ -69,7 +69,7 @@ export class Book {
   public async getBookPages(data: { id: number }, signal?: AbortSignal) {
     const ky = this.sdk.requester.create()
     return await ky
-      .get<BookPages>(this.sdk.config.apiPath.book_getBookFullDetail, {
+      .get<BookContents>(this.sdk.config.apiPath.book_getBookFullDetail, {
         searchParams: { id: data.id },
         signal
       })

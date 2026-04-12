@@ -156,44 +156,9 @@ export interface NovelRelated {
   likes: Numeric
 }
 
-export const sNovelCommentChild = z.object({
+export const sNovelComment = z.object({
   CID: sNumeric,
-  UID: sNumeric,
-  NCID: sNumeric,
-  comment: sString,
-  addtime: sNumeric,
-  likes: sNumeric,
-  username: sString,
-  nickname: sString,
-  photo: sString,
-  gender: sGender,
-  update_at: sString,
-  status: sString,
-  parent_CID: sNumeric,
-  expinfo: sExpInfo
-})
-export interface NovelCommentChild {
-  CID: Numeric
-  UID: Numeric
-  NCID: Numeric
-  comment: string
-  addtime: Numeric
-  likes: Numeric
-  username: string
-  nickname: string
-  /**
-   * @example '7701246.jpg'
-   */
-  photo: string
-  gender: Gender
-  update_at: string
-  status: string
-  parent_CID: Numeric
-  expinfo: ExpInfo
-}
-
-export const sNovelCommentMain = z.object({
-  CID: sNumeric,
+  parent_CID: sNumeric.optional(),
   NID: sNumeric,
   NCID: sNumeric,
   UID: sNumeric,
@@ -208,11 +173,13 @@ export const sNovelCommentMain = z.object({
   update_at: sNumeric,
   pinning: sNumeric,
   expinfo: sExpInfo,
+  replys: z.array(z.any()).optional(),
   content: sString,
   spoiler: sNumeric
 })
-export interface NovelCommentMain {
+export interface NovelComment {
   CID: Numeric
+  parent_CID?: Numeric
   NID: Numeric
   NCID: Numeric
   UID: Numeric
@@ -236,7 +203,7 @@ export interface NovelCommentMain {
   update_at: Numeric
   pinning: Numeric // bool
   expinfo: ExpInfo
-  replys?: NovelCommentChild[]
+  replys?: NovelComment[]
   /**
    * @deprecated 无意义，使用`comment`代替
    */
@@ -261,7 +228,7 @@ export const sFullNovel = z.object({
   is_favorite: z.boolean(),
   series: z.array(sNovelSeries),
   related_list: z.array(sNovelRelated),
-  comment_total: z.array(sNovelCommentMain)
+  comment_total: z.array(sNovelComment)
 })
 export interface FullNovel {
   id: Numeric
@@ -298,7 +265,7 @@ export interface FullNovel {
   is_favorite: boolean
   series: NovelSeries[]
   related_list: NovelRelated[]
-  comment_total: NovelCommentMain[]
+  comment_total: NovelComment[]
 }
 
 export const sNovelContent = z.object({

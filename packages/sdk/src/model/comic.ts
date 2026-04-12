@@ -1,5 +1,6 @@
 import z from 'zod'
 
+import type { Comment } from './comment'
 import { sNumeric, sString, type Numeric } from './utils'
 
 export const sCategory = z.object(
@@ -60,7 +61,7 @@ export interface LessComic extends BaseComic {
 
 export const sCommonComic = sBaseComic.extend({
   author: sString,
-  description: sString.optional(),
+  description: sString.nullable().optional(),
   image: sString,
   category: sCategory,
   category_sub: sCategory,
@@ -68,7 +69,7 @@ export const sCommonComic = sBaseComic.extend({
 })
 export interface CommonComic extends BaseComic {
   author: string
-  description?: string
+  description?: string | null
   image: string
   category: Category
   category_sub: Category
@@ -101,8 +102,8 @@ export const sFullComic = sBaseComic.extend({
   related_list: z.array(sRecommendComic),
   liked: z.boolean({ error: r => `Liked is illegal. (Input ${JSON.stringify(r.input)})` }),
   is_aids: z.boolean({ error: r => `Is aids is illegal. (Input ${JSON.stringify(r.input)})` }),
-  purchased: sNumeric,
-  price: sNumeric,
+  purchased: sNumeric.or(z.literal('')),
+  price: sNumeric.or(z.literal('')),
   likes: sNumeric
 })
 export interface FullComic extends BaseComic {
@@ -123,4 +124,9 @@ export interface FullComic extends BaseComic {
   price: Numeric
   purchased: Numeric
   likes: Numeric
+}
+
+export interface ComicComment extends Comment {
+  AID: Numeric
+  replys?: ComicComment[]
 }

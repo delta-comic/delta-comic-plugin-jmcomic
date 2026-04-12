@@ -76,7 +76,7 @@ export const sAuthorDetail = z.object({
     source: z.object({ service: sString, name: sString }).array()
   })
 })
-export interface AuthorDetail {
+export interface BookAuthor {
   /**
    * @deprecated 恒定为该无意义值
    */
@@ -106,13 +106,13 @@ export interface AuthorDetail {
   filters: { language: string[]; source: { service: string; name: string }[] }
 }
 
-export const sBookDetail = z.object({
+export const sBookRelates = z.object({
   work_date: sString,
   author_name: sString,
   work_title: sString,
   related_works: sRelatedBook.array()
 })
-export interface BookDetail {
+export interface BookRelates {
   /**
    * @example "20392 days ago"
    */
@@ -122,7 +122,7 @@ export interface BookDetail {
   related_works: RelatedBook[]
 }
 
-export const sBookPages = z.object({
+export const sBookContents = z.object({
   id: sNumeric,
   name: sString,
   total_page: sNumeric,
@@ -131,7 +131,7 @@ export const sBookPages = z.object({
   addtime: sNumeric,
   adddt: sString
 })
-export interface BookPages {
+export interface BookContents {
   /**
    * @description 这个字段是book的唯一id，本质数字
    * @example '1145'
