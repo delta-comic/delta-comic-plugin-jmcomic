@@ -72,7 +72,7 @@ export class Blog {
   }
 
   public async sendComment(
-    data: { id: Numeric; parentCommentId: number; content: string },
+    data: { id: Numeric; parentCommentId?: Numeric; content: string },
     signal?: AbortSignal
   ) {
     const ky = this.sdk.requester.create()

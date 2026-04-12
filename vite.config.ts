@@ -19,7 +19,7 @@ export default defineConfig({
     sortTailwindcss: {
       preserveDuplicates: false,
       preserveWhitespace: false,
-      stylesheet: './packages/app/src/index.css',
+      stylesheet: './packages/plugin/src/index.css',
       attributes: ['overlayClass', ':class', 'Class'],
       functions: ['twMerge']
     },

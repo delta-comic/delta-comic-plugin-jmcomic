@@ -1,31 +1,61 @@
 packages:
   - packages/*
+allowBuilds:
+  esbuild: true
 
 catalog:
   '@commitlint/cli': '^20.5.0'
   '@commitlint/config-conventional': '^20.5.0'
   '@commitlint/types': '^20.5.0'
   '@cspell/dict-npm': '^5.2.38'
+  '@delta-comic/core': '^1.3.5'
+  '@delta-comic/db': '^1.3.5'
+  '@delta-comic/model': '^1.3.5'
+  '@delta-comic/plugin': '^1.3.5'
+  '@delta-comic/request': '^1.3.5'
+  '@delta-comic/ui': '^1.3.5'
+  '@delta-comic/utils': '^1.3.5'
+  '@delta-comic/vite': '^1.3.5'
+  '@pinia/colada': '^1.1.0'
   '@semantic-release/changelog': '^6.0.3'
   '@semantic-release/git': '^10.0.1'
   '@semantic-release/github': '^12.0.6'
   '@semantic-release/release-notes-generator': '^14.1.0'
-  '@tsconfig/node24': '^24.0.4'
-  'commitlint-plugin-cspell': '^0.7.0'
+  '@tailwindcss/vite': '^4.2.2'
+  '@types/node': '^25.5.2'
+  '@vicons/antd': '^0.13.0'
+  '@vicons/material': '^0.13.0'
+  '@vitejs/plugin-vue': '^6.0.5'
+  '@vitejs/plugin-vue-jsx': '^5.1.5'
+  '@vueuse/core': '^14.2.1'
+  'browserslist': '^4.28.2'
+  'commitlint-plugin-cspell': '^0.8.0'
+  'crypto-es': '^3.1.3'
   'cspell': '^10.0.0'
-  'semantic-release': '^25.0.3'
+  'dayjs': '^1.11.20'
+  'delta-comic-plugin-layout': 'github:delta-comic/delta-comic-plugin-layout'
   dompurify: ^3.3.3
   es-toolkit: ^1.45.1
-  '@delta-comic/model': '^1.3.4'
-  '@types/node': '^25.5.2'
-  'crypto-es': '^3.1.3'
   'ky': '^2.0.0'
+  'lightningcss': '^1.32.0'
   'msw': '^2.12.14'
+  'naive-ui': '^2.44.1'
+  'semantic-release': '^25.0.3'
+  'tailwindcss': '^4.2.2'
   'typescript': '^6.0.2'
-  'zod': '^4.3.6'
+  'unplugin-vue-components': '32.0.0'
+  'vant': '^4.9.24'
   vite: npm:@voidzero-dev/vite-plus-core@^0.1.16
+  'vite-plugin-external': '^6.2.2'
+  'vite-plugin-monkey': '^7.1.9'
+  'vite-plugin-wasm': '^3.6.0'
   vite-plus: ^0.1.16
-  vitest: npm:@voidzero-dev/vite-plus-test@latest
+  vitest: npm:@voidzero-dev/vite-plus-test@0.1.16
+  'vue': '^3.5.32'
+  'vue-component-type-helpers': '^3.2.6'
+  'vue-draggable-plus': '^0.6.1'
+  'vue-router': '^5.0.4'
+  'zod': '^4.3.6'
 
 overrides:
   vite: 'catalog:'

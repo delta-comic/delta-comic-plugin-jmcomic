@@ -1,0 +1,57 @@
+{
+  "name": "plugin",
+  "version": "0.0.0-semantically-released",
+  "description": "何以哀怮",
+  "homepage": "https://github.com/delta-comic/jmcomic-sdk",
+  "license": "AGPL-3.0-only",
+  "author": {
+    "name": "wenxig",
+    "email": "wenxinguo12@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delta-comic/jmcomic-sdk.git"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "vite build && cd ./dist && zip -r plugin.zip ./*",
+    "dev": "vite",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit -p ./tsconfig.json --composite false"
+  },
+  "dependencies": {
+    "@delta-comic/core": "catalog:",
+    "@delta-comic/db": "catalog:",
+    "@delta-comic/model": "catalog:",
+    "@delta-comic/plugin": "catalog:",
+    "@delta-comic/request": "catalog:",
+    "@delta-comic/ui": "catalog:",
+    "@delta-comic/utils": "catalog:",
+    "@delta-comic/vite": "catalog:",
+    "@pinia/colada": "catalog:",
+    "@vueuse/core": "catalog:",
+    "dayjs": "catalog:",
+    "delta-comic-plugin-layout": "catalog:",
+    "dompurify": "catalog:",
+    "es-toolkit": "catalog:",
+    "jmcomic-sdk": "workspace:",
+    "naive-ui": "catalog:",
+    "vant": "catalog:",
+    "vue": "catalog:",
+    "vue-draggable-plus": "catalog:",
+    "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue-jsx": "catalog:",
+    "browserslist": "catalog:",
+    "lightningcss": "catalog:",
+    "tailwindcss": "catalog:",
+    "unplugin-vue-components": "catalog:",
+    "vite-plugin-external": "catalog:",
+    "vite-plugin-monkey": "catalog:",
+    "vite-plugin-wasm": "catalog:",
+    "vue-component-type-helpers": "catalog:"
+  }
+}

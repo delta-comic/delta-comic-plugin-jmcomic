@@ -1,5 +1,0 @@
-{
-  "include": ["./**/*"],
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": { "types": ["../packages/sdk/node_modules/@types/node"] }
-}
