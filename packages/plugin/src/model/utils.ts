@@ -22,5 +22,5 @@ export const createAuthor = (item: { author: string | string[]; tags?: string | 
   }))
 
 export enum QueryKeys {
-  Levelboard = 'jmcomic::levelboard'
+  Comic = 'jmcomic::comic_detail'
 }

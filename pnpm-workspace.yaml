@@ -10,14 +10,14 @@ catalog:
   '@commitlint/config-conventional': '^20.5.0'
   '@commitlint/types': '^20.5.0'
   '@cspell/dict-npm': '^5.2.38'
-  '@delta-comic/core': '^1.3.5'
-  '@delta-comic/db': '^1.3.5'
-  '@delta-comic/model': '^1.3.5'
-  '@delta-comic/plugin': '^1.3.5'
-  '@delta-comic/request': '^1.3.5'
-  '@delta-comic/ui': '^1.3.5'
-  '@delta-comic/utils': '^1.3.5'
-  '@delta-comic/vite': '^1.3.5'
+  '@delta-comic/core': '^2.0.2'
+  '@delta-comic/db': '^2.0.2'
+  '@delta-comic/model': '^2.0.2'
+  '@delta-comic/plugin': '^2.0.2'
+  '@delta-comic/request': '^2.0.2'
+  '@delta-comic/ui': '^2.0.2'
+  '@delta-comic/utils': '^2.0.2'
+  '@delta-comic/vite': '^2.0.2'
   '@pinia/colada': '^1.1.0'
   '@semantic-release/changelog': '^6.0.3'
   '@semantic-release/git': '^10.0.1'
@@ -47,17 +47,19 @@ catalog:
   'typescript': '^6.0.2'
   'unplugin-vue-components': '32.0.0'
   'vant': '^4.9.24'
-  vite: npm:@voidzero-dev/vite-plus-core@^0.1.16
+  vite: npm:@voidzero-dev/vite-plus-core@^0.1.18
   'vite-plugin-external': '^6.2.2'
   'vite-plugin-monkey': '^7.1.9'
   'vite-plugin-wasm': '^3.6.0'
-  vite-plus: ^0.1.16
-  vitest: npm:@voidzero-dev/vite-plus-test@0.1.16
+  vite-plus: ^0.1.18
+  vitest: npm:@voidzero-dev/vite-plus-test@0.1.18
   'vue': '^3.5.32'
   'vue-component-type-helpers': '^3.2.6'
   'vue-draggable-plus': '^0.6.1'
   'vue-router': '^5.0.4'
   'zod': '^4.3.6'
+onlyBuiltDependencies:
+  - delta-comic-plugin-layout
 
 overrides:
   vite: 'catalog:'
@@ -70,5 +72,3 @@ peerDependencyRules:
   allowedVersions:
     vite: '*'
     vitest: '*'
-onlyBuiltDependencies:
-  - delta-comic-plugin-layout

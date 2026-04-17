@@ -1,11 +1,28 @@
-import { uni } from '@delta-comic/model'
+import { uni, type StreamQuery } from '@delta-comic/model'
 import { require } from '@delta-comic/plugin'
+import { defineQuery, defineQueryOptions, useQuery, type UseQueryReturn } from '@pinia/colada'
+import type { Numeric } from 'jmcomic-sdk'
 import { defineComponent, h } from 'vue'
 
+import { sdk } from '../sdk'
 import { layoutModule, pluginName } from '../symbol'
+
+import { QueryKeys } from './utils'
 const { model, view } = require(layoutModule)
 
 export class JmComicPage extends model.ContentImagePage {
+  public static infoQuery = defineQueryOptions(({ id }: { id: Numeric }) => ({}))
+  override fetchShortId(): Promise<string> {
+    return useQuery<string>({
+      key: [QueryKeys.Comic, this.id],
+      query: async ({ signal }) => sdk.comic.getInfo({ this.id }, signal).then(v => `v.id`)
+    })
+  }
+  override fetchDetail: (signal?: AbortSignal) => Promise<uni.item.Item>
+  override fetchRecommends: StreamQuery<uni.item.Item, {}>
+  override fetchComments: StreamQuery<uni.comment.Comment, {}>
+  override fetchEps: StreamQuery<uni.ep.Ep, {}>
+  override ViewComponent = view.Image
   public static contentType = uni.content.ContentPage.contentPages.key.toString([
     pluginName,
     'comic'
