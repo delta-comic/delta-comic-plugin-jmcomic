@@ -34,3 +34,5 @@ release
 .wrangler
 
 target
+
+.npmrc

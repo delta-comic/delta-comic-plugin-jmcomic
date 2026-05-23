@@ -31,7 +31,7 @@
     "@pinia/colada": "catalog:",
     "@vueuse/core": "catalog:",
     "dayjs": "catalog:",
-    "delta-comic-plugin-layout": "catalog:",
+    "@delta-comic/delta-comic-plugin-layout": "catalog:",
     "dompurify": "catalog:",
     "es-toolkit": "catalog:",
     "jmcomic-sdk": "workspace:",
