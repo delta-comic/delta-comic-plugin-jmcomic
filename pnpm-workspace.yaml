@@ -3,17 +3,15 @@ packages:
 allowBuilds:
   canvas: false
   esbuild: true
+  msw: true
   sharp: true
-
-namedRegistries:
-  github: https://npm.pkg.github.com/
 
 registries:
   default: https://registry.npmjs.org/
-  '@delta-comic/delta-comic-plugin-layout': github
+  '@delta-comic': https://npm.pkg.github.com/
 
 catalog:
-  '@delta-comic/delta-comic-plugin-layout': '^0.9.7'
+  '@delta-comic/delta-comic-plugin-layout': '^0.9.2'
   '@commitlint/cli': '^21.0.1'
   '@commitlint/config-conventional': '^21.0.1'
   '@commitlint/types': '^21.0.1'
@@ -80,3 +78,13 @@ peerDependencyRules:
   allowedVersions:
     vite: '*'
     vitest: '*'
+
+minimumReleaseAgeExclude:
+  - '@delta-comic/core@2.2.0'
+  - '@delta-comic/db@2.2.0'
+  - '@delta-comic/model@2.2.0'
+  - '@delta-comic/plugin@2.2.0'
+  - '@delta-comic/request@2.2.0'
+  - '@delta-comic/ui@2.2.0'
+  - '@delta-comic/utils@2.2.0'
+  - '@delta-comic/vite@2.2.0'

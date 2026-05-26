@@ -2,7 +2,7 @@ import '@/index.css'
 import { SharedFunction } from '@delta-comic/core'
 import { uni } from '@delta-comic/model'
 import { definePlugin, Global, require, type Subscribe } from '@delta-comic/plugin'
-import { createAxios, interceptors } from '@delta-comic/request'
+import { createAxios, interceptors } from '@delta-comic/utils'
 import type {} from '@delta-comic/utils'
 import { UserOutlined } from '@vicons/antd'
 import {

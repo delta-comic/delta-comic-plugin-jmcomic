@@ -24,7 +24,7 @@
     "@delta-comic/db": "catalog:",
     "@delta-comic/model": "catalog:",
     "@delta-comic/plugin": "catalog:",
-    "@delta-comic/request": "catalog:",
+    "@delta-comic/utils": "catalog:",
     "@delta-comic/ui": "catalog:",
     "@delta-comic/utils": "catalog:",
     "@delta-comic/vite": "catalog:",

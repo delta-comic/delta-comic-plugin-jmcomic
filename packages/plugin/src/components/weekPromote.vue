@@ -3,7 +3,7 @@ import { jm } from '@/api'
 import { jmStore } from '@/store'
 import { useTemp } from '@delta-comic/core'
 import type { RPromiseContent } from '@delta-comic/model'
-import { SmartAbortController } from '@delta-comic/request'
+import { SmartAbortController } from '@delta-comic/utils'
 
 import { first, isUndefined, last } from 'es-toolkit/compat'
 import { watch } from 'vue'
