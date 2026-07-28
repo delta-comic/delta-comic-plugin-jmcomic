@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+
 import { describe, expect, it } from 'vitest'
 
 import packageJson from '../package.json' with { type: 'json' }
@@ -22,5 +24,14 @@ describe('release configuration', () => {
         releaseNameTemplate: `${packageJson.description} <%= nextRelease.version %><%= nextRelease.channel ? " 预览版" : " 正式版" %>`,
       },
     ])
+  })
+
+  it('grants short-lived npm and GitHub Packages publishing credentials', async () => {
+    const workflow = await readFile('.github/workflows/release.yaml', 'utf8')
+
+    expect(workflow).toContain('id-token: write')
+    expect(workflow).toContain('packages: write')
+    expect(workflow).toContain("registry-url: 'https://npm.pkg.github.com'")
+    expect(workflow).not.toMatch(/NPM_TOKEN|npm-token/i)
   })
 })
