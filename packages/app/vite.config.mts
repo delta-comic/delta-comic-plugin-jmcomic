@@ -45,6 +45,23 @@ export default defineConfig(
         return [...frameworkPlugins, ...pluginHelpers]
       }),
       resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+      run: {
+        tasks: {
+          build: { command: 'vp build', dependsOn: [{ task: 'build', from: 'dependencies' }] },
+          dev: {
+            command: 'vp dev',
+            dependsOn: [{ task: 'build', from: 'dependencies' }],
+            cache: false,
+          },
+          typecheck: {
+            command: [
+              'vue-tsgo -p tsconfig.app.json --noEmit',
+              'tsgo -p tsconfig.node.json --noEmit',
+            ],
+            dependsOn: [{ task: 'build', from: 'dependencies' }],
+          },
+        },
+      },
       server: { host: true, port: 6175, strictPort: true },
       test: {
         name: 'app',

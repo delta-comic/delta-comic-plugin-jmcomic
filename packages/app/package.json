@@ -9,11 +9,6 @@
     "email": "wenxinguo12@gmail.com"
   },
   "type": "module",
-  "scripts": {
-    "build": "vp build",
-    "dev": "vp dev",
-    "typecheck": "vue-tsgo -p tsconfig.app.json --noEmit && tsgo -p tsconfig.node.json --noEmit"
-  },
   "dependencies": {
     "@vicons/material": "catalog:",
     "jmcomic-sdk": "workspace:*",
