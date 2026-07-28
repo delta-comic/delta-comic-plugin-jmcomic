@@ -4,6 +4,7 @@ import { join } from 'node:path'
 
 import { rootDir, validatePluginArtifacts } from './artifacts.mts'
 import { prereleaseWarning } from './release-notes.mts'
+import { prepareSdkReleaseArtifacts, publishSdkPackages } from './sdk-release.mts'
 
 export const releaseAssetNames = ['manifest.json', 'plugin.zip'] as const
 export const releaseDirectory = join(rootDir, 'dist/release')
@@ -77,6 +78,12 @@ export async function verifyRelease(_pluginConfig: unknown, { nextRelease }: Rel
 /* v8 ignore next -- @preserve: semantic-release delegates to tested prepareReleaseArtifacts */
 export async function prepare(_pluginConfig: unknown, { nextRelease }: ReleaseContext) {
   await prepareReleaseArtifacts(nextRelease.version)
+  await prepareSdkReleaseArtifacts(nextRelease.version)
+}
+
+/* v8 ignore next -- @preserve: semantic-release delegates to tested publishSdkPackages */
+export async function publish(_pluginConfig: unknown, { nextRelease }: ReleaseContext) {
+  await publishSdkPackages(nextRelease.version, nextRelease.channel)
 }
 
 export async function generateNotes(_pluginConfig: unknown, { nextRelease }: ReleaseContext) {

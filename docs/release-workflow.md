@@ -1,7 +1,7 @@
 # 发布流程
 
-本仓库使用 Conventional Commits、分支晋级与 semantic-release。只发布 Delta Comic 插件的
-GitHub Release，不发布 npm SDK。
+本仓库使用 Conventional Commits、分支晋级与 semantic-release，同时发布 Delta Comic 插件的
+GitHub Release 和 TypeScript SDK。
 
 | 分支 | 用途 | 发布结果 |
 | --- | --- | --- |
@@ -10,7 +10,9 @@ GitHub Release，不发布 npm SDK。
 | `main` | 稳定版本 | `x.y.z` release |
 
 禁止手工创建版本标签或 GitHub Release。`next` 和 `main` 的 push 会触发 release workflow；
-semantic-release 只上传外置 `manifest.json` 与 `plugin.zip`。
+semantic-release 会上传外置 `manifest.json` 与 `plugin.zip`，并把同版本 SDK 发布到 npm
+`jmcomic-sdk` 和 GitHub Packages `@delta-comic/jmcomic-sdk`。预览版使用 `next` dist-tag，
+稳定版使用 `latest`。
 
 ## 准备
 
@@ -19,6 +21,10 @@ semantic-release 只上传外置 `manifest.json` 与 `plugin.zip`。
 
 - `JMCOMIC_TEST_USERNAME`
 - `JMCOMIC_TEST_PASSWORD`
+
+npm 包需要预先配置 trusted publisher：仓库为 `delta-comic/jmcomic-sdk`，workflow 文件名为
+`release.yaml`，允许 `npm publish`。workflow 通过 `id-token: write` 换取 npm 短期凭据；
+GitHub Packages 使用具备 `packages: write` 权限的仓库 `GITHUB_TOKEN`，不需要长期发布 token。
 
 提交必须遵循 Angular/Conventional Commits。至少保留一个会触发版本的提交，例如
 `feat(plugin): ...`。
@@ -92,6 +98,14 @@ node ./script/artifacts.mts "$release_dir" --release-assets
 - ZIP 内 JavaScript/CSS 入口均存在。
 - 包内没有 Vant、Sharp、Vue 或 Delta Comic 宿主运行时的重复实现。
 - manifest 的版本是 semantic-release 生成的 prerelease 版本。
+
+同时确认 SDK 的两个 registry 和 `next` dist-tag 指向同一版本：
+
+```sh
+npm view jmcomic-sdk@next version
+gh api -H 'Accept: application/vnd.github+json' \
+  /orgs/delta-comic/packages/npm/jmcomic-sdk/versions
+```
 
 完成后确认仍在 `develop`，工作树干净且与远端一致：
 
