@@ -7,6 +7,8 @@ import { defineConfig, lazyPlugins, type PluginOption, type UserConfig } from 'v
 import packageJson from './package.json' with { type: 'json' }
 import { createPluginManifest } from './src/metadata.js'
 
+const testTsconfig = fileURLToPath(new URL('./tsconfig.app.json', import.meta.url))
+
 export default defineConfig(
   ({ command, mode }) =>
     ({
@@ -44,6 +46,17 @@ export default defineConfig(
       }),
       resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
       server: { host: true, port: 6175, strictPort: true },
-      test: { environment: 'happy-dom', include: ['src/**/*.test.ts'] },
+      test: {
+        name: 'app',
+        environment: 'happy-dom',
+        include: ['src/**/*.test.ts'],
+        setupFiles: ['./src/test/setup.ts'],
+        typecheck: {
+          enabled: true,
+          checker: 'vue-tsgo',
+          tsconfig: testTsconfig,
+          include: ['src/**/*.test-d.ts'],
+        },
+      },
     }) as UserConfig,
 )

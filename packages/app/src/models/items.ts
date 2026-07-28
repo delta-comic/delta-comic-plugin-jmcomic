@@ -109,7 +109,7 @@ export class JmItem extends UniItem {
     return this.$$meta as JmItemMeta
   }
 
-  public override like(signal?: AbortSignal): Promise<unknown> {
+  public override async like(signal?: AbortSignal): Promise<unknown> {
     switch (this.meta.kind) {
       case contentKeys.comic:
         return runtime.jm.comic.like({ id: this.id }, signal)
@@ -126,7 +126,7 @@ export class JmItem extends UniItem {
     return Promise.reject(new JmApiError('UNSUPPORTED_OPERATION', '服务端不支持举报该内容'))
   }
 
-  public override sendComment(text: string, signal?: AbortSignal): Promise<unknown> {
+  public override async sendComment(text: string, signal?: AbortSignal): Promise<unknown> {
     switch (this.meta.kind) {
       case contentKeys.comic:
         return runtime.jm.comic.sendComment(

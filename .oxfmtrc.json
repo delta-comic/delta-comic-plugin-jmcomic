@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["*.md"],
+  "ignorePatterns": ["*.md", ".agents/**"],
   "endOfLine": "lf",
   "semi": false,
   "useTabs": false,

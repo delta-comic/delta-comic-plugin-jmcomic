@@ -251,9 +251,9 @@ export const sTitleItem = z.object(
     created_at: z.string({
       error: r => `Created at is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
-    updated_at: z.string({
-      error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})`,
-    }),
+    updated_at: z
+      .string({ error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})` })
+      .nullable(),
     done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` }),
   },
   'TitleItem is illegal.',
@@ -268,6 +268,6 @@ export interface TitleItem {
   begin_time: string
   end_time: string
   created_at: string
-  updated_at: string
+  updated_at: string | null
   done: boolean
 }

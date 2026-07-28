@@ -1,6 +1,7 @@
 {
   "name": "delta-comic-plugin-jmcomic",
   "private": true,
+  "description": "禁漫天堂的 Delta Comic v3 插件与 TypeScript SDK",
   "repository": {
     "type": "git",
     "url": "https://github.com/delta-comic/jmcomic-sdk.git"

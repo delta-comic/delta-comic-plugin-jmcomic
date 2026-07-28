@@ -5,6 +5,6 @@
   "settings": { "vitest": { "typecheck": true } },
   "env": { "builtin": true },
   "globals": {},
-  "ignorePatterns": ["*.md"],
+  "ignorePatterns": ["*.md", ".agents/**"],
   "options": { "typeAware": false, "typeCheck": false }
 }

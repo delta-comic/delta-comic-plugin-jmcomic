@@ -1,4 +1,8 @@
+import { fileURLToPath } from 'node:url'
+
 import { defineConfig } from 'vite-plus'
+
+const testTsconfig = fileURLToPath(new URL('./tsconfig.test.json', import.meta.url))
 
 export default defineConfig({
   pack: {
@@ -14,7 +18,7 @@ export default defineConfig({
     typecheck: {
       enabled: true,
       checker: 'tsc',
-      tsconfig: './tsconfig.test.json',
+      tsconfig: testTsconfig,
       include: ['./test/**/*.test-d.ts'],
     },
   },

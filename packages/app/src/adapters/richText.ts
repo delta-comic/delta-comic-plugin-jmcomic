@@ -16,12 +16,15 @@ const safeUrl = (value: string, image = false) => {
 }
 
 const fallbackText = (html: string) =>
-  html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
+  stripUnsafeElements(html)
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+
+const stripUnsafeElements = (html: string) =>
+  html
+    .replace(/<(script|style|iframe|object|embed|form)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '')
+    .replace(/<(script|style|iframe|object|embed|form)\b[^>]*\/?>/gi, '')
 
 export function parseRichText(html: string): RichTextBlock[] {
   if (typeof DOMParser === 'undefined') {
@@ -29,7 +32,9 @@ export function parseRichText(html: string): RichTextBlock[] {
     return text ? [{ type: 'text', text }] : []
   }
 
-  const document = new DOMParser().parseFromString(html, 'text/html')
+  // Strip active elements before parsing: DOM implementations may start loading an iframe
+  // as soon as it is parsed, even if the element is removed immediately afterwards.
+  const document = new DOMParser().parseFromString(stripUnsafeElements(html), 'text/html')
   document.querySelectorAll('script,style,iframe,object,embed,form').forEach(node => node.remove())
   const blocks: RichTextBlock[] = []
 

@@ -20,8 +20,12 @@ import { JmApiError } from '../types'
 
 const sDailyInfo = z.object({ daily_id: sNumeric })
 const sTaskList = <T extends z.ZodType>(item: T) => z.object({ list: z.array(item) })
+const sSavedComic = sCommonComic.extend({
+  is_favorite: z.boolean().optional().default(true),
+  liked: z.boolean().optional().default(false),
+})
 const sComicPage = z.object({
-  list: z.array(sCommonComic),
+  list: z.array(sSavedComic),
   total: sNumeric.transform(Number),
   count: sNumeric.optional(),
   folder_list: z.array(z.unknown()).optional(),

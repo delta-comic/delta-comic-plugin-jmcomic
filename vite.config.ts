@@ -19,12 +19,16 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json-summary', 'html', 'lcov'],
       reportsDirectory: './coverage',
-      include: ['script/**/*.{ts,mts}', 'packages/app/src/**/*.{ts,tsx}'],
+      include: [
+        'script/**/*.{ts,mts}',
+        'packages/sdk/src/**/*.ts',
+        'packages/app/src/**/*.{ts,vue}',
+      ],
       exclude: [
         '**/*.{test,spec}.{ts,tsx,mts}',
+        '**/*.test-d.ts',
         '**/*.d.ts',
-        'packages/app/src/main.ts',
-        'packages/app/src/config.ts',
+        '**/src/test/**',
         'packages/app/src/metadata.ts',
       ],
       thresholds: { lines: 80, functions: 80, branches: 75, statements: 80 },
@@ -33,6 +37,7 @@ export default defineConfig({
     projects: [
       { test: { name: 'root', environment: 'node', include: ['script/**/*.test.ts'] } },
       'packages/app',
+      'packages/sdk',
     ],
   },
 })

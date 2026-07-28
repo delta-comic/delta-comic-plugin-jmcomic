@@ -2,7 +2,7 @@
   "extends": ["./tsconfig.json", "../../tsconfig.base.json"],
   "compilerOptions": {
     "declaration": true,
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "composite": true,
     "types": ["node"]
   },

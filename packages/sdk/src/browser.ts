@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { createImageSegments } from './image'
 import type { ImageDecoder } from './types'
 

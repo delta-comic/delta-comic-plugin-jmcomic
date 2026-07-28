@@ -17,7 +17,10 @@ import { sCommonNovel } from '../model/novel'
 import { sCategoriesResult, sPromoteItem, sWeekBest } from '../model/promote'
 import { sNumeric } from '../model/utils'
 
-const sPromotePage = z.object({ list: z.array(sCommonComic), total: sNumeric.transform(Number) })
+const sPromoteComic: z.ZodType<CommonComic> = sCommonComic
+  .extend({ image: z.string().optional() })
+  .transform(comic => ({ ...comic, image: comic.image ?? `/media/albums/${comic.id}_3x4.jpg` }))
+const sPromotePage = z.object({ list: z.array(sPromoteComic), total: sNumeric.transform(Number) })
 const sWeekPage = z.object({
   list: z.array(z.union([sCommonComic, sCommonBook, sCommonNovel])),
   total: sNumeric.transform(Number),
