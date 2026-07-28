@@ -47,7 +47,11 @@ export default defineConfig(
       resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
       run: {
         tasks: {
-          build: { command: 'vp build', dependsOn: [{ task: 'build', from: 'dependencies' }] },
+          build: {
+            command: 'vp build',
+            dependsOn: [{ task: 'build', from: 'dependencies' }],
+            env: ['DELTA_PLUGIN_VERSION'],
+          },
           dev: {
             command: 'vp dev',
             dependsOn: [{ task: 'build', from: 'dependencies' }],
