@@ -1,0 +1,10 @@
+{
+  "plugins": ["unicorn", "typescript", "oxc", "vue"],
+  "categories": { "correctness": "error" },
+  "rules": { "no-thenable": "allow" },
+  "settings": { "vitest": { "typecheck": true } },
+  "env": { "builtin": true },
+  "globals": {},
+  "ignorePatterns": ["*.md"],
+  "options": { "typeAware": false, "typeCheck": false }
+}

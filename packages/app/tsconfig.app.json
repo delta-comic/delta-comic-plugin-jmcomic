@@ -1,0 +1,11 @@
+{
+  "extends": ["./tsconfig.json", "../../tsconfig.base.json"],
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ESNext", "DOM"],
+    "paths": { "@/*": ["./src/*"] },
+    "types": ["vite/client"],
+    "rootDir": "."
+  },
+  "include": ["./src/**/*"]
+}

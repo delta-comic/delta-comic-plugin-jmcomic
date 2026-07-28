@@ -1,0 +1,41 @@
+{
+  "name": "@delta-comic/plugin-jmcomic",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Delta Comic Jmcomic Plugin",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "wenxig",
+    "email": "wenxinguo12@gmail.com"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "vp build",
+    "dev": "vp dev",
+    "typecheck": "vue-tsgo -p tsconfig.app.json --noEmit && tsgo -p tsconfig.node.json --noEmit"
+  },
+  "dependencies": {
+    "naive-ui": "catalog:",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@delta-comic/plugin": "catalog:",
+    "@delta-comic/ui": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "browserslist": "catalog:",
+    "happy-dom": "catalog:",
+    "lightningcss": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
+    "vue-tsgo": "catalog:"
+  },
+  "peerDependencies": {
+    "@delta-comic/plugin": ">=3.0.0-next.6 <4.0.0",
+    "@delta-comic/ui": ">=3.0.0-next.6 <4.0.0"
+  }
+}

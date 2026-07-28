@@ -1,0 +1,49 @@
+name: 自动发布
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'next'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HUSKY: 0
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version-file: .node-version
+          cache: true
+          run-install: false
+
+      - name: Install dependencies
+        run: vp install --frozen-lockfile
+
+      - name: Check source
+        run: |
+          vp check
+          vp run typecheck
+
+      - name: Test with coverage
+        run: vp test run --coverage
+
+      - name: Publish release
+        run: vp run release

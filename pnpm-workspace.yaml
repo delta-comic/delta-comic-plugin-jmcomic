@@ -1,71 +1,36 @@
 packages:
   - packages/*
-allowBuilds:
-  canvas: false
-  esbuild: true
-  msw: true
-  sharp: true
 
-registries:
-  default: https://registry.npmjs.org/
-  '@delta-comic': https://npm.pkg.github.com/
+allowBuilds:
+  esbuild: true
 
 catalog:
-  '@delta-comic/delta-comic-plugin-layout': '^0.9.2'
-  '@commitlint/cli': '^21.0.1'
-  '@commitlint/config-conventional': '^21.0.1'
-  '@commitlint/types': '^21.0.1'
-  '@cspell/dict-npm': '^5.2.38'
-  '@delta-comic/core': '^2.2.0'
-  '@delta-comic/db': '^2.2.0'
-  '@delta-comic/model': '^2.2.0'
-  '@delta-comic/plugin': '^2.2.0'
-  '@delta-comic/request': '^2.2.0'
-  '@delta-comic/ui': '^2.2.0'
-  '@delta-comic/utils': '^2.2.0'
-  '@delta-comic/vite': '^2.2.0'
-  '@pinia/colada': '^1.1.0'
-  '@semantic-release/changelog': '^6.0.3'
-  '@semantic-release/git': '^10.0.1'
-  '@semantic-release/github': '^12.0.8'
-  '@semantic-release/release-notes-generator': '^14.1.1'
-  '@tailwindcss/vite': '^4.2.2'
-  '@types/node': '^25.5.2'
-  '@vicons/antd': '^0.13.0'
-  '@vicons/material': '^0.13.0'
-  '@vitejs/plugin-vue': '^6.0.5'
-  '@vitejs/plugin-vue-jsx': '^5.1.5'
-  '@vueuse/core': '^14.2.1'
-  'browserslist': '^4.28.2'
-  'commitlint-plugin-cspell': '^0.9.1'
-  'crypto-es': '^3.1.3'
-  'cspell': '^10.0.0'
-  'dayjs': '^1.11.20'
-  dompurify: ^3.3.3
-  es-toolkit: ^1.45.1
-  'ky': '^2.0.2'
-  'lightningcss': '^1.32.0'
-  'msw': '^2.12.14'
-  'naive-ui': '^2.44.1'
-  'semantic-release': '^25.0.3'
-  'tailwindcss': '^4.2.2'
-  'typescript': '^6.0.2'
-  'unplugin-vue-components': '32.0.0'
-  'vant': '^4.9.24'
-  vite: npm:@voidzero-dev/vite-plus-core@^0.1.22
-  'vite-plugin-external': '^6.2.2'
-  'vite-plugin-monkey': '^8.0.5'
-  'vite-plugin-wasm': '^3.6.0'
-  vite-plus: ^0.1.22
-  vitest: npm:@voidzero-dev/vite-plus-test@0.1.18
-  'vue': '^3.5.32'
-  'vue-component-type-helpers': '^3.2.6'
-  'vue-draggable-plus': '^0.6.1'
-  'vue-router': '^5.0.4'
-  'zod': '^4.3.6'
-
-onlyBuiltDependencies:
-  - '@delta-comic/delta-comic-plugin-layout'
+  '@commitlint/cli': ^21.2.1
+  '@commitlint/config-conventional': ^21.2.0
+  '@delta-comic/plugin': '3.0.0-next.6'
+  '@delta-comic/ui': '3.0.0-next.6'
+  '@semantic-release/commit-analyzer': ^13.0.1
+  '@semantic-release/github': ^12.0.9
+  '@semantic-release/release-notes-generator': ^14.1.1
+  '@tailwindcss/vite': ^4.3.0
+  '@types/node': ^26.0.0
+  '@typescript/native-preview': 7.0.0-dev.20260707.2
+  '@vitejs/plugin-vue': ^6.0.7
+  '@vitest/coverage-v8': 5.0.0-beta.7
+  browserslist: ^4.28.2
+  happy-dom: ^20.10.6
+  jszip: ^3.10.1
+  lightningcss: ^1.32.0
+  naive-ui: ^2.44.1
+  oxlint-tsgolint: ^7.0.2001
+  semantic-release: ^25.0.7
+  tailwindcss: ^4.3.0
+  typescript: ^7.1.0-dev.20260727.1
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vite-plus: ^0.2.4
+  vitest: 5.0.0-beta.7
+  vue: ^3.5.40
+  vue-tsgo: ^0.3.0
 
 overrides:
   vite: 'catalog:'
@@ -80,11 +45,13 @@ peerDependencyRules:
     vitest: '*'
 
 minimumReleaseAgeExclude:
-  - '@delta-comic/core@2.2.0'
-  - '@delta-comic/db@2.2.0'
-  - '@delta-comic/model@2.2.0'
-  - '@delta-comic/plugin@2.2.0'
-  - '@delta-comic/request@2.2.0'
-  - '@delta-comic/ui@2.2.0'
-  - '@delta-comic/utils@2.2.0'
-  - '@delta-comic/vite@2.2.0'
+  - typescript@7.0.2
+  - semantic-release@25.0.7
+  - '@delta-comic/plugin@3.0.0-next.6'
+  - '@delta-comic/ui@3.0.0-next.6'
+  - vue@3.5.40
+  - '@delta-comic/db@3.0.0-next.6'
+  - '@delta-comic/downloader@3.0.0-next.6'
+  - '@delta-comic/logger@3.0.0-next.6'
+  - '@delta-comic/model@3.0.0-next.6'
+  - '@delta-comic/utils@3.0.0-next.6'

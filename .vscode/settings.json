@@ -1,11 +1,14 @@
 {
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "oxc.fmt.configPath": "./vite.config.ts",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": { "source.fixAll.oxc": "explicit" },
   "vue.suggest.componentNameCasing": "alwaysPascalCase",
   "vue.suggest.propNameCasing": "alwaysCamelCase",
-  "tailwindCSS.classFunctions": ["twMerge"],
-  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", ":class"]
+  "tailwindCSS.classFunctions": ["twMerge", "cn"],
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", ":class"],
+  "[markdown]": { "editor.defaultFormatter": "DavidAnson.vscode-markdownlint" },
+  "oxc.path.oxfmt": "node_modules/vite-plus/bin/oxfmt",
+  "oxc.path.oxlint": "node_modules/vite-plus/bin/oxlint",
+  "oxc.path.tsgolint": "node_modules/oxlint-tsgolint/bin/tsgolint.js"
 }

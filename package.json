@@ -1,42 +1,41 @@
 {
-  "name": "jmcomic",
-  "version": "1.0.0",
-  "private": false,
-  "author": {
-    "name": "wenxig",
-    "email": "wenxinguo12@gmail.com",
-    "url": "https://wenxig.vercel.app/"
-  },
+  "name": "delta-comic-plugin-jmcomic",
+  "private": true,
   "type": "module",
   "scripts": {
-    "md": "node ./script/markdown-make.ts",
-    "npm-build": "vp run -r build",
-    "prepare": "vp config"
+    "artifacts": "node ./script/artifacts.mts",
+    "branch:develop": "node ./script/release-branches.mts develop",
+    "branch:develop:dry-run": "node ./script/release-branches.mts develop --dry-run",
+    "build": "vp run --filter @delta-comic/plugin-jmcomic build",
+    "check": "vp check",
+    "dev": "vp run --filter @delta-comic/plugin-jmcomic dev",
+    "release": "vp exec semantic-release",
+    "release:dry-run": "vp exec semantic-release --dry-run",
+    "release:preview": "node ./script/release-branches.mts preview",
+    "release:preview:dry-run": "node ./script/release-branches.mts preview --dry-run",
+    "release:stable": "node ./script/release-branches.mts stable",
+    "release:stable:dry-run": "node ./script/release-branches.mts stable --dry-run",
+    "test": "vp test",
+    "test:coverage": "vp test run --coverage",
+    "typecheck": "tsgo -p tsconfig.json --noEmit && vp run --filter @delta-comic/plugin-jmcomic typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
-    "@commitlint/types": "catalog:",
-    "@cspell/dict-npm": "catalog:",
-    "@semantic-release/changelog": "catalog:",
-    "@semantic-release/git": "catalog:",
+    "@semantic-release/commit-analyzer": "catalog:",
     "@semantic-release/github": "catalog:",
     "@semantic-release/release-notes-generator": "catalog:",
-    "commitlint-plugin-cspell": "catalog:",
-    "cspell": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "jszip": "catalog:",
+    "oxlint-tsgolint": "catalog:",
     "semantic-release": "catalog:",
+    "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
+    "vue-tsgo": "catalog:"
   },
-  "packageManager": "pnpm@11.3.0",
-  "licenses": [
-    {
-      "type": "MIT",
-      "package": "./packages/sdk"
-    },
-    {
-      "type": "AGPL-3.0-only",
-      "package": "./packages/plugin"
-    }
-  ]
+  "packageManager": "pnpm@11.13.0"
 }

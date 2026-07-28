@@ -1,4 +1,1 @@
-{
-  "extends": "./tsconfig.node.json",
-  "include": ["./commitlint.config.ts", "./.releaserc.mjs", "./script/*", "./vite.config.ts"]
-}
+{ "extends": "./tsconfig.base.json", "include": ["./*.config.*", "./script/**/*"] }
