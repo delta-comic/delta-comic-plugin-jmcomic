@@ -40,15 +40,10 @@ export const parsePluginManifest = (value: unknown): PluginManifest => {
   return manifest as PluginManifest
 }
 
-export async function validatePluginArtifacts(distDirectory = resolve('packages/app/dist')) {
+export async function validatePublishedAssets(distDirectory = resolve('packages/app/dist')) {
   const manifestPath = join(distDirectory, 'manifest.json')
   const archivePath = join(distDirectory, 'plugin.zip')
   const manifest = parsePluginManifest(JSON.parse(await readFile(manifestPath, 'utf8')))
-
-  await Promise.all([
-    access(join(distDirectory, manifest.entry.cssPath)),
-    access(join(distDirectory, manifest.entry.jsPath)),
-  ])
 
   const archive = await JSZip.loadAsync(await readFile(archivePath))
   const files = Object.values(archive.files)
@@ -69,15 +64,38 @@ export async function validatePluginArtifacts(distDirectory = resolve('packages/
     throw new Error('The external and archived manifests are different')
   }
 
+  const entryFile = archive.file(manifest.entry.jsPath)
+  if (!entryFile) throw new Error(`plugin.zip is missing ${manifest.entry.jsPath}`)
+  const entrySource = await entryFile.async('string')
+  const forbiddenBundles = [
+    ['Vant', /node_modules[/\\]\.pnpm[/\\]vant@/i],
+    ['Sharp', /node_modules[/\\]\.pnpm[/\\]sharp@/i],
+    ['Vue host runtime', /node_modules[/\\]\.pnpm[/\\]vue@/i],
+    ['Delta Comic host runtime', /node_modules[/\\]\.pnpm[/\\]@delta-comic\+/i],
+  ] as const
+  for (const [name, pattern] of forbiddenBundles) {
+    if (pattern.test(entrySource)) throw new Error(`plugin.zip contains forbidden ${name} code`)
+  }
+
   return { files, manifest }
+}
+
+export async function validatePluginArtifacts(distDirectory = resolve('packages/app/dist')) {
+  const validated = await validatePublishedAssets(distDirectory)
+  await Promise.all([
+    access(join(distDirectory, validated.manifest.entry.cssPath)),
+    access(join(distDirectory, validated.manifest.entry.jsPath)),
+  ])
+  return validated
 }
 
 const isCli = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href
 /* v8 ignore start -- @preserve: exercised by the build artifact integration check */
 if (isCli) {
-  const { files, manifest } = await validatePluginArtifacts(
-    process.argv[2] ? resolve(process.argv[2]) : undefined,
-  )
+  const releaseAssetsOnly = process.argv.includes('--release-assets')
+  const directory = process.argv.slice(2).find(argument => !argument.startsWith('-'))
+  const validate = releaseAssetsOnly ? validatePublishedAssets : validatePluginArtifacts
+  const { files, manifest } = await validate(directory ? resolve(directory) : undefined)
   console.log(`Validated ${manifest.name.id}@${manifest.version.plugin}: ${files.join(', ')}`)
 }
 /* v8 ignore stop -- @preserve */

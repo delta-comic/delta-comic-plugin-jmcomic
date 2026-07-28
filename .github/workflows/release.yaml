@@ -21,6 +21,8 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       HUSKY: 0
+      JMCOMIC_TEST_PASSWORD: ${{ secrets.JMCOMIC_TEST_PASSWORD }}
+      JMCOMIC_TEST_USERNAME: ${{ secrets.JMCOMIC_TEST_USERNAME }}
     steps:
       - name: Checkout full history
         uses: actions/checkout@v6
@@ -37,13 +39,24 @@ jobs:
       - name: Install dependencies
         run: vp install --frozen-lockfile
 
-      - name: Check source
+      - name: Check formatting and lint
         run: |
-          vp check
-          vp run typecheck
+          vp fmt --check
+          vp lint
+
+      - name: Check TypeScript 7 and Vue types
+        run: vp run typecheck
+
+      - name: Run Vitest type tests
+        run: vp test typecheck
 
       - name: Test with coverage
         run: vp test run --coverage
+
+      - name: Build and validate candidate artifacts
+        run: |
+          vp run build
+          vp run artifacts
 
       - name: Publish release
         run: vp run release

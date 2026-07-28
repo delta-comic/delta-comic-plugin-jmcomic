@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "artifacts": "node ./script/artifacts.mts",
+    "artifacts:release": "node ./script/artifacts.mts --release-assets",
     "branch:develop": "node ./script/release-branches.mts develop",
     "branch:develop:dry-run": "node ./script/release-branches.mts develop --dry-run",
     "build": "vp run -t @delta-comic/plugin-jmcomic#build",

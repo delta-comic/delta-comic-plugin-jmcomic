@@ -2,6 +2,10 @@ name: 插件校验
 
 on:
   push:
+    branches:
+      - develop
+      - main
+      - next
   pull_request:
 
 permissions:
@@ -17,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUSKY: 0
+      JMCOMIC_TEST_PASSWORD: ${{ secrets.JMCOMIC_TEST_PASSWORD }}
+      JMCOMIC_TEST_USERNAME: ${{ secrets.JMCOMIC_TEST_USERNAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,12 +37,19 @@ jobs:
       - name: Install dependencies
         run: vp install --frozen-lockfile
 
-      - name: Check formatting, lint and types
-        run: |
-          vp check
-          vp run typecheck
+      - name: Check formatting
+        run: vp fmt --check
 
-      - name: Test with coverage
+      - name: Lint
+        run: vp lint
+
+      - name: Check TypeScript 7 and Vue types
+        run: vp run typecheck
+
+      - name: Run Vitest type tests
+        run: vp test typecheck
+
+      - name: Test runtime behavior with coverage
         run: vp test run --coverage
 
       - name: Build plugin
@@ -48,7 +61,7 @@ jobs:
       - name: Upload plugin artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: plugin-template-${{ github.sha }}
+          name: jmcomic-${{ github.sha }}
           if-no-files-found: error
           path: |
             packages/app/dist/manifest.json
