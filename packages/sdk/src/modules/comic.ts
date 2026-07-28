@@ -17,10 +17,12 @@ import { sCommonComic, sFullComic, sLessComic } from '../model/comic'
 import { sComment } from '../model/comment'
 import { sMutationResult, sNumeric } from '../model/utils'
 
-const sComicComment: z.ZodType<ComicComment> = sComment.extend({
-  AID: sNumeric.optional(),
-  replys: z.lazy(() => z.array(sComicComment)).optional(),
-})
+const sComicComment: z.ZodType<ComicComment> = z.lazy(() =>
+  z.intersection(
+    sComment,
+    z.object({ AID: sNumeric.optional(), replys: z.array(sComicComment).optional() }),
+  ),
+)
 const sComicPage = z.object({ total: sNumeric.transform(Number), content: z.array(sCommonComic) })
 const sCommentPage = z.object({ total: sNumeric.transform(Number), list: z.array(sComicComment) })
 

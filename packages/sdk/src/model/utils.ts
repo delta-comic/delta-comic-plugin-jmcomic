@@ -1,14 +1,14 @@
-import z from 'zod'
+import { array, number, object, string, type ZodType } from 'zod'
 
 import type { PageResult } from '../types'
 
-export const createListSchema = <T extends z.ZodType>(item: T) =>
-  z.object(
+export { sMutationResult, sNumeric } from './generated/utils'
+
+export const createListSchema = <T extends ZodType>(item: T) =>
+  object(
     {
-      total: z.number({ error: r => `List total is illegal. (Input ${JSON.stringify(r.input)})` }),
-      list: z.array(item, {
-        error: r => `List data is illegal. (Input ${JSON.stringify(r.input)})`,
-      }),
+      total: number({ error: r => `List total is illegal. (Input ${JSON.stringify(r.input)})` }),
+      list: array(item, { error: r => `List data is illegal. (Input ${JSON.stringify(r.input)})` }),
     },
     { error: r => `List is illegal. (Input ${JSON.stringify(r.input)})` },
   )
@@ -16,38 +16,18 @@ export type List<T> = PageResult<T>
 
 export type PaginationQuery<T extends object = {}> = T & { page: number }
 
-export const sNumeric = z.union(
-  [
-    z.stringFormat('Numeric', /^\d+$/, {
-      error: r =>
-        `${String(r.path?.at(-1) ?? 'It')} must be a numeric string or number. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`,
-    }),
-    z.number({
-      error: r =>
-        `${String(r.path?.at(-1) ?? 'It')} must be a numeric string or number. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`,
-    }),
-  ],
-  {
-    error: r =>
-      `${String(r.path?.at(-1) ?? 'It')} must be a numeric string or number. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`,
-  },
-)
+/**
+ * @zod
+ * @schema union([z.stringFormat('Numeric', /^\d+$/), z.number()])
+ */
 export type Numeric = string | number
 
-export const sString = z.string({
-  error: r =>
-    `${String(r.path?.at(-1) ?? 'It')} must be string. (Input <${typeof r.input}> ${JSON.stringify(r.input)})`,
+export const sString = string({
+  error: issue =>
+    `${String(issue.path?.at(-1) ?? 'It')} must be string. (Input <${typeof issue.input}> ${JSON.stringify(issue.input)})`,
 })
 
-export const sMutationResult = z
-  .object({
-    code: z.number().optional(),
-    msg: z.string().optional(),
-    status: z.union([z.string(), z.number()]).optional(),
-    type: z.enum(['add', 'remove']).optional(),
-  })
-  .loose()
-
+/** @zod */
 export interface MutationResult {
   code?: number
   msg?: string

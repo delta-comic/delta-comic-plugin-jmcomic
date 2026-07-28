@@ -195,6 +195,11 @@ vp run -t jmcomic-sdk#build
 vp test run --project sdk
 ```
 
+`src/model/*.ts` 中带 `@zod` 的 TypeScript 接口是模型的唯一结构来源。修改这些接口或其
+JSDoc 后运行 `vp run -t jmcomic-sdk#schema:generate`，并提交同步生成的
+`src/model/generated/*.ts`；生成文件不要手工编辑。`@description`、约束标签和少量
+`@schema` 注解会同步进入 Zod schema，构建前也会自动重新生成并验证类型兼容性。
+
 发布由仓库的 semantic-release 流程统一生成版本。`next` 分支发布 `next` dist-tag，`main`
 分支发布 `latest`；npm 使用 GitHub Actions OIDC trusted publishing，GitHub Packages 使用
 workflow 的短期 `GITHUB_TOKEN`，均不保存长期发布令牌。

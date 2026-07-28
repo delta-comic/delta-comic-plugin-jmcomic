@@ -1,19 +1,14 @@
-import { z } from 'zod'
+import type { Numeric } from './utils'
 
-import { sNumeric, sString, type Numeric } from './utils'
+export * from './generated/user'
 
+/**
+ * @zod
+ * @schema union([z.enum(['Male', 'Female']), z.null(), z.literal('null').transform(() => null), z.literal('').transform(() => null)])
+ */
 export type Gender = 'Male' | 'Female' | null
-export const sGender: z.ZodType<Gender> = z.union([
-  z.enum(['Male', 'Female']),
-  z.null(),
-  z.literal('null').transform(() => null),
-  z.literal('').transform(() => null),
-])
 
-export const sBadge = z.object(
-  { content: sString, id: sNumeric, name: sString },
-  'Badge is illegal.',
-)
+/** @zod */
 export interface Badge {
   /**
    * @description 勋章图片路径，图是正方形
@@ -22,7 +17,7 @@ export interface Badge {
   content: string
   /**
    * @description 该勋章唯一id，本质数字
-   * @description '175'
+   * @example '175'
    */
   id: Numeric
   /**
@@ -32,20 +27,7 @@ export interface Badge {
   name: string
 }
 
-export const sExpInfo = z.object(
-  {
-    level_name: sString,
-    level: sNumeric,
-    exp: sNumeric,
-    nextLevelExp: sNumeric,
-    expPercent: sNumeric,
-    uid: sNumeric,
-    badges: z.array(sBadge, {
-      error: r => `Badges is illegal. (Input: ${JSON.stringify(r.input)})`,
-    }),
-  },
-  'ExpInfo is illegal.',
-)
+/** @zod */
 export interface ExpInfo {
   /**
    * @description 用户实际使用的称号
@@ -83,27 +65,7 @@ export interface ExpInfo {
   badges: Badge[]
 }
 
-export const sUserMe = sExpInfo.extend({
-  ad_free: z.boolean({ error: r => `Ad free is illegal. (Input ${JSON.stringify(r.input)})` }),
-  ad_free_before: sString,
-  album_favorites: sNumeric,
-  album_favorites_max: sNumeric,
-  charge: sString,
-  coin: sNumeric,
-  email: sString,
-  emailverified: sString,
-  fname: sString,
-  gender: sGender,
-  invitation_qrcode: sString,
-  invitation_url: sString,
-  invited_cnt: sNumeric,
-  jar: sString,
-  jwttoken: sString.optional(),
-  message: sString,
-  photo: sString,
-  s: sString,
-  username: sString,
-})
+/** @zod */
 export interface UserMe extends ExpInfo {
   ad_free: boolean
   ad_free_before: string
@@ -126,36 +88,7 @@ export interface UserMe extends ExpInfo {
   username: string
 }
 
-export const sUserEdit = z.object(
-  {
-    aboutMe: sString,
-    birthPlace: sString,
-    birthday: sString,
-    city: sString,
-    collections: sString,
-    company: sString,
-    country: sString,
-    erogenic: sString,
-    email: sString.optional(),
-    favorite: sString,
-    firstName: sString,
-    gender: sGender,
-    hate: sString,
-    ideal: sString,
-    infoHere: sString,
-    lastName: sString,
-    nickName: sString,
-    occupation: sString,
-    password: sString,
-    password_confirm: sString,
-    relations: sString,
-    school: sString,
-    sexuality: sString,
-    status: sString,
-    website: sString,
-  },
-  'UserEdit is illegal.',
-)
+/** @zod */
 export interface UserEdit {
   aboutMe: string
   birthPlace: string
@@ -184,16 +117,7 @@ export interface UserEdit {
   website: string
 }
 
-export const sBadgeItem = sBadge.extend({
-  type: z.literal('badge', { error: r => `Type is not badge. (Input ${JSON.stringify(r.input)})` }),
-  coin: sNumeric,
-  rule: sString,
-  begin_time: sString,
-  created_at: sString,
-  updated_at: sString,
-  end_time: sString,
-  done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` }),
-})
+/** @zod */
 export interface BadgeItem extends Badge {
   type: 'badge'
   /**
@@ -232,33 +156,9 @@ export interface BadgeItem extends Badge {
   done: boolean
 }
 
-export const sTitleItem = z.object(
-  {
-    id: z.stringFormat('Numeric', /^\d+$/, {
-      error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
-    }),
-    name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
-    type: z.literal('title', {
-      error: r => `Type is not title. (Input ${JSON.stringify(r.input)})`,
-    }),
-    content: z.string({ error: r => `Content is illegal. (Input ${JSON.stringify(r.input)})` }),
-    coin: z.literal('0', { error: r => `Coin is not 0. (Input ${JSON.stringify(r.input)})` }),
-    rule: z.string({ error: r => `Rule is illegal. (Input ${JSON.stringify(r.input)})` }),
-    begin_time: z.string({
-      error: r => `Begin time is illegal. (Input ${JSON.stringify(r.input)})`,
-    }),
-    end_time: z.string({ error: r => `End time is illegal. (Input ${JSON.stringify(r.input)})` }),
-    created_at: z.string({
-      error: r => `Created at is illegal. (Input ${JSON.stringify(r.input)})`,
-    }),
-    updated_at: z
-      .string({ error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})` })
-      .nullable(),
-    done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` }),
-  },
-  'TitleItem is illegal.',
-)
+/** @zod */
 export interface TitleItem {
+  /** @pattern ^\d+$ */
   id: string
   name: string
   type: 'title'

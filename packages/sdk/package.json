@@ -38,9 +38,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "build": "vp pack",
-    "pack:tarball": "vp pack && pnpm pack --out ./dist/jmcomic-sdk.tgz",
-    "typecheck": "tsgo -p tsconfig.app.json --noEmit && tsgo -p tsconfig.node.json --noEmit"
+    "pack:tarball": "vp run build && pnpm pack --out ./dist/jmcomic-sdk.tgz"
   },
   "dependencies": {
     "crypto-es": "catalog:",
@@ -50,6 +48,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "msw": "catalog:",
+    "ts-to-zod": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:"

@@ -11,6 +11,19 @@ export default defineConfig({
     dts: { tsgo: true, tsconfig: './tsconfig.app.json' },
     sourcemap: true,
   },
+  run: {
+    tasks: {
+      'schema:generate': {
+        command: ['ts-to-zod --all', 'vp fmt src/model/generated --write'],
+        cache: false,
+      },
+      'build': { command: 'vp pack', dependsOn: ['schema:generate'] },
+      'typecheck': {
+        command: ['tsgo -p tsconfig.app.json --noEmit', 'tsgo -p tsconfig.node.json --noEmit'],
+        dependsOn: ['schema:generate'],
+      },
+    },
+  },
   test: {
     name: 'sdk',
     environment: 'node',

@@ -1,30 +1,10 @@
-import z from 'zod'
-
 import type { Comment } from './comment'
-import { type Gender, type ExpInfo, sGender, sExpInfo } from './user'
-import { sNumeric, sString, type Numeric } from './utils'
+import type { ExpInfo, Gender } from './user'
+import type { Numeric } from './utils'
 
-export const sCommonBlog = z.object(
-  {
-    id: sNumeric,
-    uid: sNumeric,
-    gid: sNumeric.nullable().optional(),
-    total_views: sNumeric,
-    total_comments: sNumeric,
-    total_likes: sNumeric,
-    username: sString,
-    user_photo: sString.nullable().optional(),
-    gender: sGender.optional(),
-    game_url: sString.nullable().optional(),
-    title: sString,
-    tags: sString.array(),
-    category: z.object({ name: sString.nullable(), slug: sString.nullable() }),
-    content: sString,
-    photo: sString,
-    date: sString.optional(),
-  },
-  'CommonBlog is illegal.',
-)
+export * from './generated/blog'
+
+/** @zod */
 export interface CommonBlog {
   /**
    * @description 这个字段是blog的唯一id，本质数字
@@ -71,11 +51,7 @@ export interface CommonBlog {
   date?: string
 }
 
-export const sFullBlog = sCommonBlog.extend({
-  nickname: sString,
-  expInfo: sExpInfo,
-  is_liked: z.boolean({ error: r => `isLiked is illegal. (Input ${JSON.stringify(r.input)})` }),
-})
+/** @zod */
 export interface FullBlog extends CommonBlog {
   nickname: string
   expInfo: ExpInfo

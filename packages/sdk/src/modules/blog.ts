@@ -25,10 +25,9 @@ export const blogTypes = {
   recommendation: '本本推荐',
 } as const
 
-const sBlogComment: z.ZodType<BlogComment> = sComment.extend({
-  BID: sNumeric,
-  replys: z.lazy(() => z.array(sBlogComment)).optional(),
-})
+const sBlogComment: z.ZodType<BlogComment> = z.lazy(() =>
+  z.intersection(sComment, z.object({ BID: sNumeric, replys: z.array(sBlogComment).optional() })),
+)
 const sBlogPage = z.object({ list: z.array(sCommonBlog), count: sNumeric.transform(Number) })
 const sBlogCommentPage = z.object({
   list: z.array(sBlogComment),
