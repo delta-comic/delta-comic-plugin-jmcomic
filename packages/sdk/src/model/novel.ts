@@ -1,15 +1,9 @@
-import z from 'zod'
+import type { ExpInfo, Gender } from './user'
+import type { Numeric } from './utils'
 
-import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
-import { sNumeric, sString, type Numeric } from './utils'
+export * from './generated/novel'
 
-export const sLessNovel = z.object({
-  id: sNumeric,
-  author: sString,
-  name: sString,
-  image: sString,
-  update_at: sNumeric,
-})
+/** @zod */
 export interface LessNovel {
   /**
    * @description 唯一id，本质数字
@@ -30,18 +24,7 @@ export interface LessNovel {
   update_at: Numeric
 }
 
-export const sCommonNovel = z.object({
-  id: sNumeric,
-  author: sString,
-  name: sString,
-  image: sString,
-  liked: z.boolean({ error: r => `'Liked is illegal. (Input ${JSON.stringify(r.input)})` }),
-  is_favorite: z.boolean().nullable(),
-  update_at: sNumeric,
-  likes: sNumeric,
-  last_chapter_index: sNumeric,
-  last_chapter_title: sString,
-})
+/** @zod */
 export interface CommonNovel {
   /**
    * @description 唯一id，本质数字
@@ -83,21 +66,7 @@ export interface CommonNovel {
   last_chapter_title: string
 }
 
-export const sNovelSeries = z.object({
-  NCID: sNumeric,
-  title: sString,
-  sort: sNumeric,
-  created_at: sString,
-  status: sNumeric,
-  on_at: sString,
-  buy_nc: sNumeric,
-  is_need_buy_nc: sNumeric,
-  is_need_login: sNumeric,
-  id: sNumeric,
-  name: sString,
-  new: z.boolean({ error: r => `'New is illegal. (Input ${JSON.stringify(r.input)})` }),
-  purchased: z.boolean({ error: r => `'Purchased is illegal. (Input ${JSON.stringify(r.input)})` }),
-})
+/** @zod */
 export interface NovelSeries {
   NCID: Numeric
   title: string
@@ -120,19 +89,7 @@ export interface NovelSeries {
   purchased: boolean
 }
 
-export const sNovelRelated = z.object({
-  NID: sNumeric,
-  id: sNumeric,
-  pic_s: sString,
-  image: sString,
-  name: sString,
-  author: sString,
-  chapter_update_at: sNumeric,
-  update_at: sString,
-  last_chapter_index: sNumeric,
-  last_chapter_title: sString,
-  likes: sNumeric,
-})
+/** @zod */
 export interface NovelRelated {
   NID: Numeric
   id: Numeric
@@ -156,27 +113,7 @@ export interface NovelRelated {
   likes: Numeric
 }
 
-export const sNovelComment = z.object({
-  CID: sNumeric,
-  parent_CID: sNumeric.optional(),
-  NID: sNumeric,
-  NCID: sNumeric,
-  UID: sNumeric,
-  comment: sString,
-  addtime: sNumeric,
-  likes: sNumeric,
-  status: sNumeric,
-  username: sString,
-  nickname: sString,
-  photo: sString,
-  gender: sGender,
-  update_at: sNumeric,
-  pinning: sNumeric,
-  expinfo: sExpInfo,
-  replys: z.array(z.any()).optional(),
-  content: sString,
-  spoiler: sNumeric,
-})
+/** @zod */
 export interface NovelComment {
   CID: Numeric
   parent_CID?: Numeric
@@ -211,25 +148,7 @@ export interface NovelComment {
   spoiler: Numeric
 }
 
-export const sFullNovel = z.object({
-  id: sNumeric,
-  series_id: sNumeric,
-  name: sString,
-  images: sString,
-  addtime: sNumeric,
-  description: sString,
-  total_views: sNumeric,
-  likes: sNumeric,
-  is_end: sNumeric,
-  serial_status: sString,
-  author: sString,
-  tags: z.array(sString),
-  liked: z.boolean(),
-  is_favorite: z.boolean(),
-  series: z.array(sNovelSeries),
-  related_list: z.array(sNovelRelated),
-  comment_total: z.array(sNovelComment),
-})
+/** @zod */
 export interface FullNovel {
   id: Numeric
   series_id: Numeric
@@ -268,22 +187,7 @@ export interface FullNovel {
   comment_total: NovelComment[]
 }
 
-export const sNovelContent = z.object({
-  ncid: sNumeric,
-  nid: sNumeric,
-  name: sString,
-  title: sString,
-  content: sString,
-  last_chapter_title: sString,
-  total_favorites: sNumeric,
-  total_views: sNumeric,
-  total_likes: sNumeric,
-  addtime: sString,
-  adddt: sString,
-  is_favorite: z.boolean(),
-  liked: z.boolean(),
-  related_list: z.array(sNovelRelated),
-})
+/** @zod */
 export interface NovelContent {
   ncid: Numeric
   nid: Numeric

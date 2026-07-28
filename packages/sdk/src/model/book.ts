@@ -1,14 +1,9 @@
-import z from 'zod'
+import type { Numeric } from './utils'
 
-import { sNumeric, sString, type Numeric } from './utils'
+export * from './generated/book'
+export { sBookAuthor as sAuthorDetail } from './generated/book'
 
-export const sCommonBook = z.object({
-  author: sString,
-  id: sNumeric,
-  image: sString,
-  name: sString,
-  update_at: sNumeric,
-})
+/** @zod */
 export interface CommonBook {
   author: string
   /**
@@ -21,13 +16,7 @@ export interface CommonBook {
   update_at: Numeric
 }
 
-export const sLessBook = z.object({
-  id: sNumeric,
-  author_name: sString,
-  update_date: sString,
-  author_avatar: sString,
-  background_image: sString,
-})
+/** @zod */
 export interface LessBook {
   /**
    * @description 这个字段是book的唯一id，本质数字
@@ -43,13 +32,7 @@ export interface LessBook {
   background_image: string
 }
 
-export const sRelatedBook = z.object({
-  id: sNumeric,
-  work_image: sString,
-  work_title: sString,
-  work_date: sString,
-  platform_name: sString,
-})
+/** @zod */
 export interface RelatedBook {
   /**
    * @description 这个字段是book的唯一id，本质数字
@@ -65,29 +48,19 @@ export interface RelatedBook {
   platform_name: string
 }
 
-export const sAuthorDetail = z.object({
-  work_title: sString.optional().default(''),
-  work_date: sString.optional().default(''),
-  author_id: sString.optional().default(''),
-  author_name: sString,
-  author_avatar: sString,
-  background_image: sString,
-  sponsor: z.object({ platform_url: sString, platform_name: sString }).array(),
-  related_works: sRelatedBook.array(),
-  filters: z.object({
-    language: sString.array(),
-    source: z.object({ service: sString, name: sString }).array(),
-  }),
-})
+/** @zod */
 export interface BookAuthor {
   /**
    * @deprecated 恒定为该无意义值
+   * @schema string().optional().default('')
    */
   work_title: string
   /**
    * @deprecated 恒定为该无意义值
+   * @schema string().optional().default('')
    */
   work_date: string
+  /** @schema string().optional().default('') */
   author_id: string
   author_name: string
   /**
@@ -109,12 +82,7 @@ export interface BookAuthor {
   filters: { language: string[]; source: { service: string; name: string }[] }
 }
 
-export const sBookRelates = z.object({
-  work_date: sString,
-  author_name: sString,
-  work_title: sString,
-  related_works: sRelatedBook.array(),
-})
+/** @zod */
 export interface BookRelates {
   /**
    * @example "20392 days ago"
@@ -125,15 +93,7 @@ export interface BookRelates {
   related_works: RelatedBook[]
 }
 
-export const sBookContents = z.object({
-  id: sNumeric,
-  name: sString,
-  total_page: sNumeric,
-  images: z.object({ page: sNumeric, image: sString }).array(),
-  content: sString,
-  addtime: sNumeric,
-  adddt: sString,
-})
+/** @zod */
 export interface BookContents {
   /**
    * @description 这个字段是book的唯一id，本质数字

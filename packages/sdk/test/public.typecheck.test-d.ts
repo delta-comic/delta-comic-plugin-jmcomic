@@ -4,6 +4,7 @@ import {
   type CommonComic,
   type JmSession,
   type PageResult,
+  sCommonComic,
   SortType,
 } from 'jmcomic-sdk'
 import { BrowserImageDecoder } from 'jmcomic-sdk/browser'
@@ -27,6 +28,7 @@ expectTypeOf(sdk.book.search({ keyword: 'test', page: 1 }, signal)).resolves.toH
 assertType<JmSession>({ username: 'tester', token: 'token' })
 assertType<PageResult<string>>({ total: 1, list: ['one'] })
 assertType<Error>(new JmApiError('NETWORK_ERROR', 'failed'))
+expectTypeOf(sCommonComic.parse({})).toEqualTypeOf<CommonComic>()
 assertType<BrowserImageDecoder>(new BrowserImageDecoder())
 assertType<NodeImageDecoder>(new NodeImageDecoder())
 

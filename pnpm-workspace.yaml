@@ -36,6 +36,7 @@ catalog:
   oxlint-tsgolint: ^7.0.2001
   semantic-release: ^25.0.7
   tailwindcss: ^4.3.0
+  ts-to-zod: ^5.1.0
   typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.2.4

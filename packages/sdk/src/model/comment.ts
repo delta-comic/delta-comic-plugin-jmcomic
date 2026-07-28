@@ -1,32 +1,9 @@
-import z from 'zod'
+import type { ExpInfo, Gender } from './user'
+import type { Numeric } from './utils'
 
-import { sExpInfo, sGender, type ExpInfo, type Gender } from './user'
-import { sNumeric, sString, type Numeric } from './utils'
+export * from './generated/comment'
 
-export const sComment = z.object(
-  {
-    CID: sNumeric,
-    AID: sNumeric.nullable().optional(),
-    BID: sNumeric.nullable().optional(),
-    NID: sNumeric.nullable().optional(),
-    NCID: sNumeric.nullable().optional(),
-    UID: sNumeric,
-    likes: sNumeric,
-    username: sString,
-    nickname: sString,
-    gender: sGender,
-    update_at: sNumeric,
-    addtime: sString,
-    parent_CID: sNumeric,
-    expinfo: sExpInfo,
-    name: sString.nullable().optional(),
-    content: sString,
-    photo: sString,
-    spoiler: sNumeric,
-    replys: z.array(z.any()).optional(),
-  },
-  'Comment is illegal.',
-)
+/** @zod */
 export interface Comment {
   /**
    * @description 评论id
