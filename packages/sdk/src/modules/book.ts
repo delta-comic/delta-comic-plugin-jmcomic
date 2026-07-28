@@ -22,6 +22,7 @@ const sBookPage = z.object({
   data: z.object({ content: z.array(sLessBook), total: sNumeric.transform(Number) }),
 })
 const sBookRelatesResponse = z.object({ data: sBookRelates })
+const sAuthorDetailResponse = z.object({ status: z.string().optional(), data: sAuthorDetail })
 
 export class Book {
   public constructor(protected readonly sdk: JMComic) {}
@@ -47,16 +48,17 @@ export class Book {
     return { total: result.data.total, list: result.data.content }
   }
 
-  public getAuthorDetail(
+  public async getAuthorDetail(
     data: { id: string } & BookSourceQuery,
     signal?: AbortSignal,
   ): Promise<BookAuthor> {
-    return this.sdk.requester.request(
+    const result = await this.sdk.requester.request(
       'get',
       this.sdk.config.apiPath.book.authorDetail,
-      sAuthorDetail,
+      sAuthorDetailResponse,
       { searchParams: { id: data.id, lang: data.lang, source: data.source }, signal },
     )
+    return { ...result.data, author_id: data.id }
   }
 
   public async getBookDetail(data: { id: Numeric }, signal?: AbortSignal): Promise<BookRelates> {

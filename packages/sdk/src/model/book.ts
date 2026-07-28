@@ -66,9 +66,9 @@ export interface RelatedBook {
 }
 
 export const sAuthorDetail = z.object({
-  work_title: z.literal('').optional().default(''),
-  work_date: z.literal('').optional().default(''),
-  author_id: sString,
+  work_title: sString.optional().default(''),
+  work_date: sString.optional().default(''),
+  author_id: sString.optional().default(''),
   author_name: sString,
   author_avatar: sString,
   background_image: sString,
@@ -83,11 +83,11 @@ export interface BookAuthor {
   /**
    * @deprecated 恒定为该无意义值
    */
-  work_title: ''
+  work_title: string
   /**
    * @deprecated 恒定为该无意义值
    */
-  work_date: ''
+  work_date: string
   author_id: string
   author_name: string
   /**

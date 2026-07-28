@@ -127,6 +127,6 @@ export interface FullComic extends BaseComic {
 }
 
 export interface ComicComment extends Comment {
-  AID: Numeric
+  AID?: Numeric
   replys?: ComicComment[]
 }

@@ -8,7 +8,7 @@ describe('plugin metadata', () => {
       author: pluginMetadata.author,
       description: pluginMetadata.description,
       entry: { cssPath: 'index.css', jsPath: 'index.js' },
-      name: { display: '插件模板', id: 'template' },
+      name: { display: '禁漫天堂', id: 'jmcomic' },
       require: [{ id: 'core' }],
       version: { plugin: '1.2.3-next.4', supportCore: '>=3.0.0-next.6 <4.0.0' },
     })

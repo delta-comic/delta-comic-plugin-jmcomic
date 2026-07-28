@@ -22,6 +22,9 @@ export * from './model/promote'
 export * from './model/user'
 export * from './model/utils'
 export * from './types'
+export type { SignUpData } from './modules/auth'
+export type { BlogDetail } from './modules/blog'
+export type { BookSourceQuery } from './modules/book'
 
 export class JMComic {
   public readonly config: Config

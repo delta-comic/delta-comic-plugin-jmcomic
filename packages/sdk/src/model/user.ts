@@ -7,6 +7,7 @@ export const sGender: z.ZodType<Gender> = z.union([
   z.enum(['Male', 'Female']),
   z.null(),
   z.literal('null').transform(() => null),
+  z.literal('').transform(() => null),
 ])
 
 export const sBadge = z.object(

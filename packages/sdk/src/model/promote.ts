@@ -66,27 +66,27 @@ export interface WeekBest {
 }
 
 export const sCategoryResult = z.object({
-  id: z.stringFormat('Numeric', /^\d+$/, {
-    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
-  }),
+  id: sNumeric.transform(String),
   name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
   slug: z.string({ error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})` }),
-  total_albums: z.stringFormat('Numeric', /^\d+$/, {
-    error: r => `total_albums is not a numeric string. (Input ${JSON.stringify(r.input)})`,
-  }),
-  type: z.string({ error: r => `type is illegal. (Input ${JSON.stringify(r.input)})` }),
+  total_albums: sNumeric.transform(String),
+  type: z
+    .string({ error: r => `type is illegal. (Input ${JSON.stringify(r.input)})` })
+    .optional()
+    .default(''),
   sub_categories: z
     .array(
       z.object({
-        Id: z.stringFormat('Numeric', /^\d+$/, {
-          error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
-        }),
+        CID: sNumeric,
         name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
         slug: z.string({
           error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`,
         }),
       }),
       { error: r => `sub_categories is illegal. (Input ${JSON.stringify(r.input)})` },
+    )
+    .transform(items =>
+      items.map(item => ({ id: String(item.CID), name: item.name, slug: item.slug })),
     )
     .optional(),
 })
@@ -96,7 +96,7 @@ export interface CategoryResult {
   slug: string
   total_albums: string
   type: string
-  sub_categories?: { Id: string; name: string; slug: string }[]
+  sub_categories?: { id: string; name: string; slug: string }[]
 }
 
 export const sCategoriesResult = z.object({

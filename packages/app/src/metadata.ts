@@ -1,8 +1,8 @@
 export const pluginMetadata = {
-  author: 'your-name',
-  description: '一个基于官方工具链的 Delta Comic 插件示例',
+  author: 'wenxig',
+  description: '为 Delta Comic 提供禁漫天堂的漫画、图文、小说和创作者画册内容',
   entry: { cssPath: 'index.css', jsPath: 'index.js' },
-  name: { display: '插件模板', id: 'template' },
+  name: { display: '禁漫天堂', id: 'jmcomic' },
   require: [{ id: 'core' }],
   supportCore: '>=3.0.0-next.6 <4.0.0',
 } as const

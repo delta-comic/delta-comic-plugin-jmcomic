@@ -28,6 +28,7 @@ catalog:
   happy-dom: ^20.10.6
   jszip: ^3.10.1
   crypto-es: ^2.1.0
+  es-toolkit: 1.47.0
   ky: ^2.0.1
   lightningcss: ^1.32.0
   msw: ^2.12.10
@@ -35,7 +36,7 @@ catalog:
   oxlint-tsgolint: ^7.0.2001
   semantic-release: ^25.0.7
   tailwindcss: ^4.3.0
-  typescript: ^6.0.3
+  typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.2.4
   vitest: 4.1.10
@@ -47,6 +48,7 @@ catalog:
   sharp: ^0.34.5
 
 overrides:
+  es-toolkit: 'catalog:'
   vite: 'catalog:'
   vitest: 'catalog:'
 

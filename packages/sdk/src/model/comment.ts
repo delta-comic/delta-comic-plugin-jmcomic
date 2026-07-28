@@ -19,7 +19,7 @@ export const sComment = z.object(
     addtime: sString,
     parent_CID: sNumeric,
     expinfo: sExpInfo,
-    name: sString.nullable(),
+    name: sString.nullable().optional(),
     content: sString,
     photo: sString,
     spoiler: sNumeric,
@@ -91,7 +91,7 @@ export interface Comment {
    * @description 不是用户名，是禁漫车牌号
    * @example "JM350234"
    */
-  name: string | null
+  name?: string | null
   /**
    * @description 评论内容，html格式，外层一定是<div>
    * @example

@@ -18,7 +18,7 @@ import { sComment } from '../model/comment'
 import { sMutationResult, sNumeric } from '../model/utils'
 
 const sComicComment: z.ZodType<ComicComment> = sComment.extend({
-  AID: sNumeric,
+  AID: sNumeric.optional(),
   replys: z.lazy(() => z.array(sComicComment)).optional(),
 })
 const sComicPage = z.object({ total: sNumeric.transform(Number), content: z.array(sCommonComic) })
