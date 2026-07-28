@@ -8,7 +8,7 @@ export const sLessNovel = z.object({
   author: sString,
   name: sString,
   image: sString,
-  update_at: sNumeric
+  update_at: sNumeric,
 })
 export interface LessNovel {
   /**
@@ -36,11 +36,11 @@ export const sCommonNovel = z.object({
   name: sString,
   image: sString,
   liked: z.boolean({ error: r => `'Liked is illegal. (Input ${JSON.stringify(r.input)})` }),
-  is_favorite: z.any(),
+  is_favorite: z.boolean().nullable(),
   update_at: sNumeric,
   likes: sNumeric,
   last_chapter_index: sNumeric,
-  last_chapter_title: sString
+  last_chapter_title: sString,
 })
 export interface CommonNovel {
   /**
@@ -64,7 +64,7 @@ export interface CommonNovel {
    */
   image: string
   liked: boolean
-  is_favorite: null
+  is_favorite: boolean | null
   update_at: Numeric
   /**
    * @description 点赞数，本质数字
@@ -96,7 +96,7 @@ export const sNovelSeries = z.object({
   id: sNumeric,
   name: sString,
   new: z.boolean({ error: r => `'New is illegal. (Input ${JSON.stringify(r.input)})` }),
-  purchased: z.boolean({ error: r => `'Purchased is illegal. (Input ${JSON.stringify(r.input)})` })
+  purchased: z.boolean({ error: r => `'Purchased is illegal. (Input ${JSON.stringify(r.input)})` }),
 })
 export interface NovelSeries {
   NCID: Numeric
@@ -131,7 +131,7 @@ export const sNovelRelated = z.object({
   update_at: sString,
   last_chapter_index: sNumeric,
   last_chapter_title: sString,
-  likes: sNumeric
+  likes: sNumeric,
 })
 export interface NovelRelated {
   NID: Numeric
@@ -175,7 +175,7 @@ export const sNovelComment = z.object({
   expinfo: sExpInfo,
   replys: z.array(z.any()).optional(),
   content: sString,
-  spoiler: sNumeric
+  spoiler: sNumeric,
 })
 export interface NovelComment {
   CID: Numeric
@@ -228,7 +228,7 @@ export const sFullNovel = z.object({
   is_favorite: z.boolean(),
   series: z.array(sNovelSeries),
   related_list: z.array(sNovelRelated),
-  comment_total: z.array(sNovelComment)
+  comment_total: z.array(sNovelComment),
 })
 export interface FullNovel {
   id: Numeric
@@ -282,7 +282,7 @@ export const sNovelContent = z.object({
   adddt: sString,
   is_favorite: z.boolean(),
   liked: z.boolean(),
-  related_list: z.array(sNovelRelated)
+  related_list: z.array(sNovelRelated),
 })
 export interface NovelContent {
   ncid: Numeric

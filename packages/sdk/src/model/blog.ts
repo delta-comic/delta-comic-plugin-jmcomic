@@ -21,9 +21,9 @@ export const sCommonBlog = z.object(
     category: z.object({ name: sString.nullable(), slug: sString.nullable() }),
     content: sString,
     photo: sString,
-    date: sString.optional()
+    date: sString.optional(),
   },
-  'CommonBlog is illegal.'
+  'CommonBlog is illegal.',
 )
 export interface CommonBlog {
   /**
@@ -35,8 +35,8 @@ export interface CommonBlog {
   uid: Numeric
   username: string
   user_photo?: string | null
-  gender: Gender
-  game_url: string
+  gender?: Gender
+  game_url?: string | null
   gid?: Numeric | null
   title: string
   /**
@@ -74,7 +74,7 @@ export interface CommonBlog {
 export const sFullBlog = sCommonBlog.extend({
   nickname: sString,
   expInfo: sExpInfo,
-  is_liked: z.boolean({ error: r => `isLiked is illegal. (Input ${JSON.stringify(r.input)})` })
+  is_liked: z.boolean({ error: r => `isLiked is illegal. (Input ${JSON.stringify(r.input)})` }),
 })
 export interface FullBlog extends CommonBlog {
   nickname: string

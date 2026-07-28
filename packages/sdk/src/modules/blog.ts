@@ -1,90 +1,118 @@
+import { z } from 'zod'
+
 import type {
   BlogComment,
   CommonBlog,
   FullBlog,
   JMComic,
-  List,
+  MutationResult,
   Numeric,
+  PageResult,
   PaginationQuery,
   RecommendComic,
-  SortType
+  SortType,
 } from '..'
 import { jsonToFormData } from '../helpers'
+import { sCommonBlog, sFullBlog } from '../model/blog'
+import { sRecommendComic } from '../model/comic'
+import { sComment } from '../model/comment'
+import { sMutationResult, sNumeric } from '../model/utils'
 
-type BlogType<T> = { list: T[]; count: number }
-type BlogList2<T> = { list: T[]; total: string }
+export const blogTypes = {
+  all: '全部',
+  news: '最新消息',
+  discussion: '闲聊交流',
+  recommendation: '本本推荐',
+} as const
+
+const sBlogComment: z.ZodType<BlogComment> = sComment.extend({
+  BID: sNumeric,
+  replys: z.lazy(() => z.array(sBlogComment)).optional(),
+})
+const sBlogPage = z.object({ list: z.array(sCommonBlog), count: sNumeric.transform(Number) })
+const sBlogCommentPage = z.object({
+  list: z.array(sBlogComment),
+  total: sNumeric.transform(Number),
+})
+const sBlogDetail = z.object({
+  info: sFullBlog,
+  related_comics: z.array(sRecommendComic).optional(),
+  related_blogs: z.array(sCommonBlog).optional(),
+})
+
+export interface BlogDetail {
+  info: FullBlog
+  related_comics?: RecommendComic[]
+  related_blogs?: CommonBlog[]
+}
 
 export class Blog {
-  constructor(protected sdk: JMComic) {}
+  public constructor(protected readonly sdk: JMComic) {}
 
   public async search(
     data: PaginationQuery<{ type: string; keyword?: string; order?: SortType }>,
-    signal?: AbortSignal
-  ): Promise<List<CommonBlog>> {
-    const ky = this.sdk.requester.create()
-    const all = await ky
-      .get<BlogType<CommonBlog>>(this.sdk.config.apiPath.blog_search, {
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonBlog>> {
+    const result = await this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.blog.search,
+      sBlogPage,
+      {
         searchParams: {
           mode: 'blog',
           page: data.page,
           blog_type: data.type,
           search_query: data.keyword,
-          o: data.order
+          o: data.order,
         },
-        signal
-      })
-      .json()
-    return { list: all.list, total: Number(all.count) }
+        signal,
+      },
+    )
+    return { list: result.list, total: result.count }
   }
 
-  public async getInfo(data: { id: Numeric }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .get<{ info: FullBlog; related_comics?: RecommendComic[]; related_blogs?: CommonBlog[] }>(
-        this.sdk.config.apiPath.blog_getInfo,
-        { searchParams: { id: data.id }, signal }
-      )
-      .json()
+  public getInfo(data: { id: Numeric }, signal?: AbortSignal): Promise<BlogDetail> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.blog.detail, sBlogDetail, {
+      searchParams: { id: data.id },
+      signal,
+    })
   }
 
-  public async getComments(
+  public getComments(
     data: PaginationQuery<{ id: Numeric }>,
-    signal?: AbortSignal
-  ): Promise<List<BlogComment>> {
-    const ky = this.sdk.requester.create()
-    const list = await ky
-      .get<BlogList2<BlogComment>>(this.sdk.config.apiPath.forum_getComments, {
-        searchParams: { mode: 'blog', page: data.page, bid: data.id },
-        signal
-      })
-      .json()
-    return { list: list.list, total: Number(list.total) }
+    signal?: AbortSignal,
+  ): Promise<PageResult<BlogComment>> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.forum.comments,
+      sBlogCommentPage,
+      { searchParams: { mode: 'blog', page: data.page, bid: data.id }, signal },
+    )
   }
 
-  public async like(data: { id: Numeric }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_like, {
-        body: jsonToFormData({ id: data.id, like_type: 'blog' }),
-        signal
-      })
-      .json()
+  public like(data: { id: Numeric }, signal?: AbortSignal): Promise<MutationResult> {
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.forum.like, sMutationResult, {
+      body: jsonToFormData({ id: data.id, like_type: 'blog' }),
+      signal,
+    })
   }
 
-  public async sendComment(
+  public sendComment(
     data: { id: Numeric; parentCommentId?: Numeric; content: string },
-    signal?: AbortSignal
-  ) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_sendComment, {
+    signal?: AbortSignal,
+  ): Promise<MutationResult> {
+    return this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.forum.comment,
+      sMutationResult,
+      {
         body: jsonToFormData({
           bid: data.id,
           comment_id: data.parentCommentId,
-          comment: data.content
+          comment: data.content,
         }),
-        signal
-      })
-      .json()
+        signal,
+      },
+    )
   }
 }

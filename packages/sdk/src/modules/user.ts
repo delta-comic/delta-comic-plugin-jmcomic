@@ -1,165 +1,167 @@
+import { z } from 'zod'
+
 import type {
   BadgeItem,
   CommonComic,
   JMComic,
-  List,
+  MutationResult,
   Numeric,
+  PageResult,
   PaginationQuery,
   TitleItem,
-  UserEdit
+  UserEdit,
+  UserMe,
 } from '..'
 import { jsonToFormData } from '../helpers'
+import { sCommonComic } from '../model/comic'
+import { sBadgeItem, sTitleItem, sUserEdit } from '../model/user'
+import { sMutationResult, sNumeric } from '../model/utils'
+import { JmApiError } from '../types'
+
+const sDailyInfo = z.object({ daily_id: sNumeric })
+const sTaskList = <T extends z.ZodType>(item: T) => z.object({ list: z.array(item) })
+const sComicPage = z.object({
+  list: z.array(sCommonComic),
+  total: sNumeric.transform(Number),
+  count: sNumeric.optional(),
+  folder_list: z.array(z.unknown()).optional(),
+})
 
 export class User {
-  constructor(protected sdk: JMComic) {}
-  public async dailyCheck(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-    const dailyInfo = await ky
-      .get<{ daily_id: number }>(this.sdk.config.apiPath.user_daily, {
-        searchParams: { user_id: uid },
-        signal
-      })
-      .json()
-    try {
-      await ky.post(this.sdk.config.apiPath.user_dailyCheck, {
-        body: jsonToFormData({ user_id: uid, daily_id: dailyInfo.daily_id }),
-        signal
-      })
-    } catch (err) {
-      console.log('api daily check', err)
-    }
+  public constructor(protected readonly sdk: JMComic) {}
+
+  private requireUser(): UserMe {
+    const user = this.sdk.auth.user?.user ?? this.sdk.auth.session?.user
+    if (!user) throw new JmApiError('AUTH_REQUIRED', '该操作需要先登录')
+    return user
   }
 
-  public getUser(data: { uid: Numeric }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return ky
-      .get<UserEdit>(data.uid.toString(), { prefix: this.sdk.config.apiPath.user_edit, signal })
-      .json()
+  public async dailyCheck(signal?: AbortSignal): Promise<void> {
+    const uid = this.requireUser().uid
+    const daily = await this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.user.daily,
+      sDailyInfo,
+      { searchParams: { user_id: uid }, signal },
+    )
+    await this.sdk.requester
+      .create()
+      .post(this.sdk.config.apiPath.user.dailyCheck, {
+        body: jsonToFormData({ user_id: uid, daily_id: daily.daily_id }),
+        signal,
+      })
+      .text()
   }
 
-  public setUser(data: { uid: Numeric; user: UserEdit }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return ky
-      .get<UserEdit>(data.uid.toString(), {
-        body: jsonToFormData(data.user),
-        prefix: this.sdk.config.apiPath.user_edit,
-        signal
-      })
-      .json()
+  public getUser(data: { uid: Numeric }, signal?: AbortSignal): Promise<UserEdit> {
+    return this.sdk.requester.request(
+      'get',
+      `${this.sdk.config.apiPath.user.edit}/${data.uid}`,
+      sUserEdit,
+      { signal },
+    )
   }
 
-  public buyBadge = (data: { badgeId: Numeric }, signal?: AbortSignal) => {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-
-    return ky
-      .post(this.sdk.config.apiPath.user_buyBadge, {
-        body: jsonToFormData({ uid, task_id: data.badgeId }),
-        signal
-      })
-      .json()
+  public setUser(data: { uid: Numeric; user: UserEdit }, signal?: AbortSignal): Promise<UserEdit> {
+    return this.sdk.requester.request(
+      'post',
+      `${this.sdk.config.apiPath.user.edit}/${data.uid}`,
+      sUserEdit,
+      { body: jsonToFormData(data.user), signal },
+    )
   }
 
-  public async getMyBadges(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-
-    const my = await ky
-      .get<{ list: BadgeItem[] }>(this.sdk.config.apiPath.user_task, {
-        searchParams: { type: 'badge', filter: 'my', uid },
-        signal
-      })
-      .json()
-    return my.list
+  public buyBadge(data: { badgeId: Numeric }, signal?: AbortSignal): Promise<MutationResult> {
+    const uid = this.requireUser().uid
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.user.badge, sMutationResult, {
+      body: jsonToFormData({ uid, task_id: data.badgeId }),
+      signal,
+    })
   }
 
-  public getAllBadges = async (signal?: AbortSignal) => {
-    const ky = this.sdk.requester.create()
-    const all = await ky
-      .get<{ list?: BadgeItem[] }>(this.sdk.config.apiPath.user_task, {
-        searchParams: { type: 'badge', filter: 'all' },
-        signal
-      })
-      .json()
-
-    if (!all.list) throw new Error('You not login any account.')
-    return all.list
+  public async getMyBadges(signal?: AbortSignal): Promise<BadgeItem[]> {
+    const uid = this.requireUser().uid
+    const result = await this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.user.task,
+      sTaskList(sBadgeItem),
+      { searchParams: { type: 'badge', filter: 'my', uid }, signal },
+    )
+    return result.list
   }
 
-  public async changeBadgesOrder(data: { idList: string[] }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-
-    const result = await ky
-      .post(this.sdk.config.apiPath.user_task, {
-        body: jsonToFormData({
-          type: 'badge',
-          uid,
-          new_sort_ids: data.idList.join(','),
-          task_id: 0
-        }),
-        signal
-      })
-      .json()
-    return result
+  public async getAllBadges(signal?: AbortSignal): Promise<BadgeItem[]> {
+    const result = await this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.user.task,
+      sTaskList(sBadgeItem),
+      { searchParams: { type: 'badge', filter: 'all' }, signal },
+    )
+    return result.list
   }
 
-  public async getAllTitles(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-
-    const all = await ky
-      .get<{ list: TitleItem[] }>(this.sdk.config.apiPath.user_task, {
-        searchParams: { type: 'title', filter: 'all' },
-        signal
-      })
-      .json()
-    return all.list
+  public changeBadgesOrder(
+    data: { idList: string[] },
+    signal?: AbortSignal,
+  ): Promise<MutationResult> {
+    const uid = this.requireUser().uid
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.user.task, sMutationResult, {
+      body: jsonToFormData({ type: 'badge', uid, new_sort_ids: data.idList.join(','), task_id: 0 }),
+      signal,
+    })
   }
 
-  public async setTitles(data: { id: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-
-    const result = await ky
-      .post(this.sdk.config.apiPath.user_task, {
-        body: jsonToFormData({ type: 'title', uid, task_id: data.id }),
-        signal
-      })
-      .json()
-    return result
+  public async getAllTitles(signal?: AbortSignal): Promise<TitleItem[]> {
+    const result = await this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.user.task,
+      sTaskList(sTitleItem),
+      { searchParams: { type: 'title', filter: 'all' }, signal },
+    )
+    return result.list
   }
 
-  public async getHistory(data: PaginationQuery, signal?: AbortSignal): Promise<List<CommonComic>> {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
-
-    const result = await ky
-      .get<List<CommonComic>>(this.sdk.config.apiPath.user_history, {
-        searchParams: { page: data.page },
-        signal
-      })
-      .json()
-    return result
+  public setTitles(data: { id: string }, signal?: AbortSignal): Promise<MutationResult> {
+    const uid = this.requireUser().uid
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.user.task, sMutationResult, {
+      body: jsonToFormData({ type: 'title', uid, task_id: data.id }),
+      signal,
+    })
   }
 
-  public async getRemoveSingleHistory(data: { comicId: Numeric }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const uid = this.sdk.auth.user?.user.uid
-    if (!uid) throw new Error('You not login any account.')
+  public getFavoriteList(
+    data: PaginationQuery<{ folderId?: Numeric; order?: string }>,
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonComic>> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.forum.favorite, sComicPage, {
+      searchParams: { page: data.page, folder_id: data.folderId ?? 0, o: data.order ?? 'mr' },
+      signal,
+    })
+  }
 
-    const result = await ky
-      .post(this.sdk.config.apiPath.user_history, {
-        body: jsonToFormData({ id: data.comicId }),
-        signal
-      })
-      .json()
-    return result
+  public getHistory(data: PaginationQuery, signal?: AbortSignal): Promise<PageResult<CommonComic>> {
+    this.requireUser()
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.user.history, sComicPage, {
+      searchParams: { page: data.page },
+      signal,
+    })
+  }
+
+  public removeHistory(data: { comicId: Numeric }, signal?: AbortSignal): Promise<MutationResult> {
+    this.requireUser()
+    return this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.user.history,
+      sMutationResult,
+      { body: jsonToFormData({ id: data.comicId }), signal },
+    )
+  }
+
+  /** @deprecated 使用 removeHistory。 */
+  public getRemoveSingleHistory(
+    data: { comicId: Numeric },
+    signal?: AbortSignal,
+  ): Promise<MutationResult> {
+    return this.removeHistory(data, signal)
   }
 }

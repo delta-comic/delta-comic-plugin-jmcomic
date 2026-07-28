@@ -21,7 +21,7 @@ export const restHandlers = [
   http.get('https://*/promote_list', async () => {
     await delay(1000)
     return HttpResponse.json({ data: [], code: 200, message: 'hello' })
-  })
+  }),
 ]
 const server = setupServer(...restHandlers)
 
@@ -35,7 +35,7 @@ test.concurrent('Fork decrypted', async () => {
   expect(forks).toMatchObject({
     Setting: expect.any(Array),
     Server: expect.any(Array),
-    jm3_Server: expect.any(Array)
+    jm3_Server: expect.any(Array),
   })
 })
 

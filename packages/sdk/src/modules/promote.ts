@@ -1,83 +1,102 @@
+import { z } from 'zod'
+
 import type {
+  CategoriesResult,
   CommonBook,
   CommonComic,
   CommonNovel,
   JMComic,
-  List,
+  PageResult,
   PaginationQuery,
   PromoteItem,
-  WeekBest
+  WeekBest,
 } from '..'
+import { sCommonBook } from '../model/book'
+import { sCommonComic } from '../model/comic'
+import { sCommonNovel } from '../model/novel'
+import { sCategoriesResult, sPromoteItem, sWeekBest } from '../model/promote'
+import { sNumeric } from '../model/utils'
 
-interface PromoteList {
-  list: CommonComic[]
-  total: string | number
-}
-
-interface WeekBestList {
-  total: number
-  list: CommonComic[]
-}
+const sPromotePage = z.object({ list: z.array(sCommonComic), total: sNumeric.transform(Number) })
+const sWeekPage = z.object({
+  list: z.array(z.union([sCommonComic, sCommonBook, sCommonNovel])),
+  total: sNumeric.transform(Number),
+})
 
 export class Promote {
-  constructor(protected sdk: JMComic) {}
-  public async getPromotes(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky.get<PromoteItem[]>(this.sdk.config.apiPath.promote_get, { signal }).json()
+  public constructor(protected readonly sdk: JMComic) {}
+
+  public getCategories(signal?: AbortSignal): Promise<CategoriesResult> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.categories,
+      sCategoriesResult,
+      { signal },
+    )
   }
 
-  public async getPromoteItem(data: PaginationQuery<{ id: number }>, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const result = await ky
-      .get<PromoteList>(this.sdk.config.apiPath.promote_list, {
-        signal,
-        searchParams: { page: data.page, id: data.id }
-      })
-      .json()
-    return { list: result.list, total: Number(result.total) }
+  public getPromotes(signal?: AbortSignal): Promise<PromoteItem[]> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.list,
+      z.array(sPromoteItem),
+      { signal, searchParams: { page: 1 } },
+    )
   }
 
-  public async getWeekBestCate(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky.get<WeekBest>(this.sdk.config.apiPath.weekBest_cate, { signal }).json()
+  public getPromoteItem(
+    data: PaginationQuery<{ id: number }>,
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonComic>> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.promote.item, sPromotePage, {
+      signal,
+      searchParams: { page: data.page, id: data.id },
+    })
   }
 
-  public async getWeekBestList(
+  public getWeekBestCate(signal?: AbortSignal): Promise<WeekBest> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.weekCategories,
+      sWeekBest,
+      { signal },
+    )
+  }
+
+  public getWeekBestList(
     data: { id: number; type: string },
-    signal?: AbortSignal
-  ): Promise<List<CommonComic | CommonBook | CommonNovel>> {
-    const ky = this.sdk.requester.create()
-    const result = await ky
-      .get<WeekBestList>(this.sdk.config.apiPath.weekBest_list, {
-        signal,
-        searchParams: { type: data.type, id: data.type }
-      })
-      .json()
-    return { list: result.list, total: Number(result.total) }
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonComic | CommonBook | CommonNovel>> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.promote.weekList, sWeekPage, {
+      signal,
+      searchParams: { type: data.type, id: data.id },
+    })
   }
 
-  public async getHotTags(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky.get<string[]>(this.sdk.config.apiPath.promote_hotTags, { signal }).json()
+  public getHotTags(signal?: AbortSignal): Promise<string[]> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.hotTags,
+      z.array(z.string()),
+      { signal },
+    )
   }
 
-  public async getRandomProvide(signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .get<CommonComic[]>(this.sdk.config.apiPath.promote_random, {
-        signal,
-        searchParams: { time: Date.now() }
-      })
-      .json()
+  public getRandomProvide(signal?: AbortSignal): Promise<CommonComic[]> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.random,
+      z.array(sCommonComic),
+      { signal, searchParams: { time: this.sdk.config.now() } },
+    )
   }
 
-  public async getLatest(data: PaginationQuery, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .get<CommonComic[]>(this.sdk.config.apiPath.promote_latest, {
-        signal,
-        searchParams: { page: data.page }
-      })
-      .json()
+  public getLatest(data: PaginationQuery, signal?: AbortSignal): Promise<CommonComic[]> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.promote.latest,
+      z.array(sCommonComic),
+      { signal, searchParams: { page: data.page } },
+    )
   }
 }

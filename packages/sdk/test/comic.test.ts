@@ -9,7 +9,7 @@ test.concurrent('Comic search', { timeout: 1000 * 20 }, async ({ signal }) => {
   await sdk.fork.autoPickFork(undefined, signal)
   const result = await sdk.comic.searchByKeyword(
     { keyword: '你', order: SortType.Relate, page: 1 },
-    signal
+    signal,
   )
 
   await createListSchema(sCommonComic).parseAsync(result)
@@ -51,6 +51,6 @@ test.concurrent('Favorite comic', { timeout: 1000 * 20 }, async ({ signal }) => 
   expect(result).toMatchObject({
     status: 'ok',
     msg: expect.any(String),
-    type: expect.toBeOneOf(['add', 'remove'])
+    type: expect.toBeOneOf(['add', 'remove']),
   })
 })

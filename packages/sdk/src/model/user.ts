@@ -2,16 +2,16 @@ import { z } from 'zod'
 
 import { sNumeric, sString, type Numeric } from './utils'
 
-export const sGender = z
-  .enum(['Male', 'Female', 'null'], {
-    error: r => `Gender is illegal. (Input ${JSON.stringify(r.input)})`
-  })
-  .nullable()
 export type Gender = 'Male' | 'Female' | null
+export const sGender: z.ZodType<Gender> = z.union([
+  z.enum(['Male', 'Female']),
+  z.null(),
+  z.literal('null').transform(() => null),
+])
 
 export const sBadge = z.object(
   { content: sString, id: sNumeric, name: sString },
-  'Badge is illegal.'
+  'Badge is illegal.',
 )
 export interface Badge {
   /**
@@ -40,10 +40,10 @@ export const sExpInfo = z.object(
     expPercent: sNumeric,
     uid: sNumeric,
     badges: z.array(sBadge, {
-      error: r => `Badges is illegal. (Input: ${JSON.stringify(r.input)})`
-    })
+      error: r => `Badges is illegal. (Input: ${JSON.stringify(r.input)})`,
+    }),
   },
-  'ExpInfo is illegal.'
+  'ExpInfo is illegal.',
 )
 export interface ExpInfo {
   /**
@@ -101,7 +101,7 @@ export const sUserMe = sExpInfo.extend({
   message: sString,
   photo: sString,
   s: sString,
-  username: sString
+  username: sString,
 })
 export interface UserMe extends ExpInfo {
   ad_free: boolean
@@ -151,9 +151,9 @@ export const sUserEdit = z.object(
     school: sString,
     sexuality: sString,
     status: sString,
-    website: sString
+    website: sString,
   },
-  'UserEdit is illegal.'
+  'UserEdit is illegal.',
 )
 export interface UserEdit {
   aboutMe: string
@@ -164,7 +164,7 @@ export interface UserEdit {
   company: string
   country: string
   erogenic: string
-  email: string
+  email?: string
   favorite: string
   firstName: string
   gender: Gender
@@ -191,7 +191,7 @@ export const sBadgeItem = sBadge.extend({
   created_at: sString,
   updated_at: sString,
   end_time: sString,
-  done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` })
+  done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` }),
 })
 export interface BadgeItem extends Badge {
   type: 'badge'
@@ -234,28 +234,28 @@ export interface BadgeItem extends Badge {
 export const sTitleItem = z.object(
   {
     id: z.stringFormat('Numeric', /^\d+$/, {
-      error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+      error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
     }),
     name: z.string({ error: r => `Name is illegal. (Input ${JSON.stringify(r.input)})` }),
     type: z.literal('title', {
-      error: r => `Type is not title. (Input ${JSON.stringify(r.input)})`
+      error: r => `Type is not title. (Input ${JSON.stringify(r.input)})`,
     }),
     content: z.string({ error: r => `Content is illegal. (Input ${JSON.stringify(r.input)})` }),
     coin: z.literal('0', { error: r => `Coin is not 0. (Input ${JSON.stringify(r.input)})` }),
     rule: z.string({ error: r => `Rule is illegal. (Input ${JSON.stringify(r.input)})` }),
     begin_time: z.string({
-      error: r => `Begin time is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `Begin time is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
     end_time: z.string({ error: r => `End time is illegal. (Input ${JSON.stringify(r.input)})` }),
     created_at: z.string({
-      error: r => `Created at is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `Created at is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
     updated_at: z.string({
-      error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `Updated at is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
-    done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` })
+    done: z.boolean({ error: r => `Done is illegal. (Input ${JSON.stringify(r.input)})` }),
   },
-  'TitleItem is illegal.'
+  'TitleItem is illegal.',
 )
 export interface TitleItem {
   id: string

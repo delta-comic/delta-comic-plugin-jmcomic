@@ -1,12 +1,16 @@
 {
   "name": "delta-comic-plugin-jmcomic",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delta-comic/jmcomic-sdk.git"
+  },
   "type": "module",
   "scripts": {
     "artifacts": "node ./script/artifacts.mts",
     "branch:develop": "node ./script/release-branches.mts develop",
     "branch:develop:dry-run": "node ./script/release-branches.mts develop --dry-run",
-    "build": "vp run --filter @delta-comic/plugin-jmcomic build",
+    "build": "vp run -t @delta-comic/plugin-jmcomic#build",
     "check": "vp check",
     "dev": "vp run --filter @delta-comic/plugin-jmcomic dev",
     "release": "vp exec semantic-release",
@@ -17,7 +21,8 @@
     "release:stable:dry-run": "node ./script/release-branches.mts stable --dry-run",
     "test": "vp test",
     "test:coverage": "vp test run --coverage",
-    "typecheck": "tsgo -p tsconfig.json --noEmit && vp run --filter @delta-comic/plugin-jmcomic typecheck"
+    "test:type": "vp test typecheck",
+    "typecheck": "tsgo -p tsconfig.json --noEmit && vp run -t @delta-comic/plugin-jmcomic#typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",

@@ -1,65 +1,92 @@
-import type { Gender, JMComic, LoginData, LoginUser, UserMe } from '..'
+import { z } from 'zod'
+
+import type { Gender, JMComic, JmSession, LoginData, LoginUser } from '..'
 import { jsonToFormData } from '../helpers'
+import { sUserMe } from '../model/user'
+
+export interface SignUpData {
+  email: string
+  gender: Gender
+  password: string
+  password_confirm: string
+  username: string
+}
 
 export class Auth {
-  constructor(protected sdk: JMComic) {}
   public user?: LoginUser
+  private restoredSession?: JmSession
 
-  /**
-   * @param data 不传值仅仅只是dev测试方便，实战必须传值，不传会报错
-   */
-  public async login(data?: LoginData, signal?: AbortSignal) {
-    if (!data) {
-      // 这个账号是公开账号
-      if (import.meta.env.DEV) data = { password: '1q2w3e4r', username: '_wenxig' }
-      else throw new Error('Login must have data param in production mode!')
-    }
-
-    await this.logout(signal)
-    const ky = this.sdk.requester.create()
-    const result = ky.post<UserMe>(this.sdk.config.apiPath.auth_login, {
-      body: jsonToFormData(data),
-      signal
-    })
-    const user = await result.json()
-
-    return (this.user = { user, data })
+  public constructor(
+    protected readonly sdk: JMComic,
+    session?: JmSession,
+  ) {
+    if (session) this.restoreSession(session)
   }
 
-  /**
-   * @deprecated 实际上并非弃用，该接口为实验性功能，不确保内容可以正常使用
-   */
-  public signUp(
-    data: {
-      email: string
-      gender: Gender
-      password: string
-      password_confirm: string
-      username: string
-    },
-    signal?: AbortSignal
-  ) {
-    const ky = this.sdk.requester.create()
-    return ky
-      .post<void>(this.sdk.config.apiPath.auth_signup, { body: jsonToFormData(data), signal })
+  public get session(): JmSession | undefined {
+    if (this.user) {
+      return {
+        username: this.user.username,
+        token: this.user.user.jwttoken,
+        avs: this.user.user.s,
+        user: this.user.user,
+      }
+    }
+    return this.restoredSession
+  }
+
+  public restoreSession(session: JmSession): void {
+    this.restoredSession = { ...session }
+    this.user = session.user ? { username: session.username, user: session.user } : undefined
+  }
+
+  public clearSession(): void {
+    this.user = undefined
+    this.restoredSession = undefined
+  }
+
+  public async login(data: LoginData, signal?: AbortSignal): Promise<LoginUser> {
+    const user = await this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.auth.login,
+      sUserMe,
+      { body: jsonToFormData(data), signal },
+    )
+    const loginUser = { data, username: data.username, user } satisfies LoginUser
+    this.user = loginUser
+    this.restoredSession = undefined
+    return loginUser
+  }
+
+  public async signUp(data: SignUpData, signal?: AbortSignal): Promise<string> {
+    return this.sdk.requester
+      .create()
+      .post(this.sdk.config.apiPath.auth.signUp, { body: jsonToFormData(data), signal })
       .text()
   }
 
-  public async logout(signal?: AbortSignal) {
-    if (!this.user) return
-    const ky = this.sdk.requester.create()
-    await ky.post(this.sdk.config.apiPath.auth_logout, { signal }).text()
-    this.user = undefined
+  public async logout(signal?: AbortSignal): Promise<void> {
+    const hasSession = Boolean(this.session?.token)
+    try {
+      if (hasSession)
+        await this.sdk.requester
+          .create()
+          .post(this.sdk.config.apiPath.auth.logout, { signal })
+          .text()
+    } finally {
+      this.clearSession()
+    }
   }
 
-  public async forgetPassword(data: { email: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    const result = await ky
-      .post<never>(this.sdk.config.apiPath.auth_forgetPassword, {
-        body: jsonToFormData({ email: data.email }),
-        signal
-      })
-      .json()
-    return result
+  public forgetPassword(
+    data: { email: string },
+    signal?: AbortSignal,
+  ): Promise<{ message?: string }> {
+    return this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.auth.forgetPassword,
+      z.object({ message: z.string().optional() }).loose(),
+      { body: jsonToFormData(data), signal },
+    )
   }
 }

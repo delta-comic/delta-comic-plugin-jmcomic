@@ -7,7 +7,7 @@ export const sCommonBook = z.object({
   id: sNumeric,
   image: sString,
   name: sString,
-  update_at: sNumeric
+  update_at: sNumeric,
 })
 export interface CommonBook {
   author: string
@@ -26,7 +26,7 @@ export const sLessBook = z.object({
   author_name: sString,
   update_date: sString,
   author_avatar: sString,
-  background_image: sString
+  background_image: sString,
 })
 export interface LessBook {
   /**
@@ -48,7 +48,7 @@ export const sRelatedBook = z.object({
   work_image: sString,
   work_title: sString,
   work_date: sString,
-  platform_name: sString
+  platform_name: sString,
 })
 export interface RelatedBook {
   /**
@@ -66,6 +66,9 @@ export interface RelatedBook {
 }
 
 export const sAuthorDetail = z.object({
+  work_title: z.literal('').optional().default(''),
+  work_date: z.literal('').optional().default(''),
+  author_id: sString,
   author_name: sString,
   author_avatar: sString,
   background_image: sString,
@@ -73,8 +76,8 @@ export const sAuthorDetail = z.object({
   related_works: sRelatedBook.array(),
   filters: z.object({
     language: sString.array(),
-    source: z.object({ service: sString, name: sString }).array()
-  })
+    source: z.object({ service: sString, name: sString }).array(),
+  }),
 })
 export interface BookAuthor {
   /**
@@ -110,7 +113,7 @@ export const sBookRelates = z.object({
   work_date: sString,
   author_name: sString,
   work_title: sString,
-  related_works: sRelatedBook.array()
+  related_works: sRelatedBook.array(),
 })
 export interface BookRelates {
   /**
@@ -129,7 +132,7 @@ export const sBookContents = z.object({
   images: z.object({ page: sNumeric, image: sString }).array(),
   content: sString,
   addtime: sNumeric,
-  adddt: sString
+  adddt: sString,
 })
 export interface BookContents {
   /**

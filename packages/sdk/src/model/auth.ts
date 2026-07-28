@@ -5,6 +5,7 @@ export interface LoginData {
   password: string
 }
 export interface LoginUser {
-  data: LoginData
+  data?: LoginData
+  username: string
   user: UserMe
 }

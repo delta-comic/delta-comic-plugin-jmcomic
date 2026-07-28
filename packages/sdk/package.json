@@ -18,35 +18,46 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "types": "./dist/src/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
     }
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "vp pack && pnpm pack --out ./dist/pack.tgz"
+    "build": "vp pack",
+    "pack:tarball": "vp pack && pnpm pack --out ./dist/jmcomic-sdk.tgz",
+    "typecheck": "tsgo -p tsconfig.app.json --noEmit && tsgo -p tsconfig.node.json --noEmit"
   },
-  "devDependencies": {
-    "@delta-comic/model": "catalog:",
-    "@types/node": "catalog:",
+  "dependencies": {
     "crypto-es": "catalog:",
-    "dompurify": "catalog:",
-    "es-toolkit": "catalog:",
     "ky": "catalog:",
-    "msw": "catalog:",
-    "typescript": "catalog:",
     "zod": "catalog:"
   },
-  "dist": {
-    "tarball": "./dist/pack.tgz"
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "msw": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
-  "readme": "./README.md",
-  "dependencies": {
-    "sharp": "^0.34.5"
-  }
+  "optionalDependencies": {
+    "sharp": "catalog:"
+  },
+  "dist": {
+    "tarball": "./dist/jmcomic-sdk.tgz"
+  },
+  "readme": "./README.md"
 }

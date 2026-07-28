@@ -15,15 +15,21 @@
     "typecheck": "vue-tsgo -p tsconfig.app.json --noEmit && tsgo -p tsconfig.node.json --noEmit"
   },
   "dependencies": {
+    "@vicons/material": "catalog:",
+    "jmcomic-sdk": "workspace:*",
     "naive-ui": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
+    "@delta-comic/db": "catalog:",
+    "@delta-comic/model": "catalog:",
     "@delta-comic/plugin": "catalog:",
     "@delta-comic/ui": "catalog:",
+    "@delta-comic/utils": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
+    "@vue/test-utils": "catalog:",
     "browserslist": "catalog:",
     "happy-dom": "catalog:",
     "lightningcss": "catalog:",
@@ -32,10 +38,15 @@
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
+    "vue-component-type-helpers": "catalog:",
+    "vue-tsc": "catalog:",
     "vue-tsgo": "catalog:"
   },
   "peerDependencies": {
+    "@delta-comic/db": ">=3.0.0-next.6 <4.0.0",
+    "@delta-comic/model": ">=3.0.0-next.6 <4.0.0",
     "@delta-comic/plugin": ">=3.0.0-next.6 <4.0.0",
-    "@delta-comic/ui": ">=3.0.0-next.6 <4.0.0"
+    "@delta-comic/ui": ">=3.0.0-next.6 <4.0.0",
+    "@delta-comic/utils": ">=3.0.0-next.6 <4.0.0"
   }
 }

@@ -5,7 +5,7 @@ import { sNumeric, sString, type Numeric } from './utils'
 
 export const sCategory = z.object(
   { id: sString.nullable(), title: sString.nullable() },
-  'Category is illegal.'
+  'Category is illegal.',
 )
 export interface Category {
   id: string | null
@@ -14,7 +14,7 @@ export interface Category {
 
 export const sSeries = z.object(
   { id: sNumeric, name: sString, sort: sString },
-  'Series is illegal.'
+  'Series is illegal.',
 )
 export interface Series {
   id: Numeric
@@ -27,11 +27,11 @@ export const sBaseComic = z.object(
     id: sNumeric,
     name: sString,
     is_favorite: z.boolean({
-      error: r => `Is favorite is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `Is favorite is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
-    liked: z.boolean({ error: r => `Liked is illegal. (Input ${JSON.stringify(r.input)})` })
+    liked: z.boolean({ error: r => `Liked is illegal. (Input ${JSON.stringify(r.input)})` }),
   },
-  'Comic is illegal.'
+  'Comic is illegal.',
 )
 export interface BaseComic {
   /**
@@ -49,7 +49,7 @@ export const sLessComic = sBaseComic.extend({
   images: z.array(sString),
   tags: sString,
   series: z.array(sSeries),
-  series_id: sNumeric
+  series_id: sNumeric,
 })
 export interface LessComic extends BaseComic {
   addtime: string
@@ -65,7 +65,7 @@ export const sCommonComic = sBaseComic.extend({
   image: sString,
   category: sCategory,
   category_sub: sCategory,
-  update_at: sNumeric.optional()
+  update_at: sNumeric.optional(),
 })
 export interface CommonComic extends BaseComic {
   author: string
@@ -78,7 +78,7 @@ export interface CommonComic extends BaseComic {
 
 export const sRecommendComic = z.object(
   { id: sNumeric, author: sString, name: sString, image: sString },
-  'RecommendComic is illegal.'
+  'RecommendComic is illegal.',
 )
 export interface RecommendComic {
   id: Numeric
@@ -104,11 +104,11 @@ export const sFullComic = sBaseComic.extend({
   is_aids: z.boolean({ error: r => `Is aids is illegal. (Input ${JSON.stringify(r.input)})` }),
   purchased: sNumeric.or(z.literal('')),
   price: sNumeric.or(z.literal('')),
-  likes: sNumeric
+  likes: sNumeric,
 })
 export interface FullComic extends BaseComic {
   images: string[]
-  addtime: string
+  addtime: Numeric
   description: string
   total_views: Numeric
   series: Series[]
@@ -121,8 +121,8 @@ export interface FullComic extends BaseComic {
   related_list: RecommendComic[]
   liked: boolean
   is_aids: boolean
-  price: Numeric
-  purchased: Numeric
+  price: Numeric | ''
+  purchased: Numeric | ''
   likes: Numeric
 }
 

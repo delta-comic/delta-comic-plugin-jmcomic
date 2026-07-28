@@ -1,95 +1,105 @@
-import { AES, ECB, MD5, Utf8 } from 'crypto-es'
-import { isArray, isString, merge } from 'es-toolkit/compat'
-import ky, { type Options } from 'ky'
+import CryptoES from 'crypto-es'
+import ky, { type KyInstance, type Options } from 'ky'
+import type { z } from 'zod'
 
 import type { JMComic } from '..'
+import { isAbortError } from '../helpers'
+import { JmApiError } from '../types'
+import { parseResponse } from '../validation'
+
+interface JmEnvelope {
+  code?: number
+  data?: unknown
+  error?: string
+  message?: string
+}
+
+const decryptTemplates = ['185Hcomic3PAPP7R', '18comicAPPContent'] as const
+const { AES, MD5 } = CryptoES
+const { Utf8 } = CryptoES.enc
+const { ECB } = CryptoES.mode
+
+const responseWithJson = (value: unknown, response: Response) =>
+  new Response(JSON.stringify(value), {
+    status: response.status,
+    statusText: response.statusText,
+    headers: { ...Object.fromEntries(response.headers), 'content-type': 'application/json' },
+  })
 
 export class Requester {
-  constructor(protected sdk: JMComic) {}
-  private static innerHeaderKey = 'Jm-Key'
-  /**
-   * @description 从config创建ofetch实例
-   */
-  public create(overrideConfig: Options = {}) {
-    const user = this.sdk.auth.user
-    const {
-      requestTimeout: timeout,
-      requestRetry: retry,
-      requestUsingFork: baseUrl
-    } = this.sdk.config
+  private static readonly innerHeaderKey = 'Jm-Key'
 
-    return ky.create(
-      merge<Options, Options>(
-        {
-          timeout,
-          retry,
-          baseUrl,
-          hooks: {
-            beforeRequest: [
-              ({ request }) => {
-                const authorization = user?.user.jwttoken ?? ''
-                const key = Date.now().toString()
-                const token = MD5(`${key}185Hcomic3PAPP7R`).toString()
-                const tokenParam = `${key},1.7.9`
-                request.headers.set(Requester.innerHeaderKey, key)
-                request.headers.set('Token', token)
-                request.headers.set('Tokenparam', tokenParam)
-                if (authorization) request.headers.set('Authorization', `Bearer ${authorization}`)
-                const baseHeader = { Version: 'v1.2.9' }
-                for (const key in baseHeader) {
-                  if (Object.prototype.hasOwnProperty.call(baseHeader, key)) {
-                    const element = baseHeader[<keyof typeof baseHeader>key]
-                    request.headers.set(key, element)
-                  }
-                }
-              }
-            ],
-            afterResponse: [
-              async ({ request, response }) => {
-                const jmKey = request.headers.get(Requester.innerHeaderKey)
-                if (!jmKey) return
-                const _body = await response.text()
-                try {
-                  var body = JSON.parse(_body) as {
-                    data?: string | []
-                    code?: number
-                    message?: string
-                    error?: string
-                  }
-                } catch (error) {
-                  console.warn('sdk > Fail to decode response in jm format.')
-                  if (error instanceof Error) console.warn('sdk > ', error.message)
-                  return new Response(_body, response)
-                }
-                const keyTemplates: string[] = ['185Hcomic3PAPP7R', '18comicAPPContent'] // 预定义的密钥模板
-                const decrypt = (cipherText: string) => {
-                  for (const template of keyTemplates) {
-                    try {
-                      const dynamicKey = MD5(`${jmKey}${template}`).toString()
-                      const decrypted = AES.decrypt(cipherText, Utf8.parse(dynamicKey), {
-                        mode: ECB
-                      })
-                      return decrypted.toString(Utf8)
-                    } catch {
-                      continue
-                    }
-                  }
-                  console.error('sdk > Decryption failed', body, cipherText)
-                  throw new Error('Decryption failed')
-                }
-                if (!body.data) {
-                  console.warn('Non-body response in jm format.')
-                  return new Response(body.data)
-                }
-                if (isArray(body) || !isString(body.data)) throw new Error(JSON.stringify(body))
+  public constructor(protected readonly sdk: JMComic) {}
 
-                return new Response(decrypt(body.data))
+  public create(overrideConfig: Options = {}): KyInstance {
+    const baseUrl = this.sdk.config.requestUsingFork || undefined
+    const client = ky.create({
+      baseUrl,
+      timeout: this.sdk.config.requestTimeout,
+      retry: this.sdk.config.requestRetry,
+      hooks: {
+        beforeRequest: [
+          ({ request }) => {
+            const key = this.sdk.config.now().toString()
+            request.headers.set(Requester.innerHeaderKey, key)
+            request.headers.set('Token', MD5(`${key}185Hcomic3PAPP7R`).toString())
+            request.headers.set('Tokenparam', `${key},1.7.9`)
+            request.headers.set('Version', 'v1.2.9')
+            const token = this.sdk.auth.session?.token
+            if (token) request.headers.set('Authorization', `Bearer ${token}`)
+          },
+        ],
+        afterResponse: [
+          async ({ request, response }) => {
+            const key = request.headers.get(Requester.innerHeaderKey)
+            if (!key) return response
+            const text = await response.clone().text()
+            if (text.startsWith('Could not connect to mysql!')) {
+              throw new JmApiError('NETWORK_ERROR', '禁漫服务暂时无法连接数据库', request.url)
+            }
+
+            let envelope: JmEnvelope
+            try {
+              envelope = JSON.parse(text) as JmEnvelope
+            } catch {
+              return response
+            }
+
+            if (!Object.prototype.hasOwnProperty.call(envelope, 'data')) return response
+            if (typeof envelope.data !== 'string') return responseWithJson(envelope.data, response)
+
+            for (const template of decryptTemplates) {
+              try {
+                const dynamicKey = MD5(`${key}${template}`).toString()
+                const decrypted = AES.decrypt(envelope.data, Utf8.parse(dynamicKey), { mode: ECB })
+                  .toString(Utf8)
+                  .trim()
+                if (!decrypted) continue
+                return responseWithJson(JSON.parse(decrypted) as unknown, response)
+              } catch {
+                continue
               }
-            ]
-          }
-        },
-        overrideConfig
-      )
-    )
+            }
+            throw new JmApiError('DECRYPTION_FAILED', '禁漫响应解密失败', request.url)
+          },
+        ],
+      },
+    })
+    return Object.keys(overrideConfig).length === 0 ? client : client.extend(overrideConfig)
+  }
+
+  public async request<T>(
+    method: 'delete' | 'get' | 'patch' | 'post' | 'put',
+    endpoint: string,
+    schema: z.ZodType<T>,
+    options: Options = {},
+  ): Promise<T> {
+    try {
+      const value = await this.create()[method](endpoint, options).json<unknown>()
+      return parseResponse(schema, value, endpoint)
+    } catch (error) {
+      if (isAbortError(error) || error instanceof JmApiError) throw error
+      throw new JmApiError('NETWORK_ERROR', `请求 ${endpoint} 失败`, endpoint, { cause: error })
+    }
   }
 }

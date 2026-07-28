@@ -1,100 +1,94 @@
+import { z } from 'zod'
+
 import type {
   CommonNovel,
   FullNovel,
   JMComic,
-  List,
+  MutationResult,
   NovelContent,
   Numeric,
-  PaginationQuery
+  PageResult,
+  PaginationQuery,
 } from '..'
 import { jsonToFormData } from '../helpers'
+import { sCommonNovel, sFullNovel, sNovelContent } from '../model/novel'
+import { sMutationResult, sNumeric } from '../model/utils'
 
-interface NovelList<T> {
-  total: string
-  list: T[]
-}
+const sNovelPage = z.object({ total: sNumeric.transform(Number), list: z.array(sCommonNovel) })
+
 export class Novel {
-  constructor(protected sdk: JMComic) {}
-  public async getPromoteList(
+  public constructor(protected readonly sdk: JMComic) {}
+
+  public getPromoteList(
     data: PaginationQuery,
-    signal?: AbortSignal
-  ): Promise<List<CommonNovel>> {
-    const ky = this.sdk.requester.create()
-    const result = await ky
-      .get<NovelList<CommonNovel>>(this.sdk.config.apiPath.novel_list, {
-        signal,
-        searchParams: { page: data.page }
-      })
-      .json()
-    return { total: Number(result.total), list: result.list }
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonNovel>> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.novel.list, sNovelPage, {
+      signal,
+      searchParams: { page: data.page },
+    })
   }
 
-  public async search(
+  public search(
     data: PaginationQuery<{ keyword: string }>,
-    signal?: AbortSignal
-  ): Promise<List<CommonNovel>> {
-    const ky = this.sdk.requester.create()
-    const list = await ky
-      .get<NovelList<CommonNovel>>(this.sdk.config.apiPath.novel_search, {
-        signal,
-        searchParams: { search_query: data.keyword, page: data.page }
-      })
-      .json()
-
-    return { list: list.list, total: Number(list.total) }
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonNovel>> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.novel.search, sNovelPage, {
+      signal,
+      searchParams: { search_query: data.keyword, page: data.page },
+    })
   }
 
-  public async getInfo(data: { id: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .get<FullNovel>(this.sdk.config.apiPath.novel_detail, {
-        signal,
-        searchParams: { nid: data.id }
-      })
-      .json()
+  public getInfo(data: { id: string }, signal?: AbortSignal): Promise<FullNovel> {
+    return this.sdk.requester.request('get', this.sdk.config.apiPath.novel.detail, sFullNovel, {
+      signal,
+      searchParams: { nid: data.id },
+    })
   }
 
-  public async getContent(data: { chapterId: Numeric; lang: 'tw' | 'cn' }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .get<NovelContent>(this.sdk.config.apiPath.novel_chapters, {
-        signal,
-        searchParams: { ncid: data.chapterId, lang: data.lang }
-      })
-      .json()
+  public getContent(
+    data: { chapterId: Numeric; lang: 'tw' | 'cn' },
+    signal?: AbortSignal,
+  ): Promise<NovelContent> {
+    return this.sdk.requester.request(
+      'get',
+      this.sdk.config.apiPath.novel.chapters,
+      sNovelContent,
+      { signal, searchParams: { ncid: data.chapterId, lang: data.lang } },
+    )
   }
 
-  public async like(data: { id: string }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_like, {
-        signal,
-        searchParams: { nid: data.id, like_type: 'novel' }
-      })
-      .json()
+  public like(data: { id: string }, signal?: AbortSignal): Promise<MutationResult> {
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.forum.like, sMutationResult, {
+      signal,
+      body: jsonToFormData({ nid: data.id, like_type: 'novel' }),
+    })
   }
 
-  public async favorite(data: { id: Numeric }, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
-        this.sdk.config.apiPath.novel_favorites,
-        { body: jsonToFormData({ nid: data.id }), signal }
-      )
-      .json()
+  public favorite(data: { id: Numeric }, signal?: AbortSignal): Promise<MutationResult> {
+    return this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.novel.favorites,
+      sMutationResult,
+      { body: jsonToFormData({ nid: data.id }), signal },
+    )
   }
 
-  public async getFavoriteList(data: PaginationQuery, signal?: AbortSignal) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post<{ status: string; msg: string; type: 'add' | 'remove' }>(
-        this.sdk.config.apiPath.novel_favorites,
-        { body: jsonToFormData({ page: data.page, folder_id: '', o: '' }), signal }
-      )
-      .json()
+  public getFavoriteList(
+    data: PaginationQuery<{ folderId?: Numeric; order?: string }>,
+    signal?: AbortSignal,
+  ): Promise<PageResult<CommonNovel>> {
+    return this.sdk.requester.request('post', this.sdk.config.apiPath.novel.favorites, sNovelPage, {
+      body: jsonToFormData({
+        page: data.page,
+        folder_id: data.folderId ?? '',
+        o: data.order ?? '',
+      }),
+      signal,
+    })
   }
 
-  public async sendComment(
+  public sendComment(
     data: {
       novelId: Numeric
       chapterId?: Numeric
@@ -102,20 +96,22 @@ export class Novel {
       content: string
       isSpoiled: boolean
     },
-    signal?: AbortSignal
-  ) {
-    const ky = this.sdk.requester.create()
-    return await ky
-      .post(this.sdk.config.apiPath.forum_sendComment, {
+    signal?: AbortSignal,
+  ): Promise<MutationResult> {
+    return this.sdk.requester.request(
+      'post',
+      this.sdk.config.apiPath.forum.comment,
+      sMutationResult,
+      {
         signal,
-        searchParams: {
+        body: jsonToFormData({
           nid: data.novelId,
           comment_id: data.parentCommentId,
           ncid: data.chapterId,
           comment: data.content,
-          isSpoiler: data.isSpoiled
-        }
-      })
-      .json()
+          isSpoiler: data.isSpoiled,
+        }),
+      },
+    )
   }
 }

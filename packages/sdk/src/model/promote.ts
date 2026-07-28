@@ -12,17 +12,17 @@ export const sPromoteItem = z.object({
   type: z.string({ error: r => `update_at is illegal. (Input ${JSON.stringify(r.input)})` }),
   filter_val: z.union([
     z.stringFormat('Numeric', /^\d+$/, {
-      error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
     z.number({ error: r => `parent_Id is illegal. (Input ${JSON.stringify(r.input)})` }),
-    z.literal('')
+    z.literal(''),
   ]),
   content: z.array(
     z.union([sCommonComic, sCommonBook, sLessNovel], {
-      error: r => `content is illegal. (Input ${JSON.stringify(r.input)})`
+      error: r => `content is illegal. (Input ${JSON.stringify(r.input)})`,
     }),
-    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }
-  )
+    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` },
+  ),
 })
 export interface PromoteItem {
   /**
@@ -41,24 +41,24 @@ export const sWeekBest = z.object({
   categories: z.array(
     z.object({
       id: z.stringFormat('Numeric', /^\d+$/, {
-        error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+        error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
       }),
       title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
       time: z.string({
-        error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`
-      })
+        error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`,
+      }),
     }),
-    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }
+    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` },
   ),
   type: z.array(
     z.object({
       id: z.string({
-        error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+        error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
       }),
-      title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` })
+      title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
     }),
-    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` }
-  )
+    { error: r => `content is illegal. (Input ${JSON.stringify(r.input)})` },
+  ),
 })
 export interface WeekBest {
   categories: { id: string; title: string; time: string }[]
@@ -67,31 +67,31 @@ export interface WeekBest {
 
 export const sCategoryResult = z.object({
   id: z.stringFormat('Numeric', /^\d+$/, {
-    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+    error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
   }),
   name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
   slug: z.string({ error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})` }),
   total_albums: z.stringFormat('Numeric', /^\d+$/, {
-    error: r => `total_albums is not a numeric string. (Input ${JSON.stringify(r.input)})`
+    error: r => `total_albums is not a numeric string. (Input ${JSON.stringify(r.input)})`,
   }),
   type: z.string({ error: r => `type is illegal. (Input ${JSON.stringify(r.input)})` }),
   sub_categories: z
     .array(
       z.object({
         Id: z.stringFormat('Numeric', /^\d+$/, {
-          error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`
+          error: r => `Id is not a numeric string. (Input ${JSON.stringify(r.input)})`,
         }),
         name: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
         slug: z.string({
-          error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`
-        })
+          error: r => `User nick name is illegal. (Input ${JSON.stringify(r.input)})`,
+        }),
       }),
-      { error: r => `sub_categories is illegal. (Input ${JSON.stringify(r.input)})` }
+      { error: r => `sub_categories is illegal. (Input ${JSON.stringify(r.input)})` },
     )
-    .optional()
+    .optional(),
 })
 export interface CategoryResult {
-  id: number
+  id: string
   name: string
   slug: string
   total_albums: string
@@ -105,11 +105,11 @@ export const sCategoriesResult = z.object({
     z.object({
       title: z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
       content: z.array(
-        z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` })
-      )
+        z.string({ error: r => `User name is illegal. (Input ${JSON.stringify(r.input)})` }),
+      ),
     }),
-    { error: r => `blocks is illegal. (Input ${JSON.stringify(r.input)})` }
-  )
+    { error: r => `blocks is illegal. (Input ${JSON.stringify(r.input)})` },
+  ),
 })
 export interface CategoriesResult {
   categories: CategoryResult[]
@@ -124,5 +124,5 @@ export enum SortType {
   TotalViewBest = 'mv',
   MonthViewBest = 'mv_m',
   WeekViewBest = 'mv_w',
-  TodayViewBest = 'mv_t'
+  TodayViewBest = 'mv_t',
 }

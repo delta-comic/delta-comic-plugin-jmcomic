@@ -1,71 +1,62 @@
-import type { JMComic } from '..'
+import type { JMComicOptions } from '../types'
 
-enum ApiPath {
-  // auth接口
-  auth_login = '/login',
-  auth_signup = '/register',
-  auth_logout = '/logout',
-  auth_forgetPassword = '/forget',
-  // book接口
-  book_search = '/creator_author',
-  book_getAuthorDetail = '/creator_author_work',
-  book_getBookDetail = '/creator_work_info',
-  book_getBookFullDetail = '/creator_work_info_detail',
-  // comic接口
-  comic_searchByKeyword = '/search',
-  comic_searchByCategory = '/categories/filter',
-  comic_getInfo = '/album',
-  comic_getPages = '/chapter',
-  // blog接口
-  blog_search = '/blogs',
-  blog_getInfo = '/blog',
-  // forum接口
-  forum_getComments = '/forum',
-  forum_sendComment = '/comment',
-  forum_like = '/like',
-  forum_favorite = '/favorite',
-  // user接口
-  user_daily = '/daily',
-  user_dailyCheck = '/daily_chk',
-  user_edit = '/useredit/',
-  user_buyBadge = '/coin',
-  user_task = '/tasks',
-  user_history = '/watch_list',
-  // search接口
-  promote_get = '/promote',
-  promote_list = '/promote_list',
-  promote_hotTags = '/hot_tags',
-  promote_random = '/random_recommend',
-  promote_latest = '/latest',
-  // weekBest接口
-  weekBest_cate = '/week',
-  weekBest_list = '/week/filter',
-  // novel接口
-  novel_list = 'novels',
-  novel_detail = 'novel',
-  novel_chapters = 'novelchapters',
-  novel_search = 'search_novels',
-  novel_favorites = 'novel_favorites',
-  novel_favorites_folder = 'novel_favorites_folder'
-}
+export const apiPath = {
+  auth: { login: '/login', signUp: '/register', logout: '/logout', forgetPassword: '/forget' },
+  book: {
+    search: '/creator_author',
+    authorDetail: '/creator_author_work',
+    detail: '/creator_work_info',
+    pages: '/creator_work_info_detail',
+  },
+  comic: { search: '/search', category: '/categories/filter', detail: '/album', pages: '/chapter' },
+  blog: { search: '/blogs', detail: '/blog' },
+  forum: { comments: '/forum', comment: '/comment', like: '/like', favorite: '/favorite' },
+  user: {
+    daily: '/daily',
+    dailyCheck: '/daily_chk',
+    edit: '/useredit',
+    badge: '/coin',
+    task: '/tasks',
+    history: '/watch_list',
+  },
+  promote: {
+    categories: '/categories',
+    list: '/promote',
+    item: '/promote_list',
+    hotTags: '/hot_tags',
+    random: '/random_recommend',
+    latest: '/latest',
+    weekCategories: '/week',
+    weekList: '/week/filter',
+  },
+  novel: {
+    list: '/novels',
+    detail: '/novel',
+    chapters: '/novelchapters',
+    search: '/search_novels',
+    favorites: '/novel_favorites',
+    favoriteFolders: '/novel_favorites_folder',
+  },
+} as const
 
 export class Config {
-  constructor(protected sdk: JMComic) {}
-
-  // fork配置
-  public forkGetSource = [
+  public readonly forkSources = [
     'https://rup4a04-c01.tos-ap-southeast-1.bytepluses.com',
-    'https://rup4a04-c02.tos-cn-hongkong.bytepluses.com'
+    'https://rup4a04-c02.tos-cn-hongkong.bytepluses.com',
   ]
-  public forkFetchSecret = 'diosfjckwpqpdfjkvnqQjsik'
-  public forkGetPath = 'newsvr-2025.txt'
-  public forkTestPath = 'promote_list'
+  public readonly forkSecret = 'diosfjckwpqpdfjkvnqQjsik'
+  public readonly forkPath = 'newsvr-2025.txt'
+  public readonly forkTestPath = '/promote_list'
+  public readonly apiPath = apiPath
+  public readonly now: () => number
+  public requestTimeout: number
+  public requestRetry: number
+  public requestUsingFork: string
 
-  // 通用request配置
-  public requestTimeout = 10000
-  public requestRetry = 2
-  public requestUsingFork = ''
-
-  // api路径
-  public apiPath = ApiPath
+  public constructor(options: JMComicOptions = {}) {
+    this.requestTimeout = options.timeout ?? 10_000
+    this.requestRetry = options.retry ?? 2
+    this.requestUsingFork = options.baseUrl ?? ''
+    this.now = options.now ?? Date.now
+  }
 }

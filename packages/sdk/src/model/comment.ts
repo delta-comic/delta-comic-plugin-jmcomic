@@ -23,9 +23,9 @@ export const sComment = z.object(
     content: sString,
     photo: sString,
     spoiler: sNumeric,
-    replys: z.array(z.any()).optional()
+    replys: z.array(z.any()).optional(),
   },
-  'Comment is illegal.'
+  'Comment is illegal.',
 )
 export interface Comment {
   /**
@@ -37,17 +37,17 @@ export interface Comment {
    * @description 漫画id
    * @example '350234'
    */
-  AID?: Numeric
+  AID?: Numeric | null
   /**
    * @description 博客id
    * @example '1145'
    */
-  BID?: Numeric
+  BID?: Numeric | null
   /**
    * @description 小说id
    */
-  NID?: Numeric
-  NCID?: Numeric
+  NID?: Numeric | null
+  NCID?: Numeric | null
   /**
    * @description 用户id
    * @example ‘11451419’

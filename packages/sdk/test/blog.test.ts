@@ -11,7 +11,7 @@ test.concurrent('Blog fetch info', { timeout: 1000 * 20 }, async ({ signal }) =>
   await Promise.all([
     sFullBlog.parseAsync(info.info),
     sRecommendComic.array().nullable().parseAsync(info.related_comics),
-    sCommonBlog.array().nullable().parseAsync(info.related_blogs)
+    sCommonBlog.array().nullable().parseAsync(info.related_blogs),
   ])
 })
 
