@@ -14,7 +14,7 @@ catalog:
   '@delta-comic/model': '3.0.0-next.9'
   '@delta-comic/ui': '3.0.0-next.9'
   '@delta-comic/utils': '3.0.0-next.9'
-  '@delta-comic/delta-comic-plugin-layout': '3.0.0-next.3'
+  '@delta-comic/delta-comic-plugin-layout': '0.10.0-next.3'
   '@semantic-release/commit-analyzer': ^13.0.1
   '@semantic-release/github': ^12.0.9
   '@semantic-release/release-notes-generator': ^14.1.1
@@ -63,3 +63,4 @@ peerDependencyRules:
 
 minimumReleaseAgeExclude:
   - browserslist
+  - '@delta-comic/delta-comic-plugin-layout@0.10.0-next.3'

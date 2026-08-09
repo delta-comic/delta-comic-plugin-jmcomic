@@ -9,10 +9,9 @@ import {
 } from '@delta-comic/model'
 import type { BlogDetail, BookAuthor, BookContents, FullNovel } from 'jmcomic-sdk'
 
+import { getLayout } from '@/adapters/layout'
 import { createArrayStream, createPagedStream, emptyStream } from '@/adapters/stream'
-import ComicReader from '@/components/content/ComicReader.vue'
 import CreatorReader from '@/components/content/CreatorReader.vue'
-import GalleryReader from '@/components/content/GalleryReader.vue'
 import RichTextReader from '@/components/content/RichTextReader.vue'
 import { contentKeys, pluginName } from '@/constants'
 import { fromBlogComment, fromComicComment, fromNovelComment } from '@/models/comments'
@@ -37,7 +36,9 @@ abstract class JmContentPage extends UniContentPage {
 
 export class ComicPage extends JmContentPage {
   public override readonly contentType: [string, string] = [pluginName, contentKeys.comic]
-  public override readonly ViewComponent: UniContentViewComponent = ComicReader
+  public override get ViewComponent(): UniContentViewComponent {
+    return getLayout().view.Image
+  }
 
   public override async fetchShortId() {
     return `JM${this.id}`
@@ -62,7 +63,7 @@ export class ComicPage extends JmContentPage {
     return detail.series.map(series => this.createEp(series.id, series.name))
   })
 
-  public async loadImages(signal?: AbortSignal): Promise<UniImage[]> {
+  public async fetchImages(signal?: AbortSignal): Promise<UniImage[]> {
     const detail = await runtime.jm.comic.getInfo({ id: this.id }, signal)
     const chapterId = this.ep || String(detail.series_id)
     const paths = await runtime.jm.comic.getPages({ id: chapterId }, signal)
@@ -193,7 +194,9 @@ export class BookAuthorPage extends JmContentPage {
 
 export class BookPage extends JmContentPage {
   public override readonly contentType: [string, string] = [pluginName, contentKeys.book]
-  public override readonly ViewComponent: UniContentViewComponent = GalleryReader
+  public override get ViewComponent(): UniContentViewComponent {
+    return getLayout().view.Image
+  }
 
   public override async fetchShortId() {
     return `BOOK-${this.id}`
@@ -228,6 +231,10 @@ export class BookPage extends JmContentPage {
 
   public async loadPages(signal?: AbortSignal): Promise<BookContents> {
     return runtime.jm.book.getBookPages({ id: this.ep || this.id }, signal)
+  }
+
+  public async fetchImages(signal?: AbortSignal): Promise<UniImage[]> {
+    return (await this.loadPages(signal)).images.map(entry => UniImage.create(image(entry.image)))
   }
 }
 

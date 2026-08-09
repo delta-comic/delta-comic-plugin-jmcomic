@@ -10,6 +10,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@delta-comic/delta-comic-plugin-layout": "catalog:",
     "@vicons/material": "catalog:",
     "jmcomic-sdk": "workspace:*",
     "naive-ui": "catalog:",

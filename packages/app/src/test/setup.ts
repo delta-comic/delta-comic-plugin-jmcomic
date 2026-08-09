@@ -1,9 +1,24 @@
 import { vi } from 'vitest'
 
 vi.mock('@delta-comic/plugin', () => ({
-  definePlugin: (config: unknown) => () => config,
-  Global: { addCategories: vi.fn(), addTabbar: vi.fn(), removeOwnedRegistrations: vi.fn() },
+  defineDeltaComicPlugin: (config: unknown) =>
+    typeof config === 'function' ? config : () => config,
   pluginI18n: { translate: vi.fn((key: string) => key) },
+  usePluginStore: () => ({
+    plugins: new Map([
+      [
+        'layout',
+        {
+          model: {
+            expose: {
+              layout: { Default: { name: 'LayoutDefault' } },
+              view: { Image: { name: 'LayoutImage' }, Video: { name: 'LayoutVideo' } },
+            },
+          },
+        },
+      ],
+    ]),
+  }),
 }))
 
 vi.mock('@delta-comic/utils', () => ({ SharedFunction: { call: vi.fn().mockResolvedValue([]) } }))

@@ -12,4 +12,4 @@
 
 ---
 
-- [ ] 参照这个文件：<./PLUGIN_DEVELOPMENT.md>完成插件迁移，使用`@delta-comic/delta-comic-plugin-layout`这个插件作为view和layout
+- [x] 参照这个文件：<./PLUGIN_DEVELOPMENT.md>完成插件迁移，使用`@delta-comic/delta-comic-plugin-layout`这个插件作为view和layout

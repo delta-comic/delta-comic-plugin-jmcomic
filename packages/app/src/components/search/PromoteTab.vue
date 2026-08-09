@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UniItem } from '@delta-comic/model'
-import type { Search } from '@delta-comic/plugin'
+import type { Content } from '@delta-comic/plugin'
 import { SharedFunction } from '@delta-comic/utils'
 import { computed } from 'vue'
 
@@ -10,14 +10,11 @@ import { runtime } from '@/runtime/PluginRuntime'
 
 interface Props {
   isActive: boolean
-  tabbar: Search.Tabbar
+  tabbar: Content.Tabbar
 }
 
 const props = defineProps<Props>()
-const items = computed(() => {
-  const promote = runtime.promotes.find(entry => String(entry.id) === props.tabbar.id)
-  return promote ? mapPromoteContent(promote) : []
-})
+const items = computed(() => runtime.promotes.flatMap(mapPromoteContent))
 
 const openItem = (item: UniItem) =>
   SharedFunction.call('routeToContent', item.contentType, item.id, item.$thisEp.id, item)

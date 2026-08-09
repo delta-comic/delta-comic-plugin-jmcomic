@@ -5,10 +5,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { JmUser } from '@/models/items'
 import { runtime } from '@/runtime/PluginRuntime'
 
-import ComicReader from './content/ComicReader.vue'
 import CreatorReader from './content/CreatorReader.vue'
-import GalleryReader from './content/GalleryReader.vue'
-import JmContentLayout from './content/JmContentLayout.vue'
 import JmCommentRow from './JmCommentRow.vue'
 import PromoteTab from './search/PromoteTab.vue'
 import WeekBestTab from './search/WeekBestTab.vue'
@@ -36,36 +33,7 @@ afterEach(() => {
 })
 
 describe('content and account screens', () => {
-  test('renders comic pages and retries a failed reader', async () => {
-    const loadImages = vi
-      .fn()
-      .mockRejectedValueOnce(new Error('offline'))
-      .mockResolvedValue(['https://example.com/page.jpg'])
-    const wrapper = mount(ComicReader, { props: { page: { loadImages } as never } })
-    await flushPromises()
-    expect(wrapper.text()).toContain('offline')
-    await wrapper.get('button').trigger('click')
-    await flushPromises()
-    expect(wrapper.get('img').attributes('src')).toContain('page.jpg')
-  })
-
-  test('renders gallery rich text/images and a creator work grid', async () => {
-    const gallery = mount(GalleryReader, {
-      props: {
-        page: {
-          loadPages: vi
-            .fn()
-            .mockResolvedValue({
-              content: '<p>Gallery intro</p>',
-              images: [{ page: 0, image: 'https://example.com/gallery.jpg' }],
-            }),
-        } as never,
-      },
-    })
-    await flushPromises()
-    expect(gallery.text()).toContain('Gallery intro')
-    expect(gallery.get('img').attributes('src')).toContain('gallery.jpg')
-
+  test('renders a creator work grid', async () => {
     const creator = mount(CreatorReader, {
       props: {
         page: {
@@ -220,63 +188,5 @@ describe('content and account screens', () => {
     await wrapper.findAll('button').at(-1)!.trigger('click')
     await flushPromises()
     expect(sendComment).toHaveBeenCalledTimes(2)
-  })
-
-  test('coordinates detail tabs, reactions, comments, chapters and recommendations', async () => {
-    const like = vi.fn().mockResolvedValue(undefined)
-    const sendComment = vi.fn().mockResolvedValue(undefined)
-    const detail = {
-      id: '1',
-      title: 'Detail',
-      author: [{ label: 'Author' }],
-      categories: [{ group: 'tag', name: 'Tag' }],
-      description: 'Description',
-      commentSendable: true,
-      $cover: 'https://example.com/cover.jpg',
-      $thisEp: { id: '1' },
-      contentType: ['jmcomic', 'comic'],
-      like,
-      sendComment,
-    }
-    const page = {
-      id: '1',
-      ep: '1',
-      contentType: ['jmcomic', 'comic'],
-      fetchDetail: vi.fn().mockResolvedValue(detail),
-      fetchComments: { initPage: 1, query: vi.fn().mockResolvedValue({ data: [] }) },
-      fetchRecommends: {
-        initPage: 1,
-        query: vi.fn().mockResolvedValue({ data: [{ ...detail, id: '2', title: 'Related' }] }),
-      },
-      fetchEps: {
-        initPage: 1,
-        query: vi.fn().mockResolvedValue({ data: [{ id: '2', name: 'Chapter 2' }] }),
-      },
-    }
-    const wrapper = mount(JmContentLayout, { props: { page: page as never } })
-    await flushPromises()
-    expect(wrapper.text()).toContain('Detail')
-    const button = (text: string) =>
-      wrapper.findAll('button').find(entry => entry.text().includes(text))!
-    await button('jmcomic.action.like').trigger('click')
-    expect(like).toHaveBeenCalledOnce()
-
-    await button('jmcomic.tab.comments').trigger('click')
-    await wrapper.get('textarea').setValue('new comment')
-    await button('jmcomic.action.send').trigger('click')
-    await flushPromises()
-    expect(sendComment).toHaveBeenCalledWith('new comment')
-
-    await button('jmcomic.tab.chapters').trigger('click')
-    await button('Chapter 2').trigger('click')
-    await button('jmcomic.tab.recommends').trigger('click')
-    await wrapper.get('article').trigger('click')
-    expect(SharedFunction.call).toHaveBeenCalledWith(
-      'routeToContent',
-      ['jmcomic', 'comic'],
-      '2',
-      '1',
-      expect.anything(),
-    )
   })
 })
