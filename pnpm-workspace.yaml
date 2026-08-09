@@ -17,41 +17,39 @@ catalog:
   '@semantic-release/commit-analyzer': ^13.0.1
   '@semantic-release/github': ^12.0.9
   '@semantic-release/release-notes-generator': ^14.1.1
-  '@tailwindcss/vite': ^4.3.0
+  '@tailwindcss/vite': ^4.3.3
   '@types/node': 25.9.3
-  '@typescript/native-preview': 7.0.0-dev.20260707.2
-  '@vitejs/plugin-vue': ^6.0.7
+  '@vitejs/plugin-vue': ^6.0.8
   '@vicons/material': ^0.13.0
   '@vitest/coverage-v8': 4.1.10
   '@vue/test-utils': ^2.4.11
-  browserslist: ^4.28.2
-  happy-dom: ^20.10.6
+  browserslist: ^4.28.8
+  happy-dom: ^20.11.2
   jszip: ^3.10.1
-  crypto-es: ^2.1.0
-  es-toolkit: 1.47.0
-  ky: ^2.0.1
-  lightningcss: ^1.32.0
-  msw: ^2.12.10
+  crypto-es: ^3.1.3
+  es-toolkit: 1.50.0
+  ky: ^2.0.2
+  lightningcss: ^1.33.0
+  msw: ^2.15.0
   naive-ui: ^2.44.1
   oxlint-tsgolint: ^7.0.2001
-  semantic-release: ^25.0.7
-  tailwindcss: ^4.3.0
+  semantic-release: ^25.0.9
+  tailwindcss: ^4.3.3
   ts-to-zod: ^5.1.0
-  typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
-  vite-plus: ^0.2.4
+  vite-plus: ^0.2.8
   vitest: 4.1.10
-  vue: ^3.5.40
+  vue: ^3.6.0-rc.2
   vue-component-type-helpers: ^3.3.3
-  vue-tsc: ^3.3.3
-  vue-tsgo: ^0.3.0
+  vue-tsc: ^3.3.9
   zod: ^4.3.5
-  sharp: ^0.34.5
+  sharp: ^0.35.3
 
 overrides:
   es-toolkit: 'catalog:'
   vite: 'catalog:'
   vitest: 'catalog:'
+  typescript: npm:typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2
 
 peerDependencyRules:
   allowAny:
@@ -72,3 +70,4 @@ minimumReleaseAgeExclude:
   - '@delta-comic/logger@3.0.0-next.6'
   - '@delta-comic/model@3.0.0-next.6'
   - '@delta-comic/utils@3.0.0-next.6'
+  - browserslist@4.28.8

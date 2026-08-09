@@ -45,7 +45,7 @@ vp run build
 vp run artifacts
 ```
 
-普通类型检查固定使用 TypeScript 7 和 `vue-tsgo`。Vitest 类型测试分别用 TypeScript checker 和
+普通类型检查固定使用 `tsc` 和 `vue-tsc`。Vitest 类型测试分别用 TypeScript checker 和
 Vue checker。运行时集成测试只有在初始分流发现因网络不可用而失败时才启用 MSW 回退。
 
 ## 发布预览版

@@ -25,7 +25,7 @@
 
 ## 开发
 
-项目使用 Vite+、pnpm catalog、TypeScript 7 与 `vue-tsgo`：
+项目使用 Vite+、pnpm catalog、TypeScript 7 与 `vue-tsc`：
 
 ```sh
 vp install --frozen-lockfile

@@ -59,8 +59,8 @@ export default defineConfig(
           },
           typecheck: {
             command: [
-              'vue-tsgo -p tsconfig.app.json --noEmit',
-              'tsgo -p tsconfig.node.json --noEmit',
+              'vue-tsc -p tsconfig.app.json --noEmit',
+              'tsc -p tsconfig.node.json --noEmit',
             ],
             dependsOn: [{ task: 'build', from: 'dependencies' }],
           },
@@ -74,7 +74,7 @@ export default defineConfig(
         setupFiles: ['./src/test/setup.ts'],
         typecheck: {
           enabled: true,
-          checker: 'vue-tsgo',
+          checker: 'vue-tsc',
           tsconfig: testTsconfig,
           include: ['src/**/*.test-d.ts'],
         },
