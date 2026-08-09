@@ -1,4 +1,4 @@
-import CryptoES from 'crypto-es'
+import { AES, ECB, MD5, Utf8 } from 'crypto-es'
 import { delay, http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'vitest'
@@ -25,7 +25,7 @@ describe('request protocol contract', () => {
     const sdk = new JMComic({ baseUrl, now: () => now, retry: 0 })
     await expect(sdk.promote.getHotTags()).resolves.toEqual(['tag'])
     expect(headers.get('Jm-Key')).toBe(String(now))
-    expect(headers.get('Token')).toBe(CryptoES.MD5(`${now}185Hcomic3PAPP7R`).toString())
+    expect(headers.get('Token')).toBe(MD5(`${now}185Hcomic3PAPP7R`).toString())
     expect(headers.get('Tokenparam')).toBe(`${now},1.7.9`)
     expect(headers.get('Version')).toBe('v1.2.9')
     expect(headers.has('Authorization')).toBe(false)
@@ -40,12 +40,10 @@ describe('request protocol contract', () => {
   })
 
   test('decrypts the encrypted production response envelope', async () => {
-    const dynamicKey = CryptoES.MD5(`${now}18comicAPPContent`).toString()
-    const encrypted = CryptoES.AES.encrypt(
-      JSON.stringify(['encrypted-tag']),
-      CryptoES.enc.Utf8.parse(dynamicKey),
-      { mode: CryptoES.mode.ECB },
-    ).toString()
+    const dynamicKey = MD5(`${now}18comicAPPContent`).toString()
+    const encrypted = AES.encrypt(JSON.stringify(['encrypted-tag']), Utf8.parse(dynamicKey), {
+      mode: ECB,
+    }).toString()
     server.use(http.get(`${baseUrl}/hot_tags`, () => HttpResponse.json({ data: encrypted })))
     const sdk = new JMComic({ baseUrl, now: () => now, retry: 0 })
     await expect(sdk.promote.getHotTags()).resolves.toEqual(['encrypted-tag'])

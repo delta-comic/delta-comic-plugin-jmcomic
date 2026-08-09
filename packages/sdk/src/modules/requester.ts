@@ -1,4 +1,4 @@
-import CryptoES from 'crypto-es'
+import { AES, ECB, MD5, Utf8 } from 'crypto-es'
 import ky, { type KyInstance, type Options } from 'ky'
 import type { z } from 'zod'
 
@@ -15,10 +15,6 @@ interface JmEnvelope {
 }
 
 const decryptTemplates = ['185Hcomic3PAPP7R', '18comicAPPContent'] as const
-const { AES, MD5 } = CryptoES
-const { Utf8 } = CryptoES.enc
-const { ECB } = CryptoES.mode
-
 const responseWithJson = (value: unknown, response: Response) =>
   new Response(JSON.stringify(value), {
     status: response.status,
