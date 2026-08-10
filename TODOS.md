@@ -11,5 +11,3 @@
 该清单内容位于`项目根目录/TODOS.md`
 
 ---
-
-- [x] 参照这个文件：<./PLUGIN_DEVELOPMENT.md>完成插件迁移，使用`@delta-comic/delta-comic-plugin-layout`这个插件作为view和layout
