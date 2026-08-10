@@ -24,7 +24,7 @@
     "test": "vp test",
     "test:coverage": "vp test run --coverage",
     "test:type": "vp test typecheck",
-    "typecheck": "tsgo -p tsconfig.json --noEmit && vp run -t @delta-comic/plugin-jmcomic#typecheck"
+    "typecheck": "vp run -r typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
@@ -33,7 +33,6 @@
     "@semantic-release/github": "catalog:",
     "@semantic-release/release-notes-generator": "catalog:",
     "@types/node": "catalog:",
-    "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "jszip": "catalog:",
     "oxlint-tsgolint": "catalog:",
@@ -42,7 +41,7 @@
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
-    "vue-tsgo": "catalog:"
+    "vue-tsc": "catalog:"
   },
   "packageManager": "pnpm@11.13.0"
 }

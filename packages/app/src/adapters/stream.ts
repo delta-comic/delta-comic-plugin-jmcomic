@@ -8,7 +8,7 @@ const getNextPage = (page: number, result: PageResult<unknown>, pageSize?: numbe
   return page + 1
 }
 
-export const createPagedStream = <TResult, TData extends object = object>(
+export const createPagedStream = <TResult, TData extends object = {}>(
   fetchPage: (data: TData, page: number, signal?: AbortSignal) => Promise<PageResult<TResult>>,
 ) => {
   let pageSize: number | undefined
@@ -20,7 +20,7 @@ export const createPagedStream = <TResult, TData extends object = object>(
   }, 1)
 }
 
-export const createArrayStream = <TResult, TData extends object = object>(
+export const createArrayStream = <TResult, TData extends object = {}>(
   fetchItems: (data: TData, signal?: AbortSignal) => Promise<TResult[]> | TResult[],
 ) =>
   new StreamQuery<TResult, TData>(

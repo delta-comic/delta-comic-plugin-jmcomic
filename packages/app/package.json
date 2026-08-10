@@ -10,6 +10,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@delta-comic/delta-comic-plugin-layout": "catalog:",
     "@vicons/material": "catalog:",
     "jmcomic-sdk": "workspace:*",
     "naive-ui": "catalog:",
@@ -22,7 +23,6 @@
     "@delta-comic/ui": "catalog:",
     "@delta-comic/utils": "catalog:",
     "@tailwindcss/vite": "catalog:",
-    "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
     "@vue/test-utils": "catalog:",
     "browserslist": "catalog:",
@@ -35,14 +35,13 @@
     "vite-plus": "catalog:",
     "vitest": "catalog:",
     "vue-component-type-helpers": "catalog:",
-    "vue-tsc": "catalog:",
-    "vue-tsgo": "catalog:"
+    "vue-tsc": "catalog:"
   },
   "peerDependencies": {
-    "@delta-comic/db": ">=3.0.0-next.6 <4.0.0",
-    "@delta-comic/model": ">=3.0.0-next.6 <4.0.0",
-    "@delta-comic/plugin": ">=3.0.0-next.6 <4.0.0",
-    "@delta-comic/ui": ">=3.0.0-next.6 <4.0.0",
-    "@delta-comic/utils": ">=3.0.0-next.6 <4.0.0"
+    "@delta-comic/db": ">=3.0.0-next.10 <4.0.0",
+    "@delta-comic/model": ">=3.0.0-next.10 <4.0.0",
+    "@delta-comic/plugin": ">=3.0.0-next.10 <4.0.0",
+    "@delta-comic/ui": ">=3.0.0-next.10 <4.0.0",
+    "@delta-comic/utils": ">=3.0.0-next.10 <4.0.0"
   }
 }

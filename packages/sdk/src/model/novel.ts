@@ -117,7 +117,8 @@ export interface NovelRelated {
 export interface NovelComment {
   CID: Numeric
   parent_CID?: Numeric
-  NID: Numeric
+  /** 子评论响应可能省略所属小说 ID。 */
+  NID?: Numeric
   NCID: Numeric
   UID: Numeric
   comment: string
@@ -138,14 +139,16 @@ export interface NovelComment {
    * @example '1758041693'
    */
   update_at: Numeric
-  pinning: Numeric // bool
+  /** 子评论响应可能省略置顶状态。 */
+  pinning?: Numeric // bool
   expinfo: ExpInfo
   replys?: NovelComment[]
   /**
    * @deprecated 无意义，使用`comment`代替
    */
-  content: string
-  spoiler: Numeric
+  content?: string
+  /** 子评论响应可能省略剧透状态。 */
+  spoiler?: Numeric
 }
 
 /** @zod */

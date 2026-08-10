@@ -1,4 +1,4 @@
-import CryptoES from 'crypto-es'
+import { MD5 } from 'crypto-es'
 
 import type { Numeric } from './model/utils'
 import type { ImageDecoder, ImageSegment } from './types'
@@ -7,8 +7,6 @@ import { JmApiError } from './types'
 import type { JMComic } from '.'
 
 const segmentCountCache = new Map<string, number>()
-const { MD5 } = CryptoES
-
 export const getImageSegmentCount = (comicId: Numeric, page: Numeric): number => {
   const id = Number(comicId)
   const pageNumber = Number(page)

@@ -1,4 +1,4 @@
-import CryptoES from 'crypto-es'
+import { AES, Base64, CipherParams, ECB, Hex, MD5, Pkcs7, Utf8 } from 'crypto-es'
 import ky from 'ky'
 import { z } from 'zod'
 
@@ -18,12 +18,6 @@ const forksSchema: z.ZodType<Forks> = z.object({
   Server: z.array(z.string()),
   jm3_Server: z.array(z.tuple([z.string(), z.string()])),
 })
-const { AES, MD5 } = CryptoES
-const { CipherParams } = CryptoES.lib
-const { Base64, Hex, Utf8 } = CryptoES.enc
-const { ECB } = CryptoES.mode
-const { Pkcs7 } = CryptoES.pad
-
 export class Fork {
   public constructor(protected readonly sdk: JMComic) {}
 

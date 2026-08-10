@@ -1,10 +1,28 @@
 import { vi } from 'vitest'
 
-vi.mock('@delta-comic/plugin', () => ({
-  definePlugin: (config: unknown) => () => config,
-  Global: { addCategories: vi.fn(), addTabbar: vi.fn(), removeOwnedRegistrations: vi.fn() },
-  pluginI18n: { translate: vi.fn((key: string) => key) },
-}))
+vi.mock('@delta-comic/plugin', () => {
+  const exposeRegistry = {
+    get: (owner: string, id: string) =>
+      owner === 'layout' && id === 'default'
+        ? {
+            id,
+            owner,
+            value: {
+              layout: { Default: { name: 'LayoutDefault' } },
+              view: { Image: { name: 'LayoutImage' }, Video: { name: 'LayoutVideo' } },
+            },
+          }
+        : undefined,
+  }
+
+  return {
+    defineDeltaComicPlugin: (config: unknown) =>
+      typeof config === 'function' ? config : () => config,
+    pluginI18n: { translate: vi.fn((key: string) => key) },
+    pluginContributions: { channel: () => exposeRegistry },
+    pluginModelChannels: { expose: {} },
+  }
+})
 
 vi.mock('@delta-comic/utils', () => ({ SharedFunction: { call: vi.fn().mockResolvedValue([]) } }))
 

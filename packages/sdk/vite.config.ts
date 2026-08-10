@@ -8,7 +8,7 @@ export default defineConfig({
   pack: {
     platform: 'neutral',
     entry: ['./src/index.ts', './src/browser.ts', './src/node.ts'],
-    dts: { tsgo: true, tsconfig: './tsconfig.app.json' },
+    dts: { tsconfig: './tsconfig.app.json' },
     sourcemap: true,
   },
   run: {
@@ -19,7 +19,7 @@ export default defineConfig({
       },
       'build': { command: 'vp pack', dependsOn: ['schema:generate'] },
       'typecheck': {
-        command: ['tsgo -p tsconfig.app.json --noEmit', 'tsgo -p tsconfig.node.json --noEmit'],
+        command: ['tsc -p tsconfig.app.json --noEmit', 'tsc -p tsconfig.node.json --noEmit'],
         dependsOn: ['schema:generate'],
       },
     },

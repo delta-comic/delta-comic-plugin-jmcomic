@@ -139,13 +139,12 @@ describe('search adapters', () => {
     expect(mapWeekContent([comic], 'comic')[0]?.contentType).toEqual(['jmcomic', contentKeys.comic])
     expect(mapWeekContent([novel], 'novel')[0]?.contentType).toEqual(['jmcomic', contentKeys.novel])
     expect(mapWeekContent([book], 'book')[0]?.contentType).toEqual(['jmcomic', contentKeys.book])
-    expect(barcode.match(' JM 350234 ')).toBe(true)
-    expect(barcode.match('not-an-id')).toBe(false)
-    await expect(barcode.getContent('JM350234', new AbortController().signal)).resolves.toEqual([
-      ['jmcomic', contentKeys.comic],
-      '350234',
-      '',
-    ])
+    expect(barcode.isMatch({ input: ' JM 350234 ', search: { method: searchKeys.keyword } })).toBe(
+      true,
+    )
+    expect(barcode.isMatch({ input: 'not-an-id', search: { method: searchKeys.keyword } })).toBe(
+      false,
+    )
   })
 
   test('detects author updates and exposes stable subscription streams', async () => {
@@ -156,12 +155,12 @@ describe('search adapters', () => {
     const subscription = createSubscribe(source)
     const author = { $$plugin: 'jmcomic', label: 'Author', icon: 'draw' } as never
     await expect(
-      subscription.getUpdateList!(
+      subscription.getUpdateList(
         [{ author, list: [{ id: 'old' }] as never }],
         new AbortController().signal,
       ),
     ).resolves.toEqual({ isUpdated: true, whichUpdated: [author] })
-    await expect(subscription.fetchAuthorContent!.query({ author }, 1)).resolves.toMatchObject({
+    await expect(subscription.fetchAuthorContent.query({ author }, 1)).resolves.toMatchObject({
       data: [{ id: 'new' }],
     })
     expect(SharedFunction.call).not.toHaveBeenCalled()

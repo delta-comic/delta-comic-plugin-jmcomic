@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UniItem } from '@delta-comic/model'
-import type { Search } from '@delta-comic/plugin'
+import type { Content } from '@delta-comic/plugin'
 import { SharedFunction } from '@delta-comic/utils'
 import { NAlert, NButton, NSelect, NSpin } from 'naive-ui'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -13,7 +13,7 @@ import { useAsyncTask } from '@/runtime/useAsyncTask'
 
 interface Props {
   isActive: boolean
-  tabbar: Search.Tabbar
+  tabbar: Content.Tabbar
 }
 
 const props = defineProps<Props>()

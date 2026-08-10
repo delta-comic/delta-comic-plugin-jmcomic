@@ -113,6 +113,7 @@ export class JmComment extends UniComment {
         )
       case contentKeys.novel: {
         const raw = this.raw as NovelComment
+        if (raw.NID === undefined) throw new JmApiError('INVALID_RESPONSE', '评论缺少小说编号')
         return runtime.jm.novel.sendComment(
           {
             novelId: raw.NID,

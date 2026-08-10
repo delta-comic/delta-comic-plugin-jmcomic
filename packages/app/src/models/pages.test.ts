@@ -141,7 +141,7 @@ describe('content page adapters', () => {
       nextPage: undefined,
     })
     await expect(page.fetchEps.query({}, 1)).resolves.toMatchObject({ data: [{ id: '7' }] })
-    const images = await page.loadImages()
+    const images = await page.fetchImages()
     expect(images[0]?.processSteps).toEqual([{ referenceName: 'comicDecode', ignoreExit: false }])
   })
 

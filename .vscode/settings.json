@@ -10,5 +10,7 @@
   "[markdown]": { "editor.defaultFormatter": "DavidAnson.vscode-markdownlint" },
   "oxc.path.oxfmt": "node_modules/vite-plus/bin/oxfmt",
   "oxc.path.oxlint": "node_modules/vite-plus/bin/oxlint",
-  "oxc.path.tsgolint": "node_modules/oxlint-tsgolint/bin/tsgolint.js"
+  "oxc.path.tsgolint": "node_modules/oxlint-tsgolint/bin/tsgolint.js",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }

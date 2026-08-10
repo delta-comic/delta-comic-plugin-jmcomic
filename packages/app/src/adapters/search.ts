@@ -1,5 +1,5 @@
-import type { StreamQuery, UniItem, UniItemAuthor } from '@delta-comic/model'
-import type { Search, Subscribe } from '@delta-comic/plugin'
+import { StreamQuery, type UniItem, type UniItemAuthor } from '@delta-comic/model'
+import type { Content, Subscribe } from '@delta-comic/plugin'
 import {
   SortType,
   type CommonBook,
@@ -10,7 +10,8 @@ import {
 } from 'jmcomic-sdk'
 
 import { createPagedStream } from '@/adapters/stream'
-import { contentKeys, pluginName, searchKeys } from '@/constants'
+import { searchKeys, subscribeKeys } from '@/constants'
+import { translate } from '@/i18n'
 import {
   fromBlog,
   fromBookAuthor,
@@ -22,9 +23,9 @@ import {
 import { runtime } from '@/runtime/PluginRuntime'
 
 const sorts = [
-  { text: 'jmcomic.sort.relate', value: SortType.Relate },
-  { text: 'jmcomic.sort.likes', value: SortType.Like },
-  { text: 'jmcomic.sort.views', value: SortType.TotalViewBest },
+  { label: 'jmcomic.sort.relate', id: SortType.Relate },
+  { label: 'jmcomic.sort.likes', id: SortType.Like },
+  { label: 'jmcomic.sort.views', id: SortType.TotalViewBest },
 ] as const
 
 export const comicSearch = createPagedStream<UniItem, { input: string; sort: string }>(
@@ -66,42 +67,58 @@ export const creatorSearch = createPagedStream<UniItem, { input: string; sort: s
   },
 )
 
-const autocomplete = async (input: string, signal: AbortSignal) =>
+const autocomplete = async (method: string, input: string, signal: AbortSignal) =>
   (await runtime.jm.promote.getHotTags(signal))
     .filter(tag => tag.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
     .slice(0, 12)
-    .map(tag => ({ text: tag, value: tag }))
+    .map(tag => ({ input: tag, search: { method } }))
+
+const adaptSearchStream = (
+  source: StreamQuery<UniItem, { input: string; sort: string }>,
+  defaultSort: string,
+) =>
+  new StreamQuery<UniItem, { aim: Content.SearchAim }>(
+    ({ aim }, page, signal) =>
+      source.query({ input: aim.input, sort: aim.search.sort ?? defaultSort }, page, signal),
+    source.initPage,
+  )
 
 export const searchMethods = {
   [searchKeys.keyword]: {
+    id: searchKeys.keyword,
     name: 'jmcomic.search.comic',
-    sorts: [...sorts],
-    defaultSort: SortType.Relate,
-    fetchSearchResult: comicSearch,
-    getAutoComplete: autocomplete,
+    sorts: { options: [...sorts], default: SortType.Relate },
+    fetchSearchResult: adaptSearchStream(comicSearch, SortType.Relate),
+    getAutoComplete: (input, signal) => autocomplete(searchKeys.keyword, input, signal),
   },
   [searchKeys.blog]: {
+    id: searchKeys.blog,
     name: 'jmcomic.search.blog',
-    sorts: [...sorts],
-    defaultSort: SortType.Relate,
-    fetchSearchResult: blogSearch,
-    getAutoComplete: autocomplete,
+    sorts: { options: [...sorts], default: SortType.Relate },
+    fetchSearchResult: adaptSearchStream(blogSearch, SortType.Relate),
+    getAutoComplete: (input, signal) => autocomplete(searchKeys.blog, input, signal),
   },
   [searchKeys.novel]: {
+    id: searchKeys.novel,
     name: 'jmcomic.search.novel',
-    sorts: [{ text: 'jmcomic.sort.relate', value: SortType.Relate }],
-    defaultSort: SortType.Relate,
-    fetchSearchResult: novelSearch,
-    getAutoComplete: autocomplete,
+    sorts: {
+      options: [{ label: 'jmcomic.sort.relate', id: SortType.Relate }],
+      default: SortType.Relate,
+    },
+    fetchSearchResult: adaptSearchStream(novelSearch, SortType.Relate),
+    getAutoComplete: (input, signal) => autocomplete(searchKeys.novel, input, signal),
   },
   [searchKeys.creator]: {
+    id: searchKeys.creator,
     name: 'jmcomic.search.creator',
-    sorts: [{ text: 'jmcomic.sort.relate', value: SortType.Relate }],
-    defaultSort: SortType.Relate,
-    fetchSearchResult: creatorSearch,
-    getAutoComplete: autocomplete,
+    sorts: {
+      options: [{ label: 'jmcomic.sort.relate', id: SortType.Relate }],
+      default: SortType.Relate,
+    },
+    fetchSearchResult: adaptSearchStream(creatorSearch, SortType.Relate),
+    getAutoComplete: (input, signal) => autocomplete(searchKeys.creator, input, signal),
   },
-} satisfies NonNullable<Search.Config['methods']>
+} satisfies Record<string, Content.SearchMethod>
 
 export const mapPromoteContent = (promote: PromoteItem): UniItem[] =>
   promote.content.map(entry => {
@@ -119,7 +136,7 @@ export const mapWeekContent = (entries: (CommonComic | CommonBook | CommonNovel)
 
 const authorStream = (
   source: StreamQuery<UniItem, { input: string; sort: string }>,
-): Subscribe.Config['fetchAuthorContent'] =>
+): Subscribe['fetchAuthorContent'] =>
   createPagedStream(async ({ author }: { author: UniItemAuthor }, page, signal) => {
     const result = await source.query({ input: author.label, sort: SortType.Relate }, page, signal)
     return {
@@ -130,7 +147,7 @@ const authorStream = (
 
 export const createSubscribe = (
   source: StreamQuery<UniItem, { input: string; sort: string }>,
-): Subscribe.Config => {
+): Subscribe => {
   const fetchAuthorContent = authorStream(source)
   return {
     fetchAuthorContent,
@@ -150,10 +167,42 @@ export const createSubscribe = (
   }
 }
 
-export const barcode: Search.Barcode = {
-  name: 'jmcomic.search.barcode',
-  match: text => /^(?:JM)?\s*\d+$/i.test(text.trim()),
-  async getContent(text) {
-    return [[pluginName, contentKeys.comic], text.replace(/\D/g, ''), '']
+const subscribeSources = {
+  [subscribeKeys.comicAuthor]: createSubscribe(comicSearch),
+  [subscribeKeys.creator]: createSubscribe(creatorSearch),
+  [subscribeKeys.novelAuthor]: createSubscribe(novelSearch),
+} as const
+
+const getSubscribe = (author: UniItemAuthor) => {
+  switch (author.subscribe) {
+    case subscribeKeys.creator:
+      return subscribeSources[subscribeKeys.creator]
+    case subscribeKeys.novelAuthor:
+      return subscribeSources[subscribeKeys.novelAuthor]
+    default:
+      return subscribeSources[subscribeKeys.comicAuthor]
+  }
+}
+
+export const jmcomicSubscribe: Subscribe = {
+  fetchAuthorContent: new StreamQuery(
+    ({ author }, page, signal) =>
+      getSubscribe(author).fetchAuthorContent.query({ author }, page, signal),
+    1,
+  ),
+  async getUpdateList(olds, signal) {
+    const whichUpdated: UniItemAuthor[] = []
+    for (const old of olds) {
+      const result = await getSubscribe(old.author).getUpdateList([old], signal)
+      whichUpdated.push(...result.whichUpdated)
+    }
+    return { isUpdated: whichUpdated.length > 0, whichUpdated }
   },
+}
+
+export const barcode: Content.Barcode = {
+  id: 'jmcomic-id',
+  name: 'jmcomic.search.barcode',
+  isMatch: aim => /^(?:JM)?\s*\d+$/i.test(aim.input.trim()),
+  getTipText: aim => `${translate('jmcomic.search.barcode')}: ${aim.input}`,
 }

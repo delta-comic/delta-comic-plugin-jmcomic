@@ -1,7 +1,6 @@
 # 禁漫天堂 · Delta Comic 插件
 
-为 Delta Comic 3 提供禁漫天堂内容的插件与 TypeScript SDK。当前插件协议目标为
-`>=3.0.0-next.6 <4.0.0`，插件 ID 为 `jmcomic`。
+为 Delta Comic 提供禁漫天堂内容的插件与 TypeScript SDK。
 
 ## 功能
 
@@ -12,7 +11,7 @@
 - 账户：登录、注册、令牌会话恢复、收藏同步、签到、资料编辑、徽章与称号。
 - 发现：分区、排行榜、热门标签、推荐页、随机推荐、JM 编号识别和作者订阅。
 
-界面使用 Delta Comic UI、Naive UI 与 Tailwind CSS，不包含旧 Vant 或 layout/core API。
+界面使用 Delta Comic UI、Naive UI 与 Tailwind CSS。
 
 ## 仓库结构
 
@@ -22,11 +21,11 @@
   `jmcomic-sdk/browser` 导出，Node/Sharp 解码器从 `jmcomic-sdk/node` 导出。
 - `script`：发布分支、semantic-release 和产物验证。
 
-服务端没有官方 API 文档。SDK 的响应类型与解析规则来自真实服务验证；请勿随意修改生产验证请求头。
+服务端没有官方 API 文档。SDK 的响应类型与解析规则来自解包。
 
 ## 开发
 
-项目使用 Vite+、pnpm catalog、TypeScript 7 与 `vue-tsgo`：
+项目使用 Vite+、pnpm catalog、TypeScript 7 与 `vue-tsc`：
 
 ```sh
 vp install --frozen-lockfile
@@ -59,7 +58,6 @@ GitHub Release 固定提供两个资产：
 
 ## SDK
 
-SDK 可独立构建，但本仓库的 semantic-release 只发布 Delta Comic 插件，不发布 npm SDK 版本。
 使用示例与公共接口见 [SDK 文档](packages/sdk/README.md)。
 
 ## 许可证
