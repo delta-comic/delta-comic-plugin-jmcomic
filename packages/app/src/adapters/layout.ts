@@ -1,10 +1,13 @@
-import type { LibLayout } from '@delta-comic/delta-comic-plugin-layout'
-import { usePluginStore } from '@delta-comic/plugin'
+import { pluginContributions, pluginModelChannels } from '@delta-comic/plugin'
+
+import type { LibLayout } from '@/types/layout-plugin'
 
 export const layoutPluginName = 'layout'
 
 export const getLayout = (): LibLayout => {
-  const layout = usePluginStore().plugins.get(layoutPluginName)?.model?.expose
+  const layout = pluginContributions
+    .channel(pluginModelChannels.expose)
+    .get(layoutPluginName, 'default')?.value
   if (!layout) throw new Error('layout plugin is not ready')
-  return layout as LibLayout
+  return layout
 }

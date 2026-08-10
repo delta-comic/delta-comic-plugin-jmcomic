@@ -68,7 +68,7 @@ export const sNovelComment: z.ZodSchema<NovelComment> = z.lazy(() =>
   z.object({
     CID: sNumeric,
     parent_CID: sNumeric.optional(),
-    NID: sNumeric,
+    NID: sNumeric.optional(),
     NCID: sNumeric,
     UID: sNumeric,
     comment: z.string(),
@@ -80,11 +80,11 @@ export const sNovelComment: z.ZodSchema<NovelComment> = z.lazy(() =>
     photo: z.string(),
     gender: sGender,
     update_at: sNumeric,
-    pinning: sNumeric,
+    pinning: sNumeric.optional(),
     expinfo: sExpInfo,
     replys: z.array(sNovelComment).optional(),
-    content: z.string(),
-    spoiler: sNumeric,
+    content: z.string().optional(),
+    spoiler: sNumeric.optional(),
   }),
 )
 

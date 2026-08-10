@@ -6,6 +6,7 @@ import {
   sComment,
   sGender,
   sMutationResult,
+  sNovelComment,
   sNumeric,
 } from '../src'
 
@@ -69,7 +70,7 @@ describe('generated model schemas', () => {
       likes: '0',
       gender: 'Male',
       update_at: '0',
-      addtime: 'today',
+      addtime: '1',
       parent_CID: '0',
       expinfo,
       content: '<div>comment</div>',
@@ -83,5 +84,34 @@ describe('generated model schemas', () => {
       status: 'ok',
       server_extension: true,
     })
+  })
+
+  test('accepts abbreviated novel comment replies', () => {
+    const reply = {
+      CID: '2',
+      NCID: '3',
+      UID: '4',
+      comment: 'reply',
+      addtime: '1',
+      likes: '0',
+      status: '1',
+      username: 'user',
+      nickname: 'nickname',
+      photo: 'avatar.jpg',
+      gender: 'Male',
+      update_at: '0',
+      expinfo,
+    }
+
+    expect(
+      sNovelComment.parse({
+        ...reply,
+        NID: '1',
+        pinning: '0',
+        content: 'reply',
+        spoiler: '0',
+        replys: [reply],
+      }).replys,
+    ).toHaveLength(1)
   })
 })

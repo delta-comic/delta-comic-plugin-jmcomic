@@ -15,7 +15,7 @@ describe('plugin metadata', () => {
         { id: 'core' },
         { id: 'layout', download: 'gh:delta-comic/delta-comic-plugin-layout' },
       ],
-      version: { plugin: '1.2.3-next.4', supportCore: '>=3.0.0-next.9 <4.0.0' },
+      version: { plugin: '1.2.3-next.4', supportCore: '>=3.0.0-next.10 <4.0.0' },
     })
   })
 })

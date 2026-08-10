@@ -8,7 +8,7 @@ export const pluginMetadata = {
   kind: 'normal',
   name: { display: '禁漫天堂', id: 'jmcomic' },
   require: [{ id: 'core' }, { id: 'layout', download: 'gh:delta-comic/delta-comic-plugin-layout' }],
-  supportCore: '>=3.0.0-next.9 <4.0.0',
+  supportCore: '>=3.0.0-next.10 <4.0.0',
 } as const
 
 export function createPluginManifest(version: string) {

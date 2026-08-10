@@ -4,7 +4,7 @@
 
 本文以当前仓库的插件 API 为准：
 
-- 插件包：`@delta-comic/plugin@3.0.0-next.9`
+- 插件包：`@delta-comic/plugin@3.0.0-next.10`
 - 插件 API：`apiVersion: 1`
 - 构建工具：Vite+ 与 `@delta-comic/plugin/vite`
 
@@ -57,14 +57,14 @@ delta-comic-plugin-example/
 `@delta-comic/plugin` 的版本最好与目标客户端保持一致。使用预发布客户端时，建议精确锁定版本。
 
 ```sh
-vp add -E @delta-comic/plugin@3.0.0-next.9
+vp add -E @delta-comic/plugin@3.0.0-next.10
 vp add -D vite-plus typescript
 ```
 
 只有实际使用宿主模型或 UI 时，才需要添加对应依赖，例如：
 
 ```sh
-vp add -E @delta-comic/model@3.0.0-next.9 @delta-comic/ui@3.0.0-next.9
+vp add -E @delta-comic/model@3.0.0-next.10 @delta-comic/ui@3.0.0-next.10
 vp add vue naive-ui
 ```
 
@@ -83,7 +83,7 @@ vp add vue naive-ui
     "test": "vp test"
   },
   "dependencies": {
-    "@delta-comic/plugin": "3.0.0-next.9"
+    "@delta-comic/plugin": "3.0.0-next.10"
   },
   "devDependencies": {
     "typescript": "^6.0.0",
@@ -127,7 +127,7 @@ export const manifest = {
   },
   version: {
     plugin: '0.1.0',
-    supportCore: '>=3.0.0-next.9 <4.0.0',
+    supportCore: '>=3.0.0-next.10 <4.0.0',
   },
   author: 'Your Name',
   description: '一个最小的 Delta Comic 插件',
@@ -156,7 +156,6 @@ export default defineDeltaComicPlugin(env => ({
     onBooted() {
       console.info('[example-plugin] loaded', {
         platform: env.platform,
-        safeStartup: env.safe,
       })
     },
     onUnload() {
@@ -173,7 +172,6 @@ export default defineDeltaComicPlugin(env => ({
 | 字段 | 类型 | 含义 |
 | --- | --- | --- |
 | `platform` | `'tauri' \| 'web'` | 当前运行平台 |
-| `safe` | `boolean` | 用户本次是否选择安全启动配置；它不是安全沙箱 |
 
 Factory 应保持纯净：只根据环境组装并返回配置，不要在模块顶层或 Factory 中注册监听器、启动定时器或修改 DOM。副作用应放进生命周期钩子。
 
@@ -569,6 +567,70 @@ model: {
 
 `expose` 可提供任意具名能力，但只有存在明确宿主或其他插件消费者时才应使用。跨插件共享优先设计稳定、窄小的类型契约，不要暴露整个内部 service 实例。
 
+默认的 `ExposeModel` 是 `Record<string, unknown>`。跨插件调用应通过模块扩展把插件 ID
+登记到 `PluginExposeRegistry`，让 channel 根据提供方 ID 推导具体类型：
+
+```ts
+import type { ExposeModel } from '@delta-comic/plugin'
+
+export interface BasePluginExpose extends ExposeModel {
+  readonly version: 1
+  refresh(signal?: AbortSignal): Promise<void>
+}
+
+declare module '@delta-comic/plugin' {
+  interface PluginExposeRegistry {
+    'base-plugin': BasePluginExpose
+  }
+}
+```
+
+这段契约声明必须同时包含在提供方和消费方的 TypeScript 编译范围内。多个插件共享同一
+契约时，优先放入只包含类型的共享包；通过 `import type` 引用不会把该包带入运行时代码。
+
+提供方实现这个契约并通过 `model.expose` 发布：
+
+```ts
+import { defineDeltaComicPlugin } from '@delta-comic/plugin'
+
+import type { BasePluginExpose } from './contract'
+import { manifest } from './manifest'
+
+const expose: BasePluginExpose = {
+  version: 1,
+  async refresh(signal) {
+    signal?.throwIfAborted()
+    // 刷新提供方拥有的数据。
+  },
+}
+
+export default defineDeltaComicPlugin({
+  name: manifest.name.id,
+  model: { expose },
+})
+```
+
+消费方从共享 channel 按插件 ID 和固定 contribution ID `default` 读取：
+
+```ts
+import { pluginContributions, pluginModelChannels } from '@delta-comic/plugin'
+
+const contribution = pluginContributions
+  .channel(pluginModelChannels.expose)
+  .get('base-plugin', 'default')
+
+// contribution.value 被推导为 BasePluginExpose。
+await contribution?.value.refresh()
+```
+
+消费方应在 manifest 的 `require` 中声明提供方，从而保证提供方先激活；读取应放在
+`onBooted` 等自身激活阶段，而不是模块顶层。模块扩展只提供编译期类型，不会安装、启用
+或授权另一个插件，因此可选依赖仍需处理 `undefined`。插件卸载后 channel 会自动删除其
+记录，但消费方已经缓存的对象引用不会自动失效，因而不应长期缓存 expose 对象。
+
+`expose` 没有访问控制或对象隔离。所有插件都能读取 contribution，且拿到的是原对象
+引用；契约应尽量使用 `readonly` 数据和明确的方法，消费方不得修改提供方内部状态。
+
 ## 6. 生命周期与回滚
 
 | 钩子 | 调用时机 | 注意事项 |
@@ -732,7 +794,7 @@ import { manifest } from '../../src/manifest'
 
 describe('plugin contract', () => {
   it('returns a config with the manifest owner', () => {
-    const config = createPlugin({ platform: 'web', safe: true })
+    const config = createPlugin({ platform: 'web' })
 
     expect(config.name).toBe(manifest.name.id)
   })
@@ -804,7 +866,6 @@ entry: { jsPath: 'index.mjs', cssPath: 'index.css' }
 - 不在日志中输出 token、Cookie 和用户内容；
 - 所有 URL、远端 JSON 和剪贴板输入都按不可信数据处理；
 - 对网络请求设置取消、超时和状态码检查；
-- 不把 `env.safe` 当作权限或信任证明；
 - 卸载不应删除不属于当前插件的数据。
 
 ## 13. 仓库内部插件

@@ -1,5 +1,5 @@
 import type { StreamQuery, UniComment, UniContentPage, UniItem } from '@delta-comic/model'
-import type { DCPluginConfig } from '@delta-comic/plugin'
+import { pluginContributions, pluginModelChannels, type DCPluginConfig } from '@delta-comic/plugin'
 import { assertType, expectTypeOf } from 'vitest'
 import type { ComponentEmit, ComponentProps } from 'vue-component-type-helpers'
 
@@ -9,6 +9,7 @@ import { contentKeys, searchKeys, subscribeKeys } from '@/constants'
 import { jmcomicPluginConfig } from '@/main'
 import { createPluginManifest } from '@/metadata'
 import { contentPages } from '@/models/pages'
+import type { LibLayout } from '@/types/layout-plugin'
 
 assertType<DCPluginConfig>(jmcomicPluginConfig)
 expectTypeOf<keyof typeof contentPages>().toEqualTypeOf<
@@ -36,8 +37,11 @@ assertType<StreamQuery<UniItem>>(page.fetchRecommends)
 const manifest = createPluginManifest('1.0.0-next.1')
 expectTypeOf(manifest.name.id).toEqualTypeOf<'jmcomic'>()
 expectTypeOf(manifest.entry.jsPath).toEqualTypeOf<'index.js'>()
-expectTypeOf(manifest.version.supportCore).toEqualTypeOf<'>=3.0.0-next.9 <4.0.0'>()
+expectTypeOf(manifest.version.supportCore).toEqualTypeOf<'>=3.0.0-next.10 <4.0.0'>()
 expectTypeOf<(typeof manifest.require)[number]['id']>().toEqualTypeOf<'core' | 'layout'>()
+expectTypeOf(
+  pluginContributions.channel(pluginModelChannels.expose).get('layout', 'default')?.value,
+).toEqualTypeOf<LibLayout | undefined>()
 
 // @ts-expect-error card variants are intentionally constrained
 assertType<ItemCardProps>({ item, type: 'wide' })

@@ -13,23 +13,23 @@ catalogs:
       specifier: ^21.2.0
       version: 21.2.0
     '@delta-comic/db':
-      specifier: 3.0.0-next.9
-      version: 3.0.0-next.9
+      specifier: 3.0.0-next.10
+      version: 3.0.0-next.10
     '@delta-comic/delta-comic-plugin-layout':
-      specifier: 0.10.0-next.3
-      version: 0.10.0-next.3
+      specifier: 0.10.0-next.4
+      version: 0.10.0-next.4
     '@delta-comic/model':
-      specifier: 3.0.0-next.9
-      version: 3.0.0-next.9
+      specifier: 3.0.0-next.10
+      version: 3.0.0-next.10
     '@delta-comic/plugin':
-      specifier: 3.0.0-next.9
-      version: 3.0.0-next.9
+      specifier: 3.0.0-next.10
+      version: 3.0.0-next.10
     '@delta-comic/ui':
-      specifier: 3.0.0-next.9
-      version: 3.0.0-next.9
+      specifier: 3.0.0-next.10
+      version: 3.0.0-next.10
     '@delta-comic/utils':
-      specifier: 3.0.0-next.9
-      version: 3.0.0-next.9
+      specifier: 3.0.0-next.10
+      version: 3.0.0-next.10
     '@semantic-release/commit-analyzer':
       specifier: ^13.0.1
       version: 13.0.1
@@ -173,7 +173,7 @@ importers:
     dependencies:
       '@delta-comic/delta-comic-plugin-layout':
         specifier: 'catalog:'
-        version: 0.10.0-next.3
+        version: 0.10.0-next.4
       '@vicons/material':
         specifier: 'catalog:'
         version: 0.13.0
@@ -189,19 +189,19 @@ importers:
     devDependencies:
       '@delta-comic/db':
         specifier: 'catalog:'
-        version: 3.0.0-next.9(@delta-comic/model@3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+        version: 3.0.0-next.10(@delta-comic/model@3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@delta-comic/model':
         specifier: 'catalog:'
-        version: 3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+        version: 3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@delta-comic/plugin':
         specifier: 'catalog:'
-        version: 3.0.0-next.9(bb89f3bda9808772bf978168a0d94bcf)
+        version: 3.0.0-next.10(0a77524e0b5bf90f6ded1ac2cb649f7a)
       '@delta-comic/ui':
         specifier: 'catalog:'
-        version: 3.0.0-next.9(5ee224d16730f74b84d2c7350646679a)
+        version: 3.0.0-next.10(76fb62d4c4456f37c2cc64a315bd6b45)
       '@delta-comic/utils':
         specifier: 'catalog:'
-        version: 3.0.0-next.9(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+        version: 3.0.0-next.10(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))
@@ -459,42 +459,42 @@ packages:
     peerDependencies:
       vue: ^3.0.11
 
-  '@delta-comic/db@3.0.0-next.9':
-    resolution: {integrity: sha512-N3CXuqTYOpXVfiMTkpGuDnv26fkntNrQRT5c5tsklXZHa91KpmTTdQBHSuEMTGT7eP4Da3GUq6rpnIDokR1aSQ==, tarball: https://npm.pkg.github.com/download/@delta-comic/db/3.0.0-next.9/9dba0f1b3c2db7dc04c85ea00354e7bdd06bfcc1}
+  '@delta-comic/db@3.0.0-next.10':
+    resolution: {integrity: sha512-P0cguOR3yn6qlNQ6JRo1jMjGE5gecsRnk5HSI8JMWDaq1ey8W/IuCEG9LAOgDDwKFrrukJyEZkGHDhICzkUdAQ==, tarball: https://npm.pkg.github.com/download/@delta-comic/db/3.0.0-next.10/bb6b89c9d37e43445dc66cb037655c85cf8a610d}
     peerDependencies:
-      '@delta-comic/model': 3.0.0-next.9
+      '@delta-comic/model': 3.0.0-next.10
       '@pinia/colada': ^1.4.2
       vue: ^3.6.0-rc.2
 
-  '@delta-comic/delta-comic-plugin-layout@0.10.0-next.3':
-    resolution: {integrity: sha512-tWGRDoK80LiV7B/+PjRq3LPH/l99kVDqdFWdzwbOxhPA3MKoLesl8WfamOtNIwYvu2cZdIkoEz/YepgyZOkaJA==, tarball: https://npm.pkg.github.com/download/@delta-comic/delta-comic-plugin-layout/0.10.0-next.3/aba03015de2643cec43fc049fe6a8c338d2dfa6c}
+  '@delta-comic/delta-comic-plugin-layout@0.10.0-next.4':
+    resolution: {integrity: sha512-DtixtsaPGQOgciMuv2oJHtNX0rywS6MNhg70QJWWb8xEEjO3mMBtK4WbIXirr2Rb1HM2/8BF6OKPo+BJEznm9A==, tarball: https://npm.pkg.github.com/download/@delta-comic/delta-comic-plugin-layout/0.10.0-next.4/dd3a83c0d1d22c7d5d00654dc4a6c42ff0d83eb1}
 
-  '@delta-comic/downloader@3.0.0-next.9':
-    resolution: {integrity: sha512-n9Q+HSQoYN3Cor89u0u5bXtKmMamiv5Trq3Eby8NSG/MA4tIMT6RtnSuQB7+gveSDp6jS0ek7bKe/ECJa2zUVA==, tarball: https://npm.pkg.github.com/download/@delta-comic/downloader/3.0.0-next.9/2c4137852019799c1072d05aa5073bcb79304fe4}
+  '@delta-comic/downloader@3.0.0-next.10':
+    resolution: {integrity: sha512-Wo4puyJsaXV2R1O1ciMwQv66r4iZl6MpVAIuSDZ+2sTxCojEDXIQ/cCHactsU7rppcAmYPDxT94fV5/V/5TqpA==, tarball: https://npm.pkg.github.com/download/@delta-comic/downloader/3.0.0-next.10/37dd4e6d89adf3c80433c56ffc591f8c413dbff5}
 
-  '@delta-comic/logger@3.0.0-next.9':
-    resolution: {integrity: sha512-XJrlCN3ykWF3iPfAit5/SMsiOBhO7GK0keXTw/k4wS9HVCSKsK+xgi+LbELBtazHGkTruaVwY2U6UggYAKRJdQ==, tarball: https://npm.pkg.github.com/download/@delta-comic/logger/3.0.0-next.9/421df0f495c191e24f5fd1232a1178a0d41a8573}
+  '@delta-comic/logger@3.0.0-next.10':
+    resolution: {integrity: sha512-prZShlKP+hPv91vHS+ZTXlG4fxAHwpJqG+K5qfW7He69IBJyJ0CUFFf9e4SoBDe1G9mtDhHJPSfMKE7fuV87eg==, tarball: https://npm.pkg.github.com/download/@delta-comic/logger/3.0.0-next.10/9f6430bcb4e8fa5ebe47f3d13db30773a48274c7}
 
-  '@delta-comic/model@3.0.0-next.9':
-    resolution: {integrity: sha512-TmyZ2gxyCrxjYKPuyX3my+bVGqzXP6vQd4Bn/yUfhLgR1IHxHxhwPEfn6lnCCH08SQ+7rwyx3VQC+gUpfsSvWg==, tarball: https://npm.pkg.github.com/download/@delta-comic/model/3.0.0-next.9/560b6f41d700677f21b99312a1c8cd542d96eeb2}
+  '@delta-comic/model@3.0.0-next.10':
+    resolution: {integrity: sha512-vOIWSOVZIf+nG9vOSbeSctmUtPevGSGeK4AZglQKtQyYH+2vtsRQzHCUE7wdTQwzeWGUC38wVuNxj0NXDj31rg==, tarball: https://npm.pkg.github.com/download/@delta-comic/model/3.0.0-next.10/f50e165d91853e7f43a35d48db2a1b3c90c6798e}
     peerDependencies:
       vue: ^3.6.0-rc.2
 
-  '@delta-comic/plugin@3.0.0-next.9':
-    resolution: {integrity: sha512-EyDRK49Sc++mPH5cb/Kih5e6jKeBhi7CA9wIfJy2v6LLXU3HWgntsBs7JH9bPjC6EDSftAJ7Yu3zTvPJciCT8g==, tarball: https://npm.pkg.github.com/download/@delta-comic/plugin/3.0.0-next.9/2c3a55b054bd649602be4bb69d403438bf0395b2}
+  '@delta-comic/plugin@3.0.0-next.10':
+    resolution: {integrity: sha512-6EUmNOgWClMSWWzbttIHc28yWY4EVE6AWEfHD38Ce2eY/EmOZWcsH3o2Rm83f45DvxeOSkkmC0bGhwKtv362AA==, tarball: https://npm.pkg.github.com/download/@delta-comic/plugin/3.0.0-next.10/1f04f8e9204ab11a2a2a60bbc4b39e9e4085b74f}
     peerDependencies:
-      '@delta-comic/db': 3.0.0-next.9
-      '@delta-comic/model': 3.0.0-next.9
-      '@delta-comic/ui': 3.0.0-next.9
-      '@delta-comic/utils': 3.0.0-next.9
+      '@delta-comic/db': 3.0.0-next.10
+      '@delta-comic/model': 3.0.0-next.10
+      '@delta-comic/ui': 3.0.0-next.10
+      '@delta-comic/utils': 3.0.0-next.10
       naive-ui: ^2.44.1
       vue: ^3.6.0-rc.2
 
-  '@delta-comic/ui@3.0.0-next.9':
-    resolution: {integrity: sha512-CAIjP4tsGItSbtQ24rZNWOLVIjXEiDvUE6Ei+UqtUbQJPbUn3lLkxpN+BNKW/e4GJkFfDSrbgDIH2gPccKRzQA==, tarball: https://npm.pkg.github.com/download/@delta-comic/ui/3.0.0-next.9/436ca30d562e8edb8732f4f4bf704c59cee2b36a}
+  '@delta-comic/ui@3.0.0-next.10':
+    resolution: {integrity: sha512-EUsfUWZZh5bmFZru/yll5xuZq2sieEFQYUYD0vuTCEHi+7fYYhq5bDxeTxMwkEI/3eVUN3J88rn1QP7mHo9MHA==, tarball: https://npm.pkg.github.com/download/@delta-comic/ui/3.0.0-next.10/c8325d1bdc9d32aaf019ec77e673c09d64a5e6ef}
     peerDependencies:
-      '@delta-comic/model': 3.0.0-next.9
-      '@delta-comic/utils': 3.0.0-next.9
+      '@delta-comic/model': 3.0.0-next.10
+      '@delta-comic/utils': 3.0.0-next.10
       '@pinia/colada': ^1.4.2
       naive-ui: ^2.44.1
       pinia: ^4.0.2
@@ -502,8 +502,8 @@ packages:
       vue: ^3.6.0-rc.2
       vue-router: ^5.2.0
 
-  '@delta-comic/utils@3.0.0-next.9':
-    resolution: {integrity: sha512-EJ5q0bcvC8hjcOEMQA5y0hhDl3WcDYLvWIH7xLraNjoCEC6p+dx5xa+FzG9izQCmnYSal4WeuQcorDMdq6alVQ==, tarball: https://npm.pkg.github.com/download/@delta-comic/utils/3.0.0-next.9/08362ace5b9110ae85a0fee721af3cc946a49a2b}
+  '@delta-comic/utils@3.0.0-next.10':
+    resolution: {integrity: sha512-imIU6iSQt3CNNng6xlMANEpyqTz8d/hM1+rnz+GOxfFKqx4X28m2K2lDTEMwwA99zaiq4PMfMwEV0OH9pRkSdA==, tarball: https://npm.pkg.github.com/download/@delta-comic/utils/3.0.0-next.10/df837a85cbb38aba9f52ac5b03e3c81821522d0e}
     peerDependencies:
       naive-ui: ^2.44.1
       vue: ^3.6.0-rc.2
@@ -1949,11 +1949,6 @@ packages:
   acorn-walk@8.3.5:
     resolution: {integrity: sha512-HEHNfbars9v4pgpW6SO1KSPkfoS0xVOM/9UzkJltjlsHZmJasxg8aXkuZa7SMf8vKGIBhpUsPluQSqhJFCqebw==}
     engines: {node: '>=0.4.0'}
-
-  acorn@8.17.0:
-    resolution: {integrity: sha512-xRQbDb9BnwDafYNn6Vwl839DYVjqXYb1XVGtWAZ1kcDc6iwAL4hg3B1dZlRiuENFeO2H53gFG3in621AdERVAg==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
 
   acorn@8.18.0:
     resolution: {integrity: sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==}
@@ -4628,10 +4623,10 @@ snapshots:
     dependencies:
       vue: 3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
 
-  '@delta-comic/db@3.0.0-next.9(@delta-comic/model@3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
+  '@delta-comic/db@3.0.0-next.10(@delta-comic/model@3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
     dependencies:
-      '@delta-comic/logger': 3.0.0-next.9
-      '@delta-comic/model': 3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/logger': 3.0.0-next.10
+      '@delta-comic/model': 3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@pinia/colada': 1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@subframe7536/sqlite-wasm': 1.3.1
       '@tauri-apps/api': 2.11.1
@@ -4644,30 +4639,30 @@ snapshots:
       mitt: 3.0.1
       vue: 3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
 
-  '@delta-comic/delta-comic-plugin-layout@0.10.0-next.3': {}
+  '@delta-comic/delta-comic-plugin-layout@0.10.0-next.4': {}
 
-  '@delta-comic/downloader@3.0.0-next.9':
+  '@delta-comic/downloader@3.0.0-next.10':
     dependencies:
       '@tauri-apps/api': 2.11.1
 
-  '@delta-comic/logger@3.0.0-next.9':
+  '@delta-comic/logger@3.0.0-next.10':
     dependencies:
       '@tauri-apps/api': 2.11.1
 
-  '@delta-comic/model@3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
+  '@delta-comic/model@3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
     dependencies:
-      '@delta-comic/logger': 3.0.0-next.9
+      '@delta-comic/logger': 3.0.0-next.10
       es-toolkit: 1.50.0
       vue: 3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
 
-  '@delta-comic/plugin@3.0.0-next.9(bb89f3bda9808772bf978168a0d94bcf)':
+  '@delta-comic/plugin@3.0.0-next.10(0a77524e0b5bf90f6ded1ac2cb649f7a)':
     dependencies:
-      '@delta-comic/db': 3.0.0-next.9(@delta-comic/model@3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
-      '@delta-comic/downloader': 3.0.0-next.9
-      '@delta-comic/logger': 3.0.0-next.9
-      '@delta-comic/model': 3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
-      '@delta-comic/ui': 3.0.0-next.9(5ee224d16730f74b84d2c7350646679a)
-      '@delta-comic/utils': 3.0.0-next.9(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/db': 3.0.0-next.10(@delta-comic/model@3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/downloader': 3.0.0-next.10
+      '@delta-comic/logger': 3.0.0-next.10
+      '@delta-comic/model': 3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/ui': 3.0.0-next.10(76fb62d4c4456f37c2cc64a315bd6b45)
+      '@delta-comic/utils': 3.0.0-next.10(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@octokit/rest': 22.0.1
       '@tauri-apps/api': 2.11.1
       '@tauri-apps/plugin-fs': 2.5.1
@@ -4684,11 +4679,11 @@ snapshots:
       - postcss
       - vite
 
-  '@delta-comic/ui@3.0.0-next.9(5ee224d16730f74b84d2c7350646679a)':
+  '@delta-comic/ui@3.0.0-next.10(76fb62d4c4456f37c2cc64a315bd6b45)':
     dependencies:
-      '@delta-comic/logger': 3.0.0-next.9
-      '@delta-comic/model': 3.0.0-next.9(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
-      '@delta-comic/utils': 3.0.0-next.9(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/logger': 3.0.0-next.10
+      '@delta-comic/model': 3.0.0-next.10(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+      '@delta-comic/utils': 3.0.0-next.10(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@pinia/colada': 1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@tauri-apps/api': 2.11.1
       '@tauri-apps/plugin-shell': 2.3.5
@@ -4713,10 +4708,10 @@ snapshots:
       - react
       - react-dom
 
-  '@delta-comic/utils@3.0.0-next.9(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
+  '@delta-comic/utils@3.0.0-next.10(naive-ui@2.44.1(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue-router@5.2.0(@pinia/colada@1.4.2(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(@voidzero-dev/vite-plus-core@0.2.8(@types/node@26.1.1)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(yaml@2.9.0))(@vue/compiler-sfc@3.5.40)(pinia@4.0.2(@vue/devtools-api@8.2.1)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(rollup@4.62.3)(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)))(vue@3.6.0-rc.2(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
     dependencies:
       '@aptabase/tauri': 0.4.1
-      '@delta-comic/logger': 3.0.0-next.9
+      '@delta-comic/logger': 3.0.0-next.10
       '@tauri-apps/api': 2.11.1
       '@vue/language-core': 3.3.9
       acorn: 8.18.0
@@ -6012,9 +6007,7 @@ snapshots:
 
   acorn-walk@8.3.5:
     dependencies:
-      acorn: 8.17.0
-
-  acorn@8.17.0: {}
+      acorn: 8.18.0
 
   acorn@8.18.0: {}
 
@@ -7133,7 +7126,7 @@ snapshots:
 
   mlly@1.8.2:
     dependencies:
-      acorn: 8.17.0
+      acorn: 8.18.0
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.6.4
