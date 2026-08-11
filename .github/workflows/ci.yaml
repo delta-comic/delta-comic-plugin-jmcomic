@@ -35,7 +35,7 @@ jobs:
           node-version-file: .node-version
           cache: true
           run-install: false
-          
+
       - name: Configure GitHub Packages authentication
         run: vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
 
