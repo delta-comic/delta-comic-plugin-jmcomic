@@ -27,6 +27,7 @@ async function createSdkPackage() {
         name: npmPackageName,
         version: '1.0.2',
         files: ['dist'],
+        devDependencies: { typescript: 'catalog:' },
         scripts: { build: 'vp pack' },
         publishConfig: { access: 'public' },
       }),
@@ -74,6 +75,7 @@ describe('SDK release', () => {
       publishConfig: { access: 'public', registry: githubRegistry },
     })
     expect(npmManifest).not.toHaveProperty('scripts')
+    expect(npmManifest).not.toHaveProperty('devDependencies')
     await expect(
       readFile(join(directories.githubDirectory, 'dist/index.js'), 'utf8'),
     ).resolves.toBe('export const value = 1\n')

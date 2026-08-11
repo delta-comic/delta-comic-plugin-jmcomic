@@ -13,6 +13,7 @@ export const sdkDirectory = join(rootDir, 'packages/sdk')
 export const sdkReleaseDirectory = join(rootDir, 'dist/release/sdk')
 
 interface PackageManifest {
+  devDependencies?: Record<string, string>
   name: string
   version: string
   publishConfig?: Record<string, unknown>
@@ -94,6 +95,7 @@ async function createPackageDirectory(
     `${JSON.stringify(
       {
         ...manifest,
+        devDependencies: undefined,
         name,
         version: manifest.version,
         publishConfig: { ...manifest.publishConfig, access: 'public', registry },
