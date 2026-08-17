@@ -19,7 +19,8 @@ const login = { username: 'tester', user: testUser } satisfies LoginUser
 const model = jmcomicPluginConfig.model!
 const content = model.content!
 const user = model.user!
-const resource = model.resource!
+const remotes = model.remotes!
+const resource = remotes.find(remote => remote.type === 'resource')!
 const special = model.special!
 const hooks = jmcomicPluginConfig.hooks!
 
@@ -40,6 +41,32 @@ describe('plugin registration', () => {
     expect(content.models![0]?.Layout).toMatchObject({ name: 'LayoutDefault' })
     expect(model.social!.subscribe).toBeDefined()
     expect(model.expose!.jm).toBe(runtime.jm)
+  })
+
+  test('declares an API remote with an auto-select trigger', () => {
+    expect(remotes).toHaveLength(2)
+    expect(remotes[0]!.type).toBe('remote')
+    expect(remotes[0]).toMatchObject({
+      name: 'jmcomic.remotes.api',
+      remotes: [{ name: 'jmcomic.remotes.autoSelect', url: 'auto' }],
+    })
+    expect(resource.type).toBe('resource')
+    expect(resource.name).toBe('jmcomic.remotes.images')
+    expect(resource.remotes).toContainEqual({
+      name: 'https://cdn-msp.jmapinodeudzn.net',
+      url: 'https://cdn-msp.jmapinodeudzn.net',
+    })
+  })
+
+  test('runs auto fork selection when the API remote is tested', async () => {
+    const selectFork = vi
+      .spyOn(runtime.jm.fork, 'autoPickFork')
+      .mockResolvedValue('https://api.test')
+    const signal = new AbortController().signal
+
+    await remotes[0]!.test('auto', signal)
+
+    expect(selectFork).toHaveBeenCalledWith(undefined, signal)
   })
 
   test('restores a session or asks for the selected login form', async () => {
@@ -80,7 +107,7 @@ describe('plugin registration', () => {
 
   test('processes image resources and probes image forks', async () => {
     vi.spyOn(runtime.jm.image, 'decryptImage').mockResolvedValue({ url: 'blob:decoded' })
-    const process = resource.process!.comicDecode
+    const process = resource.processors![0]!.call
     await expect(
       process('/page.webp', { $$plugin: pluginName, $$meta: { comicId: '42', page: 3 } } as never),
     ).resolves.toEqual(['blob:decoded', true])
@@ -92,13 +119,13 @@ describe('plugin registration', () => {
     const fetch = vi.fn().mockResolvedValue(new Response(null, { status: 200 }))
     vi.stubGlobal('fetch', fetch)
     const signal = new AbortController().signal
-    await resource.types![0]!.test('https://image.test', signal)
+    await resource.test('https://image.test', signal)
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/media/photos/'), {
       method: 'HEAD',
       signal,
     })
     fetch.mockResolvedValueOnce(new Response(null, { status: 503 }))
-    await expect(resource.types![0]!.test('https://image.test', signal)).rejects.toThrow('503')
+    await expect(resource.test('https://image.test', signal)).rejects.toThrow('503')
   })
 
   test('provides random, hot-search, ranking and latest content', async () => {
@@ -129,13 +156,12 @@ describe('plugin registration', () => {
     ).resolves.toHaveLength(1)
   })
 
-  test('selects a fork, preloads categories and treats repeated check-ins as non-fatal', async () => {
-    const selectFork = vi
-      .spyOn(runtime.jm.fork, 'autoPickFork')
-      .mockResolvedValue('https://api.test')
+  test('preloads categories and treats repeated check-ins as non-fatal', async () => {
     const describe = vi.fn()
-    await special[0]!.call(describe)
-    expect(selectFork).toHaveBeenCalledWith(undefined, runtime.signal)
+    expect(special.map(step => step.name)).toEqual([
+      'jmcomic.progress.checkIn',
+      'jmcomic.progress.preload',
+    ])
 
     runtime.categories = {
       blocks: [],
@@ -151,7 +177,7 @@ describe('plugin registration', () => {
       ],
     }
     vi.spyOn(runtime, 'preload').mockResolvedValue(undefined)
-    await special[2]!.call(describe)
+    await special[1]!.call(describe)
     expect(runtime.preload).toHaveBeenCalledOnce()
     expect(content.promotes!.categories).toMatchObject([
       { namespace: 'main' },
@@ -160,7 +186,7 @@ describe('plugin registration', () => {
 
     runtime.jm.auth.restoreSession({ username: 'tester', token: 'token', user: testUser })
     const daily = vi.spyOn(runtime.jm.user, 'dailyCheck').mockRejectedValue(new Error('checked'))
-    await expect(special[1]!.call(describe)).resolves.toBeUndefined()
+    await expect(special[0]!.call(describe)).resolves.toBeUndefined()
     expect(daily).toHaveBeenCalledOnce()
   })
 

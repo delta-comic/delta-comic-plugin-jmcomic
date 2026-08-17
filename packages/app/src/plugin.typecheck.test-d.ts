@@ -37,7 +37,7 @@ assertType<StreamQuery<UniItem>>(page.fetchRecommends)
 const manifest = createPluginManifest('1.0.0-next.1')
 expectTypeOf(manifest.name.id).toEqualTypeOf<'jmcomic'>()
 expectTypeOf(manifest.entry.jsPath).toEqualTypeOf<'index.js'>()
-expectTypeOf(manifest.version.supportCore).toEqualTypeOf<'>=3.0.0-next.10 <4.0.0'>()
+expectTypeOf(manifest.version.supportCore).toEqualTypeOf<'>=3.0.0-next.12 <4.0.0'>()
 expectTypeOf<(typeof manifest.require)[number]['id']>().toEqualTypeOf<'core' | 'layout'>()
 expectTypeOf(
   pluginContributions.channel(pluginModelChannels.expose).get('layout', 'default')?.value,
