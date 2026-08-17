@@ -1,5 +1,5 @@
 import '@/index.css'
-import { UniUser, type UniItem, type UniItemRaw } from '@delta-comic/model'
+import { UniUser, type UniItem, type UniItemRaw, type UniResource } from '@delta-comic/model'
 import {
   defineDeltaComicPlugin,
   type Content,
@@ -150,39 +150,48 @@ export const jmcomicPluginConfig: DCPluginConfig = {
   model: {
     content: { models, search, promotes },
     expose: { jm: runtime.jm },
-    resource: {
-      types: [
-        {
-          type: 'default',
-          urls: [...defaultImageForks],
-          async test(url, signal) {
-            const response = await fetch(`${url}/media/photos/1205243/00001.webp`, {
-              method: 'HEAD',
-              signal,
-            })
-            if (!response.ok) throw new Error(`Image fork returned ${response.status}`)
-          },
-        },
-      ],
-      process: {
-        async comicDecode(nowPath, resource) {
-          const comicId = String(resource.$$meta?.comicId ?? '')
-          const page = Number(resource.$$meta?.page ?? 1)
-          if (!comicId) return [nowPath, false]
-          const result = await runtime.jm.image.decryptImage(nowPath, comicId, page, runtime.signal)
-          return [result.url, true]
+    remotes: [
+      {
+        type: 'remote',
+        name: 'jmcomic.remotes.api',
+        remotes: [{ name: 'jmcomic.remotes.autoSelect', url: 'auto' }],
+        async test(_url, signal) {
+          // The host's standard remote probe triggers SDK latency selection for API forks.
+          await runtime.jm.fork.autoPickFork(undefined, signal)
         },
       },
-    },
+      {
+        type: 'resource',
+        name: 'jmcomic.remotes.images',
+        remotes: defaultImageForks.map(url => ({ name: url, url })),
+        async test(url, signal) {
+          const response = await fetch(`${url}/media/photos/1205243/00001.webp`, {
+            method: 'HEAD',
+            signal,
+          })
+          if (!response.ok) throw new Error(`Image fork returned ${response.status}`)
+        },
+        processors: [
+          {
+            name: 'comicDecode',
+            async call(nowPath: string, resource: UniResource) {
+              const comicId = String(resource.$$meta?.comicId ?? '')
+              const page = Number(resource.$$meta?.page ?? 1)
+              if (!comicId) return [nowPath, false]
+              const result = await runtime.jm.image.decryptImage(
+                nowPath,
+                comicId,
+                page,
+                runtime.signal,
+              )
+              return [result.url, true]
+            },
+          },
+        ],
+      },
+    ],
     social: { subscribe: jmcomicSubscribe },
     special: [
-      {
-        name: 'jmcomic.progress.fork',
-        async call(setDescription) {
-          setDescription(translate('jmcomic.progress.fork'))
-          await runtime.jm.fork.autoPickFork(undefined, runtime.signal)
-        },
-      },
       {
         name: 'jmcomic.progress.checkIn',
         async call(setDescription) {

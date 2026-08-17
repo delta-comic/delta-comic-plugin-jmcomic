@@ -55,14 +55,12 @@ const categories = (values: string[], group: string, method: string = searchKeys
     .flatMap(value => value.split(/[,，、]/))
     .map(value => value.trim())
     .filter(Boolean)
-    .map(
-      (name): UniItemCategory => ({
-        $$plugin: pluginName,
-        name,
-        group,
-        search: { keyword: name, source: method, sort: SortType.Relate },
-      }),
-    )
+    .map((name): UniItemCategory => ({
+      $$plugin: pluginName,
+      name,
+      group,
+      search: { keyword: name, source: method, sort: SortType.Relate },
+    }))
 
 const splitAuthors = (value: string | string[]) =>
   (Array.isArray(value) ? value : value.split(/,|，|&|、|\sand\s|\s和\s/i))
@@ -106,7 +104,7 @@ const baseItem = (
 
 export class JmItem extends UniItem {
   public get meta(): JmItemMeta {
-    return this.$$meta as JmItemMeta
+    return this.$$meta as unknown as JmItemMeta
   }
 
   public override async like(signal?: AbortSignal): Promise<unknown> {
