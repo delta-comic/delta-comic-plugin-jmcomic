@@ -38,10 +38,10 @@
     "vue-tsc": "catalog:"
   },
   "peerDependencies": {
-    "@delta-comic/db": ">=3.0.0-next.12 <4.0.0",
-    "@delta-comic/model": ">=3.0.0-next.12 <4.0.0",
-    "@delta-comic/plugin": ">=3.0.0-next.12 <4.0.0",
-    "@delta-comic/ui": ">=3.0.0-next.12 <4.0.0",
-    "@delta-comic/utils": ">=3.0.0-next.12 <4.0.0"
+    "@delta-comic/db": ">=3.0.0-next.14 <4.0.0",
+    "@delta-comic/model": ">=3.0.0-next.14 <4.0.0",
+    "@delta-comic/plugin": ">=3.0.0-next.14 <4.0.0",
+    "@delta-comic/ui": ">=3.0.0-next.14 <4.0.0",
+    "@delta-comic/utils": ">=3.0.0-next.14 <4.0.0"
   }
 }

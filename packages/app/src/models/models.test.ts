@@ -2,6 +2,7 @@ import type { ComicComment, FullComic, RelatedBook } from 'jmcomic-sdk'
 import { describe, expect, test, vi } from 'vitest'
 
 import { runtime } from '@/runtime/PluginRuntime'
+import { pluginName } from '@/symbol'
 
 import { fromComicComment } from './comments'
 import { fromFullComic, fromRelatedBook } from './items'
@@ -77,7 +78,7 @@ describe('content models', () => {
   test('maps full comics into one stable host item', () => {
     const item = fromFullComic(fullComic)
     expect(item.id).toBe('42')
-    expect(item.contentType).toEqual(['jmcomic', 'comic'])
+    expect(item.contentType).toEqual([pluginName, 'comic'])
     expect(item.author.map(author => author.label)).toEqual(['Author A', 'Author B'])
     expect(item.categories.map(category => category.name)).toEqual(['Tag', 'Work', 'Actor'])
     expect(item.$thisEp.id).toBe('7')

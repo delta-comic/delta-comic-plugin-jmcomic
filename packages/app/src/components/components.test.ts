@@ -2,6 +2,8 @@ import { UniContentPage, UniImage, UniItem } from '@delta-comic/model'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 
+import { pluginName } from '@/symbol'
+
 import RichTextReader from './content/RichTextReader.vue'
 import SafeRichText from './content/SafeRichText.vue'
 import JmItemCard from './JmItemCard.vue'
@@ -14,16 +16,16 @@ class TestItem extends UniItem {
 }
 
 const item = new TestItem({
-  $$plugin: 'jmcomic',
+  $$plugin: pluginName,
   author: [],
   categories: [],
   commentSendable: false,
-  contentType: ['jmcomic', 'comic'],
-  cover: { $$plugin: 'jmcomic', forkNamespace: 'default', path: 'https://example.com/cover.jpg' },
+  contentType: [pluginName, 'comic'],
+  cover: { $$plugin: pluginName, forkNamespace: 'default', path: 'https://example.com/cover.jpg' },
   epLength: '1',
   id: '1',
   length: '1',
-  thisEp: { $$plugin: 'jmcomic', id: '1', name: 'Chapter' },
+  thisEp: { $$plugin: pluginName, id: '1', name: 'Chapter' },
   title: 'Card title',
 })
 
@@ -46,11 +48,11 @@ describe('shared UI components', () => {
       .mockReturnValueOnce({ getUrl: vi.fn().mockRejectedValue('bad image') } as never)
       .mockReturnValueOnce({ getUrl: vi.fn().mockRejectedValue(new Error('offline')) } as never)
     const wrapper = mount(ResolvedImage, {
-      props: { image: { $$plugin: 'jmcomic', path: '/broken.jpg' } as never },
+      props: { image: { $$plugin: pluginName, path: '/broken.jpg' } as never },
     })
     await flushPromises()
     expect(wrapper.emitted('error')?.[0]?.[0]).toEqual(new Error('bad image'))
-    await wrapper.setProps({ image: { $$plugin: 'jmcomic', path: '/offline.jpg' } as never })
+    await wrapper.setProps({ image: { $$plugin: pluginName, path: '/offline.jpg' } as never })
     await flushPromises()
     expect(wrapper.emitted('error')?.[1]?.[0]).toEqual(new Error('offline'))
   })

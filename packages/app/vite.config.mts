@@ -2,12 +2,36 @@ import { fileURLToPath, URL } from 'node:url'
 
 import browserslist from 'browserslist'
 import { browserslistToTargets } from 'lightningcss'
-import { defineConfig, lazyPlugins, type PluginOption, type UserConfig } from 'vite-plus'
+import { defineConfig, lazyPlugins, type UserConfig } from 'vite-plus'
 
 import packageJson from './package.json' with { type: 'json' }
-import { createPluginManifest } from './src/metadata.js'
+import { pluginName } from './src/symbol.ts'
 
 const testTsconfig = fileURLToPath(new URL('./tsconfig.app.json', import.meta.url))
+
+import { DELTA_COMIC_PLUGIN_API_VERSION, type PluginManifest } from '@delta-comic/model'
+
+export const pluginMetadata = {
+  apiVersion: DELTA_COMIC_PLUGIN_API_VERSION,
+  author: 'wenxig',
+  description: '为 Delta Comic 提供禁漫天堂的漫画、图文、小说和创作者画册内容',
+  entry: { cssPath: 'src/index.css', jsPath: 'src/main.ts' },
+  name: { display: '禁漫天堂', id: pluginName },
+  require: [{ id: 'core' }, { id: 'layout', download: 'gh:delta-comic/delta-comic-plugin-layout' }],
+  supportCore: '>=3.0.0-next.14 <4.0.0',
+} as const
+
+export function createPluginManifest(version: string) {
+  return {
+    apiVersion: pluginMetadata.apiVersion,
+    author: pluginMetadata.author,
+    description: pluginMetadata.description,
+    entry: { ...pluginMetadata.entry },
+    name: { ...pluginMetadata.name },
+    require: pluginMetadata.require.map(required => ({ ...required })),
+    version: { plugin: version, supportCore: pluginMetadata.supportCore },
+  } satisfies PluginManifest
+}
 
 export default defineConfig(
   ({ command, mode }) =>
@@ -31,17 +55,11 @@ export default defineConfig(
           import('@vitejs/plugin-vue'),
         ])
 
-        const frameworkPlugins = [
-          vue() as unknown as PluginOption,
-          tailwindcss() as unknown as PluginOption,
-        ]
+        const frameworkPlugins = [vue(), tailwindcss()]
         if (mode === 'test') return frameworkPlugins
 
         const version = process.env.DELTA_PLUGIN_VERSION ?? packageJson.version
-        const pluginHelpers = deltaComic(
-          createPluginManifest(version),
-          command,
-        ) as unknown as PluginOption[]
+        const pluginHelpers = deltaComic(createPluginManifest(version), command)
         return [...frameworkPlugins, ...pluginHelpers]
       }),
       resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },

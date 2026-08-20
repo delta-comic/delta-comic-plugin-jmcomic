@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { contentKeys, searchKeys } from '@/constants'
 import { runtime } from '@/runtime/PluginRuntime'
+import { pluginName } from '@/symbol'
 
 import {
   barcode,
@@ -115,7 +116,7 @@ describe('search adapters', () => {
         type: 'comic',
         content: [comic],
       }),
-    ).toMatchObject([{ contentType: ['jmcomic', contentKeys.comic] }])
+    ).toMatchObject([{ contentType: [pluginName, contentKeys.comic] }])
     expect(
       mapPromoteContent({
         id: 2,
@@ -125,7 +126,7 @@ describe('search adapters', () => {
         type: 'novel',
         content: [novel],
       }),
-    ).toMatchObject([{ contentType: ['jmcomic', contentKeys.novel] }])
+    ).toMatchObject([{ contentType: [pluginName, contentKeys.novel] }])
     expect(
       mapPromoteContent({
         id: 3,
@@ -135,10 +136,16 @@ describe('search adapters', () => {
         type: 'book',
         content: [book],
       }),
-    ).toMatchObject([{ contentType: ['jmcomic', contentKeys.book] }])
-    expect(mapWeekContent([comic], 'comic')[0]?.contentType).toEqual(['jmcomic', contentKeys.comic])
-    expect(mapWeekContent([novel], 'novel')[0]?.contentType).toEqual(['jmcomic', contentKeys.novel])
-    expect(mapWeekContent([book], 'book')[0]?.contentType).toEqual(['jmcomic', contentKeys.book])
+    ).toMatchObject([{ contentType: [pluginName, contentKeys.book] }])
+    expect(mapWeekContent([comic], 'comic')[0]?.contentType).toEqual([
+      pluginName,
+      contentKeys.comic,
+    ])
+    expect(mapWeekContent([novel], 'novel')[0]?.contentType).toEqual([
+      pluginName,
+      contentKeys.novel,
+    ])
+    expect(mapWeekContent([book], 'book')[0]?.contentType).toEqual([pluginName, contentKeys.book])
     expect(barcode.isMatch({ input: ' JM 350234 ', search: { method: searchKeys.keyword } })).toBe(
       true,
     )
@@ -153,7 +160,7 @@ describe('search adapters', () => {
       query: vi.fn().mockResolvedValue({ data: [{ id: 'new' }], nextPage: 2 }),
     } as never
     const subscription = createSubscribe(source)
-    const author = { $$plugin: 'jmcomic', label: 'Author', icon: 'draw' } as never
+    const author = { $$plugin: pluginName, label: 'Author', icon: 'draw' } as never
     await expect(
       subscription.getUpdateList(
         [{ author, list: [{ id: 'old' }] as never }],

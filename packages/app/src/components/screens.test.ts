@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { JmUser } from '@/models/items'
 import { runtime } from '@/runtime/PluginRuntime'
+import { pluginName } from '@/symbol'
 
 import CreatorReader from './content/CreatorReader.vue'
 import JmCommentRow from './JmCommentRow.vue'
@@ -71,7 +72,7 @@ describe('content and account screens', () => {
     await promoted.get('article').trigger('click')
     expect(SharedFunction.call).toHaveBeenCalledWith(
       'routeToContent',
-      ['jmcomic', 'comic'],
+      [pluginName, 'comic'],
       '1',
       '1',
       expect.anything(),
