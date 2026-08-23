@@ -15,8 +15,8 @@ export default {
       '@semantic-release/github',
       {
         assets: [
-          { path: 'dist/release/manifest.json', label: 'manifest.json' },
-          { path: 'dist/release/plugin.zip', label: 'plugin.zip' },
+          { path: 'packages/app/dist/manifest.json', label: 'manifest.json' },
+          { path: 'packages/app/dist/plugin.zip', label: 'plugin.zip' },
         ],
         releaseNameTemplate: createReleaseNameTemplate(packageJson.description),
       },

@@ -24,7 +24,6 @@ vp check
 vp run typecheck
 vp test run --coverage
 vp run build
-vp run artifacts
 ```
 
 测试应聚焦边界条件、状态回滚、缓存隔离和发布契约，避免只为提高数字而复制低价值断言。提交信息遵循 Conventional Commits，例如：

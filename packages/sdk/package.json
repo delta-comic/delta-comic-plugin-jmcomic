@@ -37,9 +37,6 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "scripts": {
-    "pack:tarball": "vp run build && pnpm pack --out ./dist/jmcomic-sdk.tgz"
-  },
   "dependencies": {
     "crypto-es": "catalog:",
     "ky": "catalog:",
@@ -55,9 +52,6 @@
   },
   "optionalDependencies": {
     "sharp": "catalog:"
-  },
-  "dist": {
-    "tarball": "./dist/jmcomic-sdk.tgz"
   },
   "readme": "./README.md"
 }

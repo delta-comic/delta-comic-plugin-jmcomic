@@ -167,9 +167,6 @@ catalogs:
     happy-dom:
       specifier: ^20.11.2
       version: 20.11.6
-    jszip:
-      specifier: ^3.10.1
-      version: 3.10.1
     ky:
       specifier: ^2.0.2
       version: 2.0.2
@@ -245,9 +242,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
-      jszip:
-        specifier: 'catalog:'
-        version: 3.10.1
       oxlint-tsgolint:
         specifier: 'catalog:'
         version: 7.0.2001
@@ -5317,7 +5311,7 @@ snapshots:
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 25.9.3
+      '@types/node': 26.2.0
 
   '@types/statuses@2.0.6': {}
 

@@ -18,8 +18,8 @@ describe('release configuration', () => {
       '@semantic-release/github',
       {
         assets: [
-          { label: 'manifest.json', path: 'dist/release/manifest.json' },
-          { label: 'plugin.zip', path: 'dist/release/plugin.zip' },
+          { label: 'manifest.json', path: 'packages/app/dist/manifest.json' },
+          { label: 'plugin.zip', path: 'packages/app/dist/plugin.zip' },
         ],
         releaseNameTemplate: `${packageJson.description} <%= nextRelease.version %><%= nextRelease.channel ? " 预览版" : " 正式版" %>`,
       },
