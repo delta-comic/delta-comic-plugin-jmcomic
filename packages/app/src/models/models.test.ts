@@ -1,8 +1,8 @@
 import type { ComicComment, FullComic, RelatedBook } from 'jmcomic-sdk'
 import { describe, expect, test, vi } from 'vitest'
 
+import { pluginName } from '@/constants'
 import { runtime } from '@/runtime/PluginRuntime'
-import { pluginName } from '@/symbol'
 
 import { fromComicComment } from './comments'
 import { fromFullComic, fromRelatedBook } from './items'

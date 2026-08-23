@@ -1,6 +1,6 @@
 import type { JMComicOptions } from '../types'
 
-export const apiPath = {
+const apiPath = {
   auth: { login: '/login', signUp: '/register', logout: '/logout', forgetPassword: '/forget' },
   book: {
     search: '/creator_author',

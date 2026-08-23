@@ -2,9 +2,8 @@ import { SharedFunction } from '@delta-comic/utils'
 import { SortType } from 'jmcomic-sdk'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
-import { contentKeys, searchKeys } from '@/constants'
+import { contentKeys, pluginName, searchKeys } from '@/constants'
 import { runtime } from '@/runtime/PluginRuntime'
-import { pluginName } from '@/symbol'
 
 import {
   barcode,

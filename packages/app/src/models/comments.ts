@@ -1,11 +1,5 @@
 import { StreamQuery, UniComment, UniUser, type UniResourceRaw } from '@delta-comic/model'
-import {
-  JmApiError,
-  type BlogComment,
-  type ComicComment,
-  type Comment,
-  type NovelComment,
-} from 'jmcomic-sdk'
+import { JmApiError, type BlogComment, type ComicComment, type NovelComment } from 'jmcomic-sdk'
 
 import { richTextToPlainText } from '@/adapters/richText'
 import { contentKeys, pluginName } from '@/constants'
@@ -132,5 +126,3 @@ export class JmComment extends UniComment {
 export const fromComicComment = (comment: ComicComment) => new JmComment('comic', comment)
 export const fromBlogComment = (comment: BlogComment) => new JmComment('blog', comment)
 export const fromNovelComment = (comment: NovelComment) => new JmComment('novel', comment)
-
-export type JmForumComment = Comment | NovelComment

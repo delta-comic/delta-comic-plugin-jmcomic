@@ -2,9 +2,9 @@ import { SharedFunction } from '@delta-comic/utils'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
+import { pluginName } from '@/constants'
 import { JmUser } from '@/models/items'
 import { runtime } from '@/runtime/PluginRuntime'
-import { pluginName } from '@/symbol'
 
 import CreatorReader from './content/CreatorReader.vue'
 import JmCommentRow from './JmCommentRow.vue'

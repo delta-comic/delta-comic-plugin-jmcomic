@@ -2,7 +2,7 @@ import { UniContentPage, UniImage, UniItem } from '@delta-comic/model'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 
-import { pluginName } from '@/symbol'
+import { pluginName } from '@/constants'
 
 import RichTextReader from './content/RichTextReader.vue'
 import SafeRichText from './content/SafeRichText.vue'

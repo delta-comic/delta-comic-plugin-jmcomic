@@ -2,7 +2,7 @@ import type { Content } from '@delta-comic/plugin'
 import { SortType } from 'jmcomic-sdk'
 
 import { getLayout } from '@/adapters/layout'
-import { barcode, jmcomicSubscribe, searchMethods } from '@/adapters/search'
+import { barcode, searchMethods } from '@/adapters/search'
 import JmCommentRow from '@/components/JmCommentRow.vue'
 import JmItemCard from '@/components/JmItemCard.vue'
 import PromoteTab from '@/components/search/PromoteTab.vue'
@@ -68,5 +68,3 @@ export const models: Content.Model[] = Object.entries(contentPages).map(([name, 
 }))
 
 export const content = { models, search, promotes }
-
-export { barcode, jmcomicSubscribe }

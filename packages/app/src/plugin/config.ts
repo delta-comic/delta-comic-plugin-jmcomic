@@ -1,8 +1,9 @@
 import type { DCPluginConfig } from '@delta-comic/plugin'
 
+import { jmcomicSubscribe } from '@/adapters/search'
 import { pluginName } from '@/constants'
 import { jmcomicMessages } from '@/i18n'
-import { content, jmcomicSubscribe } from '@/plugin/content'
+import { content } from '@/plugin/content'
 import { hooks } from '@/plugin/hooks'
 import { special } from '@/plugin/progress'
 import { remotes } from '@/plugin/remotes'

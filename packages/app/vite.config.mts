@@ -6,7 +6,7 @@ import { browserslistToTargets } from 'lightningcss'
 import { defineConfig, lazyPlugins } from 'vite-plus'
 
 import packageJson from './package.json' with { type: 'json' }
-import { pluginName } from './src/symbol.ts'
+import { pluginName } from './src/constants.ts'
 
 const testTsconfig = fileURLToPath(new URL('./tsconfig.app.json', import.meta.url))
 
