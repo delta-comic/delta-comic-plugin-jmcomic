@@ -1,13 +1,16 @@
 import { spawn } from 'node:child_process'
-import { copyFile, mkdir, rm } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { rootDir, validatePluginArtifacts } from './artifacts.mts'
+import { rootDir } from './paths.mts'
 import { prereleaseWarning } from './release-notes.mts'
 import { prepareSdkReleaseArtifacts, publishSdkPackages } from './sdk-release.mts'
 
 export const releaseAssetNames = ['manifest.json', 'plugin.zip'] as const
-export const releaseDirectory = join(rootDir, 'dist/release')
+
+interface PluginManifest {
+  version: { plugin: string }
+}
 
 interface ReleaseContext {
   nextRelease: { channel?: string | null; version: string }
@@ -16,7 +19,6 @@ interface ReleaseContext {
 export type BuildRunner = (version: string) => Promise<void>
 
 export interface ReleasePreparationOptions {
-  destination?: string
   pluginDist?: string
   runBuild?: BuildRunner
 }
@@ -26,6 +28,21 @@ const semanticVersion =
 
 export function assertVersion(version: string) {
   if (!semanticVersion.test(version)) throw new Error(`Invalid semantic version: ${version}`)
+}
+
+function parsePluginManifest(value: unknown): PluginManifest {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    !('version' in value) ||
+    typeof value.version !== 'object' ||
+    value.version === null ||
+    !('plugin' in value.version) ||
+    typeof value.version.plugin !== 'string'
+  ) {
+    throw new Error('Invalid plugin manifest')
+  }
+  return { version: { plugin: value.version.plugin } }
 }
 
 /* v8 ignore start -- @preserve: full plugin builds are covered by the integration gate */
@@ -48,7 +65,6 @@ async function buildPlugin(version: string) {
 export async function prepareReleaseArtifacts(
   version: string,
   {
-    destination = releaseDirectory,
     pluginDist = join(rootDir, 'packages/app/dist'),
     runBuild = buildPlugin,
   }: ReleasePreparationOptions = {},
@@ -56,19 +72,17 @@ export async function prepareReleaseArtifacts(
   assertVersion(version)
   await runBuild(version)
 
-  const validated = await validatePluginArtifacts(pluginDist)
-  if (validated.manifest.version.plugin !== version) {
+  const parsedManifest: unknown = JSON.parse(
+    await readFile(join(pluginDist, 'manifest.json'), 'utf8'),
+  )
+  const manifest = parsePluginManifest(parsedManifest)
+  if (manifest.version.plugin !== version) {
     throw new Error(
-      `Built manifest version ${validated.manifest.version.plugin} does not match release ${version}`,
+      `Built manifest version ${manifest.version.plugin} does not match release ${version}`,
     )
   }
 
-  await rm(destination, { force: true, recursive: true })
-  await mkdir(destination, { recursive: true })
-  await Promise.all(
-    releaseAssetNames.map(name => copyFile(join(pluginDist, name), join(destination, name))),
-  )
-  return validated
+  return { manifest, pluginDist }
 }
 
 export async function verifyRelease(_pluginConfig: unknown, { nextRelease }: ReleaseContext) {

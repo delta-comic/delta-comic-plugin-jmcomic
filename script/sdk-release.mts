@@ -1,8 +1,8 @@
 import { spawn } from 'node:child_process'
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { rootDir } from './artifacts.mts'
+import { rootDir } from './paths.mts'
 
 export const npmRegistry = 'https://registry.npmjs.org'
 export const githubRegistry = 'https://npm.pkg.github.com'
@@ -10,24 +10,11 @@ export const npmPackageName = 'jmcomic-sdk'
 export const githubPackageName = '@delta-comic/jmcomic-sdk'
 
 export const sdkDirectory = join(rootDir, 'packages/sdk')
-export const sdkReleaseDirectory = join(rootDir, 'dist/release/sdk')
-
-interface PackageManifest {
-  devDependencies?: Record<string, string>
-  name: string
-  version: string
-  publishConfig?: Record<string, unknown>
-  scripts?: Record<string, string>
-}
 
 export interface SdkReleasePreparationOptions {
-  destination?: string
   runBuild?: () => Promise<void>
-  runPack?: PackRunner
   source?: string
 }
-
-export type PackRunner = (source: string, tarball: string) => Promise<void>
 
 export interface CommandResult {
   status: number
@@ -72,34 +59,38 @@ async function buildSdk() {
   await runCommand('vp', ['run', '-t', 'jmcomic-sdk#build'])
 }
 
-async function packSdk(source: string, tarball: string) {
-  await runCommand('pnpm', ['pack', '--out', tarball], { cwd: source })
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
-/* v8 ignore stop -- @preserve */
 
-async function createPackageDirectory(
+function parsePackageManifest(value: unknown) {
+  if (!isRecord(value) || typeof value.name !== 'string' || typeof value.version !== 'string') {
+    throw new Error('Invalid SDK package manifest')
+  }
+  return value
+}
+
+async function updatePackageManifest(
   source: string,
-  destination: string,
-  manifest: PackageManifest,
+  manifest: Record<string, unknown>,
   name: string,
+  version: string,
   registry: string,
 ) {
-  await mkdir(destination, { recursive: true })
-  await Promise.all([
-    cp(join(source, 'dist'), join(destination, 'dist'), { recursive: true }),
-    cp(join(source, 'LICENSE'), join(destination, 'LICENSE')),
-    cp(join(source, 'README.md'), join(destination, 'README.md')),
-  ])
   await writeFile(
-    join(destination, 'package.json'),
+    join(source, 'package.json'),
     `${JSON.stringify(
       {
         ...manifest,
         devDependencies: undefined,
         name,
-        version: manifest.version,
-        publishConfig: { ...manifest.publishConfig, access: 'public', registry },
+        publishConfig: {
+          ...(isRecord(manifest.publishConfig) ? manifest.publishConfig : {}),
+          access: 'public',
+          registry,
+        },
         scripts: undefined,
+        version,
       },
       null,
       2,
@@ -107,41 +98,10 @@ async function createPackageDirectory(
   )
 }
 
-export async function prepareSdkReleaseArtifacts(
-  version: string,
-  {
-    destination = sdkReleaseDirectory,
-    runBuild = buildSdk,
-    runPack = packSdk,
-    source = sdkDirectory,
-  }: SdkReleasePreparationOptions = {},
-) {
-  await runBuild()
-  const manifest = JSON.parse(
-    await readFile(join(source, 'package.json'), 'utf8'),
-  ) as PackageManifest
-  manifest.version = version
-
-  await rm(destination, { force: true, recursive: true })
-  const npmDirectory = join(destination, 'npm')
-  const githubDirectory = join(destination, 'github')
-  await Promise.all([
-    createPackageDirectory(source, npmDirectory, manifest, npmPackageName, npmRegistry),
-    createPackageDirectory(source, githubDirectory, manifest, githubPackageName, githubRegistry),
-  ])
-
-  const npmTarball = join(destination, 'npm.tgz')
-  const githubTarball = join(destination, 'github.tgz')
-  await runPack(npmDirectory, npmTarball)
-  await runPack(githubDirectory, githubTarball)
-
-  return { githubDirectory, githubTarball, npmDirectory, npmTarball }
-}
-
 async function publishPackage(
   name: string,
   version: string,
-  directory: string,
+  source: string,
   registry: string,
   tag: string,
   runner: NpmRunner,
@@ -157,22 +117,40 @@ async function publishPackage(
     return false
   }
 
-  await runner(['publish', directory, '--access', 'public', '--tag', tag, ...commonArguments], {
-    env,
-  })
+  const manifestPath = join(source, 'package.json')
+  const originalManifest = await readFile(manifestPath, 'utf8')
+  const parsedManifest: unknown = JSON.parse(originalManifest)
+  const manifest = parsePackageManifest(parsedManifest)
+  try {
+    await updatePackageManifest(source, manifest, name, version, registry)
+    await runner(['publish', source, '--access', 'public', '--tag', tag, ...commonArguments], {
+      env,
+    })
+  } finally {
+    await writeFile(manifestPath, originalManifest)
+  }
   return true
+}
+
+export async function prepareSdkReleaseArtifacts(
+  version: string,
+  { runBuild = buildSdk, source = sdkDirectory }: SdkReleasePreparationOptions = {},
+) {
+  await runBuild()
+  return { source, version }
 }
 
 export async function publishSdkPackages(
   version: string,
   channel?: string | null,
   runner: NpmRunner = defaultNpmRunner,
+  source = sdkDirectory,
 ) {
   const tag = channel ?? 'latest'
   const npmPublished = await publishPackage(
     npmPackageName,
     version,
-    join(sdkReleaseDirectory, 'npm.tgz'),
+    source,
     npmRegistry,
     tag,
     runner,
@@ -180,7 +158,7 @@ export async function publishSdkPackages(
   const githubPublished = await publishPackage(
     githubPackageName,
     version,
-    join(sdkReleaseDirectory, 'github.tgz'),
+    source,
     githubRegistry,
     tag,
     runner,

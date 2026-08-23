@@ -10,7 +10,7 @@ GitHub Release 和 TypeScript SDK。
 | `main` | 稳定版本 | `x.y.z` release |
 
 禁止手工创建版本标签或 GitHub Release。`next` 和 `main` 的 push 会触发 release workflow；
-semantic-release 会上传外置 `manifest.json` 与 `plugin.zip`，并把同版本 SDK 发布到 npm
+semantic-release 会直接上传 `packages/app/dist` 中的 `manifest.json` 与 `plugin.zip`，并把同版本 SDK 发布到 npm
 `jmcomic-sdk` 和 GitHub Packages `@delta-comic/jmcomic-sdk`。预览版使用 `next` dist-tag，
 稳定版使用 `latest`。
 
@@ -42,7 +42,6 @@ vp run typecheck
 vp test typecheck
 vp test run --coverage
 vp run build
-vp run artifacts
 ```
 
 普通类型检查固定使用 `tsc` 和 `vue-tsc`。Vitest 类型测试分别用 TypeScript checker 和
@@ -78,7 +77,7 @@ gh run list --branch next --limit 10
 gh run watch <release-run-id> --exit-status
 ```
 
-## 验收远端资产
+## 查看远端资产
 
 找到本次 prerelease 标签，下载且只下载两个发布资产：
 
@@ -89,15 +88,9 @@ gh release download <tag> \
   --pattern manifest.json \
   --pattern plugin.zip \
   --dir "$release_dir"
-node ./script/artifacts.mts "$release_dir" --release-assets
 ```
 
-验收会确认：
-
-- 外置 manifest 与 ZIP 内 manifest 完全一致。
-- ZIP 内 JavaScript/CSS 入口均存在。
-- 包内没有 Vant、Sharp、Vue 或 Delta Comic 宿主运行时的重复实现。
-- manifest 的版本是 semantic-release 生成的 prerelease 版本。
+下载的两个文件就是 `packages/app/dist` 的发布产物；构建流程不再维护额外的根目录 staging 或独立产物校验器。
 
 同时确认 SDK 的两个 registry 和 `next` dist-tag 指向同一版本：
 

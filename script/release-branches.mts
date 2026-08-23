@@ -2,7 +2,7 @@ import { execFile } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { promisify } from 'node:util'
 
-import { rootDir } from './artifacts.mts'
+import { rootDir } from './paths.mts'
 
 const execFileAsync = promisify(execFile)
 

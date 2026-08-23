@@ -20,7 +20,7 @@
   `book-author`、`book` 五个技术路由。
 - `packages/sdk`：请求、分流、鉴权、分页、响应校验和图片解码。浏览器解码器从
   `jmcomic-sdk/browser` 导出，Node/Sharp 解码器从 `jmcomic-sdk/node` 导出。
-- `script`：发布分支、semantic-release 和产物验证。
+- `script`：发布分支和 semantic-release。
 
 服务端没有官方 API 文档。SDK 的响应类型与解析规则来自解包。
 
@@ -36,7 +36,6 @@ vp run typecheck
 vp test typecheck
 vp test run --coverage
 vp run build
-vp run artifacts
 ```
 
 运行时集成测试默认请求真实服务。若初始分流发现因网络不可用而失败，测试才启动本地 MSW
@@ -48,13 +47,12 @@ vp run artifacts
 
 ## 安装插件
 
-GitHub Release 固定提供两个资产：
+GitHub Release 固定提供两个来自 `packages/app/dist` 的资产：
 
 - `manifest.json`
 - `plugin.zip`
 
-`plugin.zip` 内包含与外置文件完全一致的 manifest，以及入口 JavaScript 和 CSS。请在 Delta Comic
-的插件管理界面使用对应 Release 资产安装。发布与远端产物验收详见
+请在 Delta Comic 的插件管理界面使用对应 Release 资产安装。发布流程详见
 [发布流程](docs/release-workflow.md)。
 
 ## SDK
