@@ -1,12 +1,11 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { PLUGIN_LAYOUT_ID } from '@delta-comic/plugin-layout'
 import browserslist from 'browserslist'
 import { browserslistToTargets } from 'lightningcss'
 import { defineConfig, lazyPlugins } from 'vite-plus'
 
 import packageJson from './package.json' with { type: 'json' }
-import { pluginName } from './src/constants.ts'
+import { pluginLayoutId, pluginName } from './src/constants.ts'
 
 const testTsconfig = fileURLToPath(new URL('./tsconfig.app.json', import.meta.url))
 
@@ -20,7 +19,7 @@ const pluginMetadata: PluginManifest = {
   name: { display: '禁漫天堂', id: pluginName },
   require: [
     { id: 'core' },
-    { id: PLUGIN_LAYOUT_ID, download: 'gh:delta-comic/delta-comic-plugin-layout' },
+    { id: pluginLayoutId, download: 'gh:delta-comic/delta-comic-plugin-layout' },
   ],
   version: {
     plugin: process.env.DELTA_PLUGIN_VERSION ?? packageJson.version,

@@ -1,5 +1,7 @@
 export const pluginName = 'jmcomic'
 
+export const pluginLayoutId = 'layout'
+
 export const contentKeys = {
   comic: 'comic',
   blog: 'blog',
