@@ -2,6 +2,7 @@ import { SharedFunction } from '@delta-comic/utils'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
+import { pluginName } from '@/constants'
 import { JmUser } from '@/models/items'
 import { runtime } from '@/runtime/PluginRuntime'
 
@@ -71,7 +72,7 @@ describe('content and account screens', () => {
     await promoted.get('article').trigger('click')
     expect(SharedFunction.call).toHaveBeenCalledWith(
       'routeToContent',
-      ['jmcomic', 'comic'],
+      [pluginName, 'comic'],
       '1',
       '1',
       expect.anything(),

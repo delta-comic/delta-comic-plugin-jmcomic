@@ -1,4 +1,4 @@
-export const jsonToFormData = <T extends object>(data: Readonly<T>): FormData => {
+export const jsonToFormData = (data: object): FormData => {
   const formData = new FormData()
   for (const [key, value] of Object.entries(data)) {
     if (value === undefined) continue

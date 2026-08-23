@@ -18,13 +18,6 @@ import { sRecommendComic } from '../model/comic'
 import { sComment } from '../model/comment'
 import { sMutationResult, sNumeric } from '../model/utils'
 
-export const blogTypes = {
-  all: '全部',
-  news: '最新消息',
-  discussion: '闲聊交流',
-  recommendation: '本本推荐',
-} as const
-
 const sBlogComment: z.ZodType<BlogComment> = z.lazy(() =>
   z.intersection(sComment, z.object({ BID: sNumeric, replys: z.array(sBlogComment).optional() })),
 )

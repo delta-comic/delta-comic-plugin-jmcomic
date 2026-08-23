@@ -15,12 +15,13 @@ export default defineConfig({
     tasks: {
       'schema:generate': {
         command: ['ts-to-zod --all', 'vp fmt src/model/generated --write'],
-        cache: false,
+        cache: true,
       },
-      'build': { command: 'vp pack', dependsOn: ['schema:generate'] },
+      'build': { command: 'vp pack', dependsOn: ['schema:generate'], cache: true },
       'typecheck': {
         command: ['tsc -p tsconfig.app.json --noEmit', 'tsc -p tsconfig.node.json --noEmit'],
         dependsOn: ['schema:generate'],
+        cache: true,
       },
     },
   },

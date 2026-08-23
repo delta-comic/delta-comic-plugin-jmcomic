@@ -1,5 +1,5 @@
 {
   "extends": ["../../tsconfig.node.json"],
   "compilerOptions": { "composite": true, "noEmit": true, "emitDeclarationOnly": false },
-  "files": ["./vite.config.mts", "./src/metadata.ts"]
+  "files": ["./vite.config.mts", "./src/constants.ts"]
 }

@@ -2,7 +2,6 @@ import {
   UniContentPage,
   UniEp,
   UniImage,
-  type StreamQuery,
   type UniComment,
   type UniContentViewComponent,
   type UniItem,
@@ -238,8 +237,6 @@ export class BookPage extends JmContentPage {
   }
 }
 
-export type JmPage = ComicPage | BlogPage | NovelPage | BookAuthorPage | BookPage
-
 export const contentPages = {
   [contentKeys.comic]: ComicPage,
   [contentKeys.blog]: BlogPage,
@@ -250,5 +247,3 @@ export const contentPages = {
   string,
   new (preload: UniItem | undefined, id: string, ep: string) => UniContentPage
 >
-
-export type JmStream = StreamQuery<UniItem>
