@@ -115,10 +115,35 @@ describe('ReleaseBranchManager', () => {
     ).rejects.toThrow('origin/main does not exist')
   })
 
+  it('requires the source branch to exist before promotion', async () => {
+    await expect(new ReleaseBranchManager(createGitFixture()).promote('preview')).rejects.toThrow(
+      'origin/develop does not exist',
+    )
+  })
+
+  it('rejects a local target when creating the first preview branch', async () => {
+    const refs = ['refs/remotes/origin/develop', 'refs/heads/develop', 'refs/heads/next']
+    await expect(
+      new ReleaseBranchManager(createGitFixture({ refs })).promote('preview'),
+    ).rejects.toThrow('Local next exists without origin/next')
+  })
+
   it('dispatches actions through execute', async () => {
     const refs = ['refs/remotes/origin/main']
     const git = createGitFixture({ refs })
     await new ReleaseBranchManager(git).execute('develop')
     expect(git).toHaveBeenCalledWith(['push', '--set-upstream', 'origin', 'develop'])
+  })
+
+  it('dispatches preview actions through execute', async () => {
+    const refs = [
+      'refs/remotes/origin/develop',
+      'refs/heads/develop',
+      'refs/remotes/origin/next',
+      'refs/heads/next',
+    ]
+    const git = createGitFixture({ refs })
+    await new ReleaseBranchManager(git).execute('preview')
+    expect(git).toHaveBeenCalledWith(['push', 'origin', 'next'])
   })
 })

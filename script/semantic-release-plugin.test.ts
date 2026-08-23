@@ -13,16 +13,18 @@ import {
   verifyRelease,
 } from './semantic-release-plugin.mts'
 
-async function createPluginDist(version: string) {
-  const pluginDist = await mkdtemp(join(tmpdir(), 'plugin-template-dist-'))
-  const manifest = {
+async function createPluginDist(
+  version: string,
+  manifest: unknown = {
     author: 'author',
     description: 'Plugin template',
     entry: { cssPath: 'index.css', jsPath: 'index.js' },
     name: { display: 'Template', id: 'template' },
     require: [{ id: 'core' }],
     version: { plugin: version, supportCore: '>=3.0.0-next.6 <4.0.0' },
-  }
+  },
+) {
+  const pluginDist = await mkdtemp(join(tmpdir(), 'plugin-template-dist-'))
   await writeFile(join(pluginDist, 'manifest.json'), JSON.stringify(manifest))
   return pluginDist
 }
@@ -60,6 +62,26 @@ describe('semantic release plugin', () => {
         runBuild: vi.fn(),
       }),
     ).rejects.toThrow('does not match release')
+  })
+
+  it('refuses malformed plugin manifests', async () => {
+    const manifests: unknown[] = [
+      null,
+      [],
+      {},
+      { version: null },
+      { version: {} },
+      { version: { plugin: 1 } },
+    ]
+
+    for (const manifest of manifests) {
+      await expect(
+        prepareReleaseArtifacts('1.2.3-next.4', {
+          pluginDist: await createPluginDist('1.2.3-next.4', manifest),
+          runBuild: vi.fn(),
+        }),
+      ).rejects.toThrow('Invalid plugin manifest')
+    }
   })
 
   it('adds a warning only to prerelease notes', async () => {
