@@ -20,12 +20,3 @@ export const subscribeKeys = {
   novelAuthor: 'novel-author',
   creator: 'creator',
 } as const
-
-export const defaultImageForks = [
-  'https://cdn-msp.jmapinodeudzn.net',
-  'https://cdn-msp2.jmapinodeudzn.net',
-  'https://cdn-msp.jmapiproxy1.cc',
-  'https://cdn-msp.jmapiproxy2.cc',
-  'https://cdn-msp.jmapiproxy3.cc',
-  'https://cdn-msp.jmapiproxy4.cc',
-] as const

@@ -46,7 +46,7 @@ const normalizeTime = (value: number | string | undefined): number | undefined =
 export const image = (path: string, meta?: Record<string, unknown>): UniImageRaw => ({
   $$plugin: pluginName,
   $$meta: meta,
-  forkNamespace: 'default',
+  forkNamespace: 'jmcomic.remotes.images',
   path,
 })
 

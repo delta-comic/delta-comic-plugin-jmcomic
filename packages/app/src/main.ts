@@ -11,7 +11,7 @@ import { BadgeOutlined, EditOutlined, SearchOutlined, TitleOutlined } from '@vic
 import { SortType, type Gender, type LoginUser } from 'jmcomic-sdk'
 
 import { getLayout } from '@/adapters/layout'
-import { barcode, jmcomicSubscribe, mapPromoteContent, searchMethods } from '@/adapters/search'
+import { barcode, jmcomicSubscribe, searchMethods } from '@/adapters/search'
 import JmCommentRow from '@/components/JmCommentRow.vue'
 import JmItemCard from '@/components/JmItemCard.vue'
 import PromoteTab from '@/components/search/PromoteTab.vue'
@@ -20,7 +20,7 @@ import BadgeManager from '@/components/user/BadgeManager.vue'
 import JmUserCard from '@/components/user/JmUserCard.vue'
 import JmUserEditor from '@/components/user/JmUserEditor.vue'
 import TitleManager from '@/components/user/TitleManager.vue'
-import { contentKeys, defaultImageForks, pluginName, searchKeys } from '@/constants'
+import { contentKeys, pluginName, searchKeys } from '@/constants'
 import { jmcomicMessages, translate } from '@/i18n'
 import { JmUser, fromCommonComic, translateItem } from '@/models/items'
 import { contentPages } from '@/models/pages'
@@ -144,7 +144,7 @@ const models: Content.Model[] = Object.entries(contentPages).map(([name, Content
   ItemTranslator: translateItem,
 }))
 
-export const jmcomicPluginConfig: DCPluginConfig = {
+const jmcomicPluginConfig = {
   name: pluginName,
   i18n: jmcomicMessages,
   model: {
@@ -163,7 +163,8 @@ export const jmcomicPluginConfig: DCPluginConfig = {
       {
         type: 'resource',
         name: 'jmcomic.remotes.images',
-        remotes: defaultImageForks.map(url => ({ name: url, url })),
+        remotes: async () =>
+          (await runtime.jm.fork.getForks()).Server.map(url => ({ name: url, url })),
         async test(url, signal) {
           const response = await fetch(`${url}/media/photos/1205243/00001.webp`, {
             method: 'HEAD',
@@ -316,10 +317,8 @@ export const jmcomicPluginConfig: DCPluginConfig = {
       await runtime.uninstall()
     },
   },
-}
+} satisfies DCPluginConfig
 
-export default defineDeltaComicPlugin(() => jmcomicPluginConfig)
-
-export const jm = runtime.jm
-
-export const getPromoteItems = () => runtime.promotes.flatMap(mapPromoteContent)
+export default defineDeltaComicPlugin(
+  () => jmcomicPluginConfig as { model: { expose: { jm: typeof runtime.jm } } },
+)
