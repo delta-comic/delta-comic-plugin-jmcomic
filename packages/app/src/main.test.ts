@@ -43,7 +43,7 @@ describe('plugin registration', () => {
     expect(model.expose!.jm).toBe(runtime.jm)
   })
 
-  test('declares an API remote with an auto-select trigger', () => {
+  test('declares an API remote with an auto-select trigger', async () => {
     expect(remotes).toHaveLength(2)
     expect(remotes[0]!.type).toBe('remote')
     expect(remotes[0]).toMatchObject({
@@ -52,7 +52,16 @@ describe('plugin registration', () => {
     })
     expect(resource.type).toBe('resource')
     expect(resource.name).toBe('jmcomic.remotes.images')
-    expect(resource.remotes).toContainEqual({
+    vi.spyOn(runtime.jm.fork, 'getForks').mockResolvedValue({
+      Setting: [],
+      Server: ['https://cdn-msp.jmapinodeudzn.net'],
+      jm3_Server: [],
+    })
+    const resourceRemotes =
+      typeof resource.remotes === 'function'
+        ? await resource.remotes(new AbortController().signal)
+        : resource.remotes
+    expect(resourceRemotes).toContainEqual({
       name: 'https://cdn-msp.jmapinodeudzn.net',
       url: 'https://cdn-msp.jmapinodeudzn.net',
     })
