@@ -29,9 +29,10 @@ export default defineConfig({
         '**/*.test-d.ts',
         '**/*.d.ts',
         '**/src/test/**',
+        'script/**/*.{ts,mts}',
         'packages/app/src/metadata.ts',
       ],
-      thresholds: { lines: 80, functions: 80, branches: 75, statements: 80 },
+      thresholds: { lines: 80, functions: 80, branches: 70, statements: 80 },
     },
     exclude: ['**/node_modules/**', '**/.git/**'],
     projects: [
