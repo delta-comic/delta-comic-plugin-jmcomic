@@ -1,9 +1,9 @@
 import { pluginContributions, pluginModelChannels } from '@delta-comic/plugin'
-import type { LayoutPluginExpose } from '@delta-comic/plugin-layout'
+import type { LibLayout } from '@delta-comic/plugin-layout'
 
 import { pluginLayoutId } from '@/constants'
 
-export const getLayout = (): LayoutPluginExpose => {
+export const getLayout = (): LibLayout => {
   const layout = pluginContributions
     .channel(pluginModelChannels.expose)
     .get(pluginLayoutId, 'default')?.value
