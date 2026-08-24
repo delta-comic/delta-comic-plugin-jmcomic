@@ -24,6 +24,8 @@ vi.mock('@delta-comic/plugin', () => {
   }
 })
 
+vi.mock('@delta-comic/plugin-layout', () => ({ PLUGIN_LAYOUT_ID: 'layout' }))
+
 vi.mock('@delta-comic/utils', () => ({ SharedFunction: { call: vi.fn().mockResolvedValue([]) } }))
 
 vi.mock('@delta-comic/db', () => {
