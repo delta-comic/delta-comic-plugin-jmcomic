@@ -1,10 +1,10 @@
-import type { ComicComment, FullComic, RelatedBook } from 'jmcomic-sdk'
+import type { BlogComment, ComicComment, FullComic, NovelComment, RelatedBook } from 'jmcomic-sdk'
 import { describe, expect, test, vi } from 'vitest'
 
 import { pluginName } from '@/constants'
 import { runtime } from '@/runtime/PluginRuntime'
 
-import { fromComicComment } from './comments'
+import { fromBlogComment, fromComicComment, fromNovelComment } from './comments'
 import { fromFullComic, fromRelatedBook } from './items'
 
 const fullComic: FullComic = {
@@ -111,5 +111,45 @@ describe('content models', () => {
       undefined,
     )
     await expect(comment.like()).rejects.toMatchObject({ code: 'UNSUPPORTED_OPERATION' })
+    await expect(comment.report()).rejects.toMatchObject({ code: 'UNSUPPORTED_OPERATION' })
+  })
+
+  test('routes blog and novel comments and handles invalid responses', async () => {
+    const blogSend = vi.spyOn(runtime.jm.blog, 'sendComment').mockResolvedValue({ status: 'ok' })
+    const blog = {
+      ...rawComment,
+      BID: 8,
+      CID: 3,
+      comment: 'Blog comment',
+      photo: 'avatar.jpg',
+      replys: [],
+    } as BlogComment
+    await fromComicComment(rawComment).sendComment('comic')
+    const blogComment = fromBlogComment(blog)
+    expect(blogComment.content).toEqual({ type: 'string', text: 'Blog comment' })
+    await blogComment.sendComment('blog')
+    expect(blogSend).toHaveBeenCalledWith({ id: 8, content: 'blog', parentCommentId: 3 }, undefined)
+
+    const novelSend = vi.spyOn(runtime.jm.novel, 'sendComment').mockResolvedValue({ status: 'ok' })
+    const novel = {
+      ...rawComment,
+      NID: 9,
+      NCID: 10,
+      CID: 4,
+      parent_CID: 0,
+      comment: 'Novel comment',
+    } as NovelComment
+    await fromNovelComment(novel).sendComment('novel')
+    expect(novelSend).toHaveBeenCalledWith(
+      { novelId: 9, chapterId: 10, content: 'novel', isSpoiled: false, parentCommentId: 4 },
+      undefined,
+    )
+
+    expect(() =>
+      fromComicComment({ ...rawComment, AID: undefined } as never).sendComment('bad'),
+    ).toThrow(expect.objectContaining({ code: 'INVALID_RESPONSE' }))
+    expect(() =>
+      fromNovelComment({ ...novel, NID: undefined } as never).sendComment('bad'),
+    ).toThrow(expect.objectContaining({ code: 'INVALID_RESPONSE' }))
   })
 })

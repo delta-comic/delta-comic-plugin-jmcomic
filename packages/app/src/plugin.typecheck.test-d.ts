@@ -6,10 +6,10 @@ import type { ComponentEmit, ComponentProps } from 'vue-component-type-helpers'
 import JmCommentRow from '@/components/JmCommentRow.vue'
 import JmItemCard from '@/components/JmItemCard.vue'
 import { contentKeys, searchKeys, subscribeKeys } from '@/constants'
-import { jmcomicPluginConfig } from '@/main'
+import jmcomicPlugin from '@/main'
 import { contentPages } from '@/models/pages'
 
-assertType<DCPluginConfig>(jmcomicPluginConfig)
+assertType<DCPluginConfig>(jmcomicPlugin)
 expectTypeOf<keyof typeof contentPages>().toEqualTypeOf<
   'blog' | 'book' | 'book-author' | 'comic' | 'novel'
 >()

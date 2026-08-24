@@ -4,7 +4,7 @@ import type { LoginUser, UserMe } from 'jmcomic-sdk'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { contentKeys, pluginName, searchKeys } from '@/constants'
-import { jmcomicPluginConfig } from '@/main'
+import jmcomicPlugin from '@/main'
 import { runtime } from '@/runtime/PluginRuntime'
 
 const testUser = {
@@ -16,6 +16,7 @@ const testUser = {
   s: 'avs',
 } as UserMe
 const login = { username: 'tester', user: testUser } satisfies LoginUser
+const jmcomicPluginConfig = jmcomicPlugin({ platform: 'web' })
 const model = jmcomicPluginConfig.model!
 const content = model.content!
 const user = model.user!
@@ -40,7 +41,7 @@ describe('plugin registration', () => {
     )
     expect(content.models![0]?.Layout).toMatchObject({ name: 'LayoutDefault' })
     expect(model.social!.subscribe).toBeDefined()
-    expect(model.expose!.jm).toBe(runtime.jm)
+    expect(model.expose!.runtime).toBe(runtime)
   })
 
   test('declares an API remote with an auto-select trigger', async () => {
