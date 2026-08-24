@@ -2,7 +2,7 @@ import { SharedFunction } from '@delta-comic/utils'
 import { SortType } from 'jmcomic-sdk'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
-import { contentKeys, pluginName, searchKeys } from '@/constants'
+import { contentKeys, pluginName, searchKeys, subscribeKeys } from '@/constants'
 import { runtime } from '@/runtime/PluginRuntime'
 
 import {
@@ -11,6 +11,7 @@ import {
   comicSearch,
   createSubscribe,
   creatorSearch,
+  jmcomicSubscribe,
   mapPromoteContent,
   mapWeekContent,
   novelSearch,
@@ -170,5 +171,33 @@ describe('search adapters', () => {
       data: [{ id: 'new' }],
     })
     expect(SharedFunction.call).not.toHaveBeenCalled()
+  })
+
+  test('keeps unchanged authors and routes subscription kinds', async () => {
+    const source = {
+      initPage: 1,
+      query: vi.fn().mockResolvedValue({ data: [{ id: 'known' }], nextPage: undefined }),
+    } as never
+    const subscription = createSubscribe(source)
+    const author = { $$plugin: pluginName, label: 'Author', icon: 'draw' } as never
+    await expect(
+      subscription.getUpdateList(
+        [{ author, list: [{ id: 'known' }] as never }],
+        new AbortController().signal,
+      ),
+    ).resolves.toEqual({ isUpdated: false, whichUpdated: [] })
+
+    vi.spyOn(runtime.jm.comic, 'searchByKeyword').mockResolvedValue({ total: 0, list: [] })
+    vi.spyOn(runtime.jm.novel, 'search').mockResolvedValue({ total: 0, list: [] })
+    vi.spyOn(runtime.jm.book, 'search').mockResolvedValue({ total: 0, list: [] })
+    for (const subscribe of [subscribeKeys.creator, subscribeKeys.novelAuthor, 'unknown']) {
+      const subscribedAuthor = Object.assign({}, author, { subscribe }) as never
+      await expect(
+        jmcomicSubscribe.fetchAuthorContent.query({ author: subscribedAuthor }, 1),
+      ).resolves.toBeDefined()
+    }
+    await expect(jmcomicSubscribe.getUpdateList([], new AbortController().signal)).resolves.toEqual(
+      { isUpdated: false, whichUpdated: [] },
+    )
   })
 })
