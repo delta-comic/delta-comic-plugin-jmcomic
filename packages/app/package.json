@@ -29,6 +29,7 @@
     "es-toolkit": "catalog:",
     "happy-dom": "catalog:",
     "lightningcss": "catalog:",
+    "rolldown-plugin-dts": "^0.28.2",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
@@ -38,10 +39,10 @@
     "vue-tsc": "catalog:"
   },
   "peerDependencies": {
-    "@delta-comic/db": ">=3.0.0-next.17 <4.0.0",
-    "@delta-comic/model": ">=3.0.0-next.17 <4.0.0",
-    "@delta-comic/plugin": ">=3.0.0-next.17 <4.0.0",
-    "@delta-comic/ui": ">=3.0.0-next.17 <4.0.0",
-    "@delta-comic/utils": ">=3.0.0-next.17 <4.0.0"
+    "@delta-comic/db": ">=3.0.0-next.19 <4.0.0",
+    "@delta-comic/model": ">=3.0.0-next.19 <4.0.0",
+    "@delta-comic/plugin": ">=3.0.0-next.19 <4.0.0",
+    "@delta-comic/ui": ">=3.0.0-next.19 <4.0.0",
+    "@delta-comic/utils": ">=3.0.0-next.19 <4.0.0"
   }
 }
