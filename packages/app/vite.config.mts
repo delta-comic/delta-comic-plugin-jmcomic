@@ -36,8 +36,7 @@ export default defineConfig(({ mode }) => ({
         import('rolldown-plugin-dts'),
       ],
     )
-    const pluginLayoutId =
-      mode === 'test' ? undefined : (await import('@delta-comic/plugin-layout')).PLUGIN_LAYOUT_ID
+    const pluginLayoutId = mode === 'test' ? undefined : 'layout'
 
     return [
       vue(),

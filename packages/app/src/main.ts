@@ -20,4 +20,4 @@ export default defineDeltaComicPlugin({
 
 export type { LibJmcomic } from '@/expose'
 
-export { pluginName as PLUGIN_JMCOMIC_ID } from '@/constants'
+export const PLUGIN_JMCOMIC_ID = pluginName
